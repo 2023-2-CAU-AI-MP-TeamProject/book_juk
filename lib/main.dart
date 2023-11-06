@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//서다연 이정민 ㅇ
+
 void main() {
   runApp(const MyApp());
 }
