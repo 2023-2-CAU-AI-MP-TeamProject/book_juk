@@ -1,5 +1,7 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
-//서다연 이정민 이재인
+
 void main() {
   runApp(const MyApp());
 }
@@ -12,56 +14,98 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mobile Programming Team Project',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        primarySwatch: Colors.blue
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        '/': (context) => Landing(),
+
+      }
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+class Landing extends StatefulWidget {
+  const Landing({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Landing> createState() => _MyLanding();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class _MyLanding extends State<Landing> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    void _onItemTapped(int index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+
+    List<Text> texts = [
+      Text(
+        "Book-Juk!!",
+        style: TextStyle(
+          fontSize: 100
+        ),
+        textAlign: TextAlign.center,
+      ),
+      Text(
+        "Search!!!!!!",
+        style: TextStyle(
+          fontSize: 100
+        ),
+        textAlign: TextAlign.center,
+      ),
+      Text(
+        "Analytics!!!!!!!!!!!!!!",
+        style: TextStyle(
+          fontSize: 100
+        ),
+        textAlign: TextAlign.center,
+      ),
+      Text(
+        "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
+        style: TextStyle(
+          fontSize: 100
+        ),
+        textAlign: TextAlign.center,
+      )
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text("Book-Juk"),
+        leading: Icon(Icons.book),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+      body: Align(
+        alignment: Alignment.center,
+        child: texts[_selectedIndex]
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "홈 화면"
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: "검색"
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.analytics),
+            label: "통계"
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: "설정"
+          )
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+        onTap: _onItemTapped
       ),
     );
   }
