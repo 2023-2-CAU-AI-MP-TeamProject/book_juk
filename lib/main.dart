@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'initial.dart';
+import 'search.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mobile Programming Team Project',
+      title: '책:크',
       theme: ThemeData(
         primarySwatch: Colors.blue
       ),
@@ -43,15 +44,9 @@ class _MyLanding extends State<Landing> {
       });
     }
 
-    List<Widget> texts = [
-      HomePage(),
-      Text(
-        "Search!!!!!!",
-        style: TextStyle(
-          fontSize: 100
-        ),
-        textAlign: TextAlign.center,
-      ),
+    List<Widget> navItems = [
+      Initial(),
+      Search(),
       Text(
         "Analytics!!!!!!!!!!!!!!",
         style: TextStyle(
@@ -69,14 +64,7 @@ class _MyLanding extends State<Landing> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Book-Juk"),
-        leading: Icon(Icons.book),
-      ),
-      body: Align(
-        alignment: Alignment.center,
-        child: texts[_selectedIndex]
-      ),
+      body: navItems[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -102,21 +90,6 @@ class _MyLanding extends State<Landing> {
         type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped
       ),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      //나중에 Scaffold로 만들던지 Container로 만들든지 어떻게어떻게 잘..
-      // home 브랜치 테스트
-      "북적북적 홈 화면",
-      style: TextStyle(
-          fontSize: 100
-      ),
-      textAlign: TextAlign.center,
     );
   }
 }

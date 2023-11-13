@@ -1,7 +1,7 @@
 //초기 화면
 
-import 'main.dart';
 import 'package:flutter/material.dart';
+import 'MyAppBar.dart';
 
 class Initial extends StatefulWidget {
   const Initial({Key? key}) : super(key: key);
@@ -14,9 +14,7 @@ class _Initial extends State<Initial> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('초기 화면'),
-      ),
+      appBar: MyAppBar(),
       body: Center(
         child: Container(
           width: 200,
