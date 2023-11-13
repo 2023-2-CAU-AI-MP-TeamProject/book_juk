@@ -110,6 +110,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       //나중에 Scaffold로 만들던지 Container로 만들든지 어떻게어떻게 잘..
+      // home 브랜치 테스트
       "북적북적 홈 화면",
       style: TextStyle(
           fontSize: 100
@@ -118,5 +119,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-//branch 병합 테스트
