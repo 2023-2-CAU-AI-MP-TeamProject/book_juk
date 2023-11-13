@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => Landing(),
-      }
+      },
+      debugShowCheckedModeBanner: false
     );
   }
 }
@@ -41,14 +42,8 @@ class _MyLanding extends State<Landing> {
       });
     }
 
-    List<Text> texts = [
-      Text(
-        "Book-Juk!!",
-        style: TextStyle(
-          fontSize: 100
-        ),
-        textAlign: TextAlign.center,
-      ),
+    List<Widget> texts = [
+      HomePage(),
       Text(
         "Search!!!!!!",
         style: TextStyle(
@@ -106,6 +101,20 @@ class _MyLanding extends State<Landing> {
         type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped
       ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      //나중에 Scaffold로 만들던지 Container로 만들든지 어떻게어떻게 잘..
+      "북적북적 홈 화면",
+      style: TextStyle(
+          fontSize: 100
+      ),
+      textAlign: TextAlign.center,
     );
   }
 }
