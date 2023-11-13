@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'models/BookModel.dart';
-
+import 'searchCard.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -39,10 +39,29 @@ class SearchState extends State<Search> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          Text(input, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 100)),
-        ],
+      body: Center(
+        child: FutureBuilder(
+          future: searchBook(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if(snapshot.hasData == false){
+              return CircularProgressIndicator();
+            }
+            else if (snapshot.hasError) {
+              return Text('Error!');
+            }
+            else {
+              return ListView.separated(
+                padding: EdgeInsets.all(8.0),
+                itemCount: 10,
+                itemBuilder: (context, idx) {
+                  BookModel book = snapshot.data[idx];
+                  return searchCard(title: book.title, author: book.author, cover: book.cover, description: book.description);
+                },
+                separatorBuilder: (context, index) => Divider(),
+              );
+            }
+          }
+        ),
       )
     );
   }
@@ -51,20 +70,22 @@ class SearchState extends State<Search> {
     setState(() {
       input = value;
     });
-    searchBook(input);
+    searchBook();
   }
 
-  Future<List<BookModel>> searchBook(String value) async {
-    List<BookModel> books = [];
+  Future<List<BookModel>> searchBook() async {
+    List<BookModel> searchedBooks = [];
 
     final Uri url = Uri.parse('$baseURL1$TTB$baseURL2');
     final response = await http.get(url);
 
     if(response.statusCode == 200) {
-      books = jsonDecode(response.body).map<BookModel>((book) => BookModel.fromJson(book)).toList();
-      return;
+      List<dynamic> books = jsonDecode(response.body)['item'];
+      for (var book in books) {
+        searchedBooks.add(BookModel.fromJson(book));
+      }
+      return searchedBooks;
     }
     throw Error();
   }
-
 }

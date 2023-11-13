@@ -1,46 +1,76 @@
 class BookModel {
-  final String version;
-  final String logo;
-  final String title;
-  final String link;
-  final String pubDate;
-  final int totalResults;
-  final int startIndex;
-  final int itemsPerPage;
-  final String query;
-  final int searchCategoryId;
-  final String searchCategoryName;
-  final List<dynamic> item;
+  String title;
+  String link;
+  String author;
+  String pubDate;
+  String? description;
+  String isbn;
+  String isbn13;
+  int itemId;
+  int priceSales;
+  int priceStandard;
+  String mallType;
+  String? stockStatus;
+  int mileage;
+  String cover;
+  int categoryId;
+  String categoryName;
+  String publisher;
+  int salesPoint;
+  bool adult;
+  bool fixedPrice;
+  int customerReviewRank;
+  dynamic subInfo;
 
   BookModel({
-    required this.version,
-    required this.logo,
     required this.title,
     required this.link,
+    required this.author,
     required this.pubDate,
-    required this.totalResults,
-    required this.startIndex,
-    required this.itemsPerPage,
-    required this.query,
-    required this.searchCategoryId,
-    required this.searchCategoryName,
-    required this.item
+    this.description,
+    required this.isbn,
+    required this.isbn13,
+    required this.itemId,
+    required this.priceSales,
+    required this.priceStandard,
+    required this.mallType,
+    this.stockStatus,
+    required this.mileage,
+    required this.cover,
+    required this.categoryId,
+    required this.categoryName,
+    required this.publisher,
+    required this.salesPoint,
+    required this.adult,
+    required this.fixedPrice,
+    required this.customerReviewRank,
+    this.subInfo
   });
 
   factory BookModel.fromJson(Map<String, dynamic> json) {
     return BookModel(
-      version: json["version"],
-      logo: json["logo"],
       title: json["title"],
       link: json["link"],
+      author: json["author"],
       pubDate: json["pubDate"],
-      totalResults: json["totalResults"],
-      startIndex: json["startIndex"],
-      itemsPerPage: json["itemsPerPage"],
-      query: json["query"],
-      searchCategoryId: json["searchCategoryId"],
-      searchCategoryName: json["searchCategoryName"],
-      item: json["item"]
+      description: json["description"],
+      isbn: json["isbn"],
+      isbn13: json["isbn13"],
+      itemId: json["itemId"],
+      priceSales: json["priceSales"],
+      priceStandard: json["priceStandard"],
+      mallType: json["mallType"],
+      stockStatus: json["stockStatus"],
+      mileage: json["mileage"],
+      cover: json["cover"],
+      categoryId: json["categoryId"],
+      categoryName: json["categoryName"],
+      publisher: json["publisher"],
+      salesPoint: json["salesPoint"],
+      adult: json["adult"],
+      fixedPrice: json["fixedPrice"],
+      customerReviewRank: json["customerReviewRank"],
+      subInfo: json["subInfo"]
     );
   }
 
