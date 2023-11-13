@@ -44,27 +44,9 @@ class _MyLanding extends State<Landing> {
 
     List<Widget> texts = [
       HomePage(),
-      Text(
-        "Search!!!!!!",
-        style: TextStyle(
-          fontSize: 100
-        ),
-        textAlign: TextAlign.center,
-      ),
-      Text(
-        "Analytics!!!!!!!!!!!!!!",
-        style: TextStyle(
-          fontSize: 100
-        ),
-        textAlign: TextAlign.center,
-      ),
-      Text(
-        "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
-        style: TextStyle(
-          fontSize: 100
-        ),
-        textAlign: TextAlign.center,
-      )
+      SearchPage(),
+      StatisticsPage(),
+      SettingPage(),
     ];
 
     return Scaffold(
@@ -119,4 +101,41 @@ class HomePage extends StatelessWidget {
   }
 }
 
-//branch 병합 테스트
+class SearchPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "Search!!!!!!",
+      style: TextStyle(
+          fontSize: 100
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
+class StatisticsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "Analytics!!!!!!!!!!!!!!",
+      style: TextStyle(
+          fontSize: 100
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
+class SettingPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
+      style: TextStyle(
+          fontSize: 100
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+}
