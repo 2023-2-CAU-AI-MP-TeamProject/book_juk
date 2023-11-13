@@ -130,12 +130,16 @@ class StatisticsPage extends StatelessWidget {
 class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text(
-      "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
-      style: TextStyle(
-          fontSize: 100
+    return Center(
+      child: Column(
+        children: [
+          Container(),
+          Container(),
+          Container(),
+          Spacer(),
+          Text("라이센스 정보"),
+        ],
       ),
-      textAlign: TextAlign.center,
     );
   }
 }
