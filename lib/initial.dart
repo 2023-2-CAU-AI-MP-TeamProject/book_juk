@@ -14,7 +14,7 @@ class _Initial extends State<Initial> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: const MyAppBar(),
       body: Center(
         child: Container(
           width: 200,

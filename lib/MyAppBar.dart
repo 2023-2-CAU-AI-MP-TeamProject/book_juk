@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MyAppBar({super.key});
+
   @override
   Widget build(BuildContext context){
     return AppBar(
-      title: Text('책:크 - 나만의 책꽂이'),
-      leading: Icon(Icons.book_rounded),
+      title: const Text('책:크 - 나만의 책꽂이'),
+      leading: const Icon(Icons.book_rounded),
     );
   }
   
   @override
-  Size get preferredSize => Size.fromHeight(50);
+  Size get preferredSize => const Size.fromHeight(50);
 }

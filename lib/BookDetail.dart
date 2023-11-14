@@ -24,7 +24,7 @@ class BookDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: const MyAppBar(),
       body: Center(
         child: FutureBuilder(
           future: detailBook(),
