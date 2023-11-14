@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 import 'models/BookModel.dart';
 import 'searchCard.dart';
 
@@ -15,52 +14,108 @@ class Search extends StatefulWidget {
 
 class SearchState extends State<Search> {
   String input = '';
-  final String baseURL1 = 'http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=';
-  final String baseURL2 = '&QueryType=ItemNewAll&MaxResults=10&start=1&SearchTarget=Book&output=js&Version=20131101';
-  final String TTB = 'ttbsdyhappy2211001';
+  final int booksPerPage = 10;
+  final String ttb = 'ttbsdyhappy2211001';
+
+  final List<String> baseURL = [
+    'http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=',
+    '&Query=',
+    '&QueryType=KeyWord&MaxResults=',
+    '&start=',
+    '&Output=JS&Version=20131101'
+  ];
+
+  final TextEditingController tec = TextEditingController();
+  int page = 1;
+  bool isSubmitted = false;
+
+  @override
+  void initState(){
+    super.initState();
+    isSubmitted = false;
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    tec.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Container(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           width: MediaQuery.of(context).size.width,
-          child: TextField(
-            cursorColor: Colors.black,
-            decoration: InputDecoration(
-              hintText: 'Search Anything...',
-              icon: Icon(Icons.search)
-            ),
-            textInputAction: TextInputAction.search,
-            onSubmitted: _onSubmitted,
+          child: Row(
+            children: [
+              Flexible(
+                child: TextField(
+                  cursorColor: Colors.black,
+                  decoration: const InputDecoration(
+                    hintText: '도서 검색',
+                  ),
+                  textInputAction: TextInputAction.search,
+                  onSubmitted: _onSubmitted,
+                  controller: tec,
+                ),
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  onPressed: () {
+                    FocusScope.of(context).unfocus();
+                    _onSubmitted(tec.text);
+                  },
+                  icon: const Icon(Icons.search, color: Colors.black,)
+                ),
+              )
+            ],
           ),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Center(
-        child: FutureBuilder(
-          future: searchBook(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if(snapshot.hasData == false){
-              return CircularProgressIndicator();
+      body: GestureDetector(
+        onTap:() {
+          FocusScope.of(context).unfocus();
+        },
+        child: Center(
+          child: (isSubmitted) ? FutureBuilder(
+            future: searchBook(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if(snapshot.hasData == false){
+                return const CircularProgressIndicator();
+              }
+              else if (snapshot.hasError) {
+                return const Text('Error!');
+              }
+              else if (snapshot.data.length == 0) {
+                return const Text('검색 결과가 없습니다.',
+                  style: TextStyle(fontSize: 20)
+                );
+              }
+              else {
+                return ListView.separated(
+                  padding: const EdgeInsets.all(8.0),
+                  itemCount: (snapshot.data.length >= 10) ? 10 : snapshot.data.length,
+                  itemBuilder: (context, idx) {
+                    BookModel book = snapshot.data[idx];
+                    return searchCard(
+                      title: book.title,
+                      author: book.author,
+                      cover: book.cover,
+                      description: book.description,
+                      isbn13: book.isbn13,
+                    );
+                  },
+                  separatorBuilder: (context, index) => const Divider(),
+                );
+              }
             }
-            else if (snapshot.hasError) {
-              return Text('Error!');
-            }
-            else {
-              return ListView.separated(
-                padding: EdgeInsets.all(8.0),
-                itemCount: 10,
-                itemBuilder: (context, idx) {
-                  BookModel book = snapshot.data[idx];
-                  return searchCard(title: book.title, author: book.author, cover: book.cover, description: book.description);
-                },
-                separatorBuilder: (context, index) => Divider(),
-              );
-            }
-          }
+          ) : 
+          Container()
         ),
       )
     );
@@ -69,6 +124,7 @@ class SearchState extends State<Search> {
   void _onSubmitted(String value) {
     setState(() {
       input = value;
+      isSubmitted = true;
     });
     searchBook();
   }
@@ -76,7 +132,9 @@ class SearchState extends State<Search> {
   Future<List<BookModel>> searchBook() async {
     List<BookModel> searchedBooks = [];
 
-    final Uri url = Uri.parse('$baseURL1$TTB$baseURL2');
+    final Uri url = Uri.parse(
+      '${baseURL[0]}$ttb${baseURL[1]}$input${baseURL[2]}${booksPerPage.toString()}${baseURL[3]}${page.toString()}${baseURL[4]}'
+    );
     final response = await http.get(url);
 
     if(response.statusCode == 200) {
@@ -88,4 +146,6 @@ class SearchState extends State<Search> {
     }
     throw Error();
   }
+
+
 }
