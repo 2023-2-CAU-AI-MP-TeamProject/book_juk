@@ -16,6 +16,9 @@ class SearchState extends State<Search> {
   String input = '';
   final int booksPerPage = 10;
   final String ttb = 'ttbsdyhappy2211001';
+  final TextEditingController tec = TextEditingController();
+  int page = 1;
+  bool isSubmitted = false;
 
   final List<String> baseURL = [
     'http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=',
@@ -24,10 +27,6 @@ class SearchState extends State<Search> {
     '&start=',
     '&Output=JS&Version=20131101'
   ];
-
-  final TextEditingController tec = TextEditingController();
-  int page = 1;
-  bool isSubmitted = false;
 
   @override
   void initState(){
@@ -82,21 +81,25 @@ class SearchState extends State<Search> {
           FocusScope.of(context).unfocus();
         },
         child: Center(
-          child: (isSubmitted) ? FutureBuilder(
+          child: (isSubmitted && input !='') ? FutureBuilder(
             future: searchBook(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if(snapshot.hasData == false){
+                isSubmitted = false;
                 return const CircularProgressIndicator();
               }
               else if (snapshot.hasError) {
+                isSubmitted = false;
                 return const Text('Error!');
               }
               else if (snapshot.data.length == 0) {
+                isSubmitted = false;
                 return const Text('검색 결과가 없습니다.',
                   style: TextStyle(fontSize: 20)
                 );
               }
               else {
+                isSubmitted = false;
                 return ListView.separated(
                   padding: const EdgeInsets.all(8.0),
                   itemCount: (snapshot.data.length >= 10) ? 10 : snapshot.data.length,
@@ -126,7 +129,6 @@ class SearchState extends State<Search> {
       input = value;
       isSubmitted = true;
     });
-    searchBook();
   }
 
   Future<List<BookModel>> searchBook() async {
