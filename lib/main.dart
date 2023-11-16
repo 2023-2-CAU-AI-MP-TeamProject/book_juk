@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'dart:io';
-
 import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
 import 'Search.dart';
@@ -10,7 +8,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  sleep(Duration(seconds: 3));
+  Future.delayed(const Duration(seconds: 3));
   FlutterNativeSplash.remove();
   runApp(const MyApp());
 }
