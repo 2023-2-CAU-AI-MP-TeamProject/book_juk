@@ -1,20 +1,18 @@
 //초기 화면
 
 import 'package:flutter/material.dart';
-import 'MyAppBar.dart';
 
-class Initial extends StatefulWidget {
-  const Initial({Key? key}) : super(key: key);
+class Splash extends StatefulWidget {
+  const Splash({Key? key}) : super(key: key);
 
   @override
-  State<Initial> createState() => _Initial();
+  State<Splash> createState() => _Splash();
 }
 
-class _Initial extends State<Initial> {
+class _Splash extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
       body: Center(
         child: Container(
           width: 200,
