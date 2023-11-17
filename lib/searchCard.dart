@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'BookDetail.dart';
+import 'package:html/parser.dart';
 
 class searchCard extends StatelessWidget {
   final String title;
@@ -22,15 +23,15 @@ class searchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis,),
+      title: Text(_decodeHtmlEntities(title), maxLines: 2, overflow: TextOverflow.ellipsis,),
       leading: Image.network(cover,
         width: 50,
       ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(author),
-          Text(description ?? '',
+          Text(_decodeHtmlEntities(author)),
+          Text(_decodeHtmlEntities(description ?? '',),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -45,4 +46,10 @@ class searchCard extends StatelessWidget {
       },
     );
   }
+}
+
+String _decodeHtmlEntities(String input) {
+  final document = parse(input);
+  final String parsedString = parse(document.body?.text).documentElement!.text;
+  return parsedString;
 }
