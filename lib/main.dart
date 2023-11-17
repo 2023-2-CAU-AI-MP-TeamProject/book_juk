@@ -2,6 +2,8 @@
 
 import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'Login.dart';
 import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -10,6 +12,7 @@ void main() {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Future.delayed(const Duration(seconds: 3));
   FlutterNativeSplash.remove();
+  KakaoSdk.init(nativeAppKey: '650492dd92ba874f33ebcb55c010e883');
   runApp(const MyApp());
 }
 
@@ -61,13 +64,7 @@ class _MyLanding extends State<Landing> {
     List<Widget> navItems = [
       MyHome(),
       Search(),
-      Text(
-        "Analytics!!!!!!!!!!!!!!",
-        style: TextStyle(
-          fontSize: 100
-        ),
-        textAlign: TextAlign.center,
-      ),
+      Login(),
       Text(
         "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
         style: TextStyle(
@@ -107,3 +104,4 @@ class _MyLanding extends State<Landing> {
     );
   }
 }
+
