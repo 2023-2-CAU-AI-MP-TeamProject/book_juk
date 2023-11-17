@@ -4,6 +4,8 @@ import 'dart:convert';
 
 import 'models/BookModel.dart';
 import 'MyAppBar.dart';
+import 'package:html/parser.dart';
+
 
 class BookDetail extends StatelessWidget {
   BookDetail(
@@ -69,7 +71,7 @@ class BookDetail extends StatelessWidget {
                     const SizedBox(height: 50),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(book.description ?? '',)
+                      child: Text(_decodeHtmlEntities(book.description ?? '',))
                     )
                   ],
                 ),
@@ -93,4 +95,10 @@ class BookDetail extends StatelessWidget {
     }
     throw Error();
   }
+}
+
+String _decodeHtmlEntities(String input) {
+  final document = parse(input);
+  final String parsedString = parse(document.body?.text).documentElement!.text;
+  return parsedString;
 }
