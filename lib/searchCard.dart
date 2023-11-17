@@ -23,14 +23,14 @@ class searchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(title, maxLines: 2, overflow: TextOverflow.ellipsis,),
+      title: Text(_decodeHtmlEntities(title), maxLines: 2, overflow: TextOverflow.ellipsis,),
       leading: Image.network(cover,
         width: 50,
       ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(author),
+          Text(_decodeHtmlEntities(author)),
           Text(_decodeHtmlEntities(description ?? '',),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
