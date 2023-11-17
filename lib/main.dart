@@ -28,7 +28,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '책:크',
       theme: ThemeData(
-        primarySwatch: Colors.blue
+        primarySwatch: Colors.blue,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+          }
+        )
       ),
       routes: {
         '/': (context) => Landing(),

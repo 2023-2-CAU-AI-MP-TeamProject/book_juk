@@ -13,7 +13,7 @@ class BookDetail extends StatelessWidget {
   final String ttb = 'ttbsdyhappy2211001';
   final String isbn13;
   final List<String> baseURL = [
-    'http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=',
+    'https://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=',
     '&itemIdType=',
     '&ItemID=',
     '&Output=JS&Cover=big&Version=20131101'
@@ -77,7 +77,7 @@ class BookDetail extends StatelessWidget {
             }
           }
         )
-      )
+      ),
     );
   }
 
