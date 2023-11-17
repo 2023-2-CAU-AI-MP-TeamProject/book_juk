@@ -51,7 +51,7 @@ class BookDetail extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(book.title,
+                      child: Text(_decodeHtmlEntities(book.title),
                         style: const TextStyle(
                           fontSize: 30
                         ),
@@ -61,7 +61,7 @@ class BookDetail extends StatelessWidget {
                     const SizedBox(height: 30),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(book.author,
+                      child: Text(_decodeHtmlEntities(book.author),
                         style: const TextStyle(
                           fontSize: 20
                         ),
