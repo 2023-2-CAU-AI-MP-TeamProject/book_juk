@@ -1,9 +1,23 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
+import 'Search.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  Future.delayed(const Duration(seconds: 3));
+  FlutterNativeSplash.remove();
   runApp(const MyApp());
+}
+
+Future<bool> fetchData() async {
+  bool data =false;
+
+  await Future.delayed(const Duration(seconds: 3), () {data = true;});
+  return data;
 }
 
 class MyApp extends StatelessWidget {
@@ -12,17 +26,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mobile Programming Team Project',
+      title: '책:크',
       theme: ThemeData(
-        primarySwatch: Colors.blue
+        primarySwatch: Colors.blue,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+          }
+        )
       ),
       routes: {
         '/': (context) => Landing(),
+        '/search':(context) => Search()
       },
-      debugShowCheckedModeBanner: false
+      debugShowCheckedModeBanner: false,
     );
   }
 }
+
 
 class Landing extends StatefulWidget {
   const Landing({super.key});
@@ -42,22 +64,27 @@ class _MyLanding extends State<Landing> {
       });
     }
 
-    List<Widget> texts = [
-      HomePage(),
-      SearchPage(),
-      StatisticsPage(),
-      SettingPage(),
+    List<Widget> navItems = [
+      MyHome(),
+      Search(),
+      Text(
+        "Analytics!!!!!!!!!!!!!!",
+        style: TextStyle(
+          fontSize: 100
+        ),
+        textAlign: TextAlign.center,
+      ),
+      Text(
+        "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
+        style: TextStyle(
+          fontSize: 100
+        ),
+        textAlign: TextAlign.center,
+      )
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Book-Juk"),
-        leading: Icon(Icons.book),
-      ),
-      body: Align(
-        alignment: Alignment.center,
-        child: texts[_selectedIndex]
-      ),
+      body: navItems[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -87,59 +114,3 @@ class _MyLanding extends State<Landing> {
   }
 }
 
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      //나중에 Scaffold로 만들던지 Container로 만들든지 어떻게어떻게 잘..
-      "북적북적 홈 화면",
-      style: TextStyle(
-          fontSize: 100
-      ),
-      textAlign: TextAlign.center,
-    );
-  }
-}
-
-class SearchPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      "Search!!!!!!",
-      style: TextStyle(
-          fontSize: 100
-      ),
-      textAlign: TextAlign.center,
-    );
-  }
-}
-
-class StatisticsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      "Analytics!!!!!!!!!!!!!!",
-      style: TextStyle(
-          fontSize: 100
-      ),
-      textAlign: TextAlign.center,
-    );
-  }
-}
-
-class SettingPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Container(),
-          Container(),
-          Container(),
-          Spacer(),
-          Text("라이센스 정보"),
-        ],
-      ),
-    );
-  }
-}
