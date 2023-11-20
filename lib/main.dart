@@ -20,7 +20,10 @@ void main() {
 Future<bool> initLoad() async {
   bool data =false;
 
-  KakaoSdk.init(nativeAppKey: '650492dd92ba874f33ebcb55c010e883');
+  KakaoSdk.init(
+    nativeAppKey: '650492dd92ba874f33ebcb55c010e883',
+    javaScriptAppKey: 'afa87686307e58f3967f15ac07b60253'
+  );
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform

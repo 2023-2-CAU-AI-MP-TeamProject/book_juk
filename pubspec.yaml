@@ -41,6 +41,7 @@ dependencies:
   change_app_package_name: ^1.1.0
   firebase_core: ^2.14.0
   firebase_auth: ^4.14.0
+  firebase_core_web: ^2.8.1
 
 dev_dependencies:
   flutter_test:
