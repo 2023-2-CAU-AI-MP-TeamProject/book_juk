@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "906096207491",
+    "project_id": "chac-k",
+    "storage_bucket": "chac-k.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906096207491:android:a7807595738679b83d1db6",
+        "android_client_info": {
+          "package_name": "com.chac.k"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlbvfvCqlu2skPVtEbteEeACpmC6sBYZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,20 +6,27 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'Login.dart';
 import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  KakaoSdk.init(nativeAppKey: '650492dd92ba874f33ebcb55c010e883');
-  Future.delayed(const Duration(seconds: 3));
+  initLoad();
   FlutterNativeSplash.remove();
   runApp(const MyApp());
 }
 
-Future<bool> fetchData() async {
+Future<bool> initLoad() async {
   bool data =false;
 
-  await Future.delayed(const Duration(seconds: 3), () {data = true;});
+  KakaoSdk.init(nativeAppKey: '650492dd92ba874f33ebcb55c010e883');
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+
+  data = true;
   return data;
 }
 
