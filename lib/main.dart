@@ -10,9 +10,9 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  KakaoSdk.init(nativeAppKey: '650492dd92ba874f33ebcb55c010e883');
   Future.delayed(const Duration(seconds: 3));
   FlutterNativeSplash.remove();
-  KakaoSdk.init(nativeAppKey: '650492dd92ba874f33ebcb55c010e883');
   runApp(const MyApp());
 }
 
