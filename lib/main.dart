@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Landing(),
         '/search':(context) => Search(),
-        '/statis':(context) => Statis()
+        '/statistics':(context) => Statistics()
       },
       debugShowCheckedModeBanner: false,
     );
@@ -69,13 +69,7 @@ class _MyLanding extends State<Landing> {
     List<Widget> navItems = [
       MyHome(),
       Search(),
-      Text(
-        "Analytics!!!!!!!!!!!!!!",
-        style: TextStyle(
-          fontSize: 100
-        ),
-        textAlign: TextAlign.center,
-      ),
+      Statistics(),
       Text(
         "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
         style: TextStyle(

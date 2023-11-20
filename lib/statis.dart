@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-class Statis extends StatelessWidget { //이건 책 저장되는 것 구현한 후에 수정하기. 일단 예시로 써뒀음.
+class Statistics extends StatelessWidget { //이건 책 저장되는 것 구현한 후에 수정하기. 일단 예시로 써뒀음.
   final List<Book> savedBooks = [
     Book('1월', '제목 1'),
     Book('1월', '제목 2'),
@@ -10,8 +10,7 @@ class Statis extends StatelessWidget { //이건 책 저장되는 것 구현한 �
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text('책 통계'),
         ),
@@ -31,8 +30,7 @@ class Statis extends StatelessWidget { //이건 책 저장되는 것 구현한 �
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildHistogram() {
@@ -67,8 +65,4 @@ class Book { //이것도 저장하는 거 구현한 후에 수정해야 할듯.
   String title;
 
   Book(this.month, this.title);
-}
-
-void main() {
-  runApp(Statis());
 }
