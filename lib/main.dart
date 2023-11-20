@@ -9,10 +9,12 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-void main() {
+void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  initLoad();
+  if(!(await initLoad())) {
+    throw Error();
+  };
   FlutterNativeSplash.remove();
   runApp(const MyApp());
 }

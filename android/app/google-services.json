@@ -12,7 +12,12 @@
           "package_name": "com.chac.k"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "906096207491-ecu72q103ovpulc414n90fa8jb6e9l82.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBlbvfvCqlu2skPVtEbteEeACpmC6sBYZI"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906096207491-cdnpsnm8pvh4g4nn65asbh9oafb51b62.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "906096207491-87qr3g3cdi8u4746m3a0tnm8gpnq1aq9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bookJuk"
+              }
+            }
+          ]
         }
       }
     }
