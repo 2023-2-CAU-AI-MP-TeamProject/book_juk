@@ -4,7 +4,7 @@ import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
 import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'statis.dart';
+import 'Statistics.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
