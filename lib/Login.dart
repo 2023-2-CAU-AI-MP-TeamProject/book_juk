@@ -125,6 +125,7 @@ class _LoginState extends State<Login> {
       accessToken: token.accessToken, // 카카오 로그인에서 발급된 accessToken
     );
     await FirebaseAuth.instance.signInWithCredential(credential);
+
     if (context.mounted) {
         const SnackBar sb = SnackBar(
           content: Text('Loginned with kakao.'),
@@ -134,7 +135,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-  Future<void> googleLogin() async {
+  void googleLogin() async {
     try{
         // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -150,8 +151,10 @@ class _LoginState extends State<Login> {
 
       // Once signed in, return the UserCredential
       await FirebaseAuth.instance.signInWithCredential(credential);
+
       print('구글계정으로 로그인 성공');
       _loginPlatform = LoginPlatform.google;
+
       if (context.mounted) {
           const SnackBar sb = SnackBar(
             content: Text('Loginned with google.'),
@@ -175,16 +178,17 @@ class _LoginState extends State<Login> {
         'login_hint': 'user@example.com'
       });
 
-      await FirebaseAuth.instance.signInWithPopup(googleProvider);
+      await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+      
       print('구글계정으로 로그인 성공');
-        _loginPlatform = LoginPlatform.google;
-        if (context.mounted) {
-            const SnackBar sb = SnackBar(
-              content: Text('Loginned with google.'),
-              duration: Duration(seconds: 2),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(sb);
-        }
+      _loginPlatform = LoginPlatform.google;
+      if (context.mounted) {
+          const SnackBar sb = SnackBar(
+            content: Text('Loginned with google.'),
+            duration: Duration(seconds: 2),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(sb);
+      }
     } catch(error) {
       print('구글계정으로 로그인 실패 $error');
       _loginPlatform = LoginPlatform.none;
