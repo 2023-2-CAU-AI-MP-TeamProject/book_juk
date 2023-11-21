@@ -2,7 +2,7 @@ import 'package:book_juk/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'MyAppBar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -33,10 +33,56 @@ class _LoginState extends State<Login> {
     }
   }
 
+  void setLoginState(String loginPlatform) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      pref.setString("login_platform", loginPlatform);
+      _loginPlatform = _loginPlatform;
+    });
+    if(_loginPlatform != LoginPlatform.none && context.mounted){
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    }
+    else if(context.mounted){
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) => const Login())), (route) => false,);
+    }
+  }
+
+  Future<String> getLoginState() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    return pref.getString("login_platform") ?? "loginPlatform.none";
+  }
+
+  Future<LoginPlatform> checkLoginState() async {
+    String loginState = await getLoginState();
+    switch(loginState){
+      case "LoginPlatform.kakao":
+        return LoginPlatform.kakao;
+      case "LoginPlatform.google":
+        return LoginPlatform.google;
+      case "LoginPlatform.none":
+      default:
+        return LoginPlatform.none;
+    }
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    if(_loginPlatform == LoginPlatform.none){
+      checkLoginState()
+      .then(
+        (value) {
+          setState(() {
+            _loginPlatform = value;
+          });
+        }
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -65,7 +111,7 @@ class _LoginState extends State<Login> {
             ),
           ) : Container(),
           Text(_loginText(), style: const TextStyle(fontSize: 20),),
-          TextButton(
+          (_loginPlatform != LoginPlatform.none) ? TextButton(
             onPressed: signOut,
             child: const Text('로그아웃',
               style: TextStyle(
@@ -73,12 +119,14 @@ class _LoginState extends State<Login> {
               )
             )
           )
+          : Container()
         ],
       ) 
     );
   }
 
   void kakaoLogin() async {
+    showLoading(context);
     if (await isKakaoTalkInstalled()) {
       try {
         OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
@@ -114,7 +162,7 @@ class _LoginState extends State<Login> {
         _loginPlatform = LoginPlatform.none;
       }
     }
-    setState(() {});
+    setLoginState(_loginPlatform.toString());
   }
 
   Future<void> kakaoSendInfo(OAuthToken token) async {
@@ -127,15 +175,16 @@ class _LoginState extends State<Login> {
     await FirebaseAuth.instance.signInWithCredential(credential);
 
     if (context.mounted) {
-        const SnackBar sb = SnackBar(
-          content: Text('Loginned with kakao.'),
-          duration: Duration(seconds: 2),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(sb);
+      SnackBar sb = const SnackBar(
+        content: Text('Loginned with kakao'),
+        duration: Duration(seconds: 2),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(sb);
     }
   }
 
   void googleLogin() async {
+    showLoading(context);
     try{
         // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -154,22 +203,22 @@ class _LoginState extends State<Login> {
 
       print('구글계정으로 로그인 성공');
       _loginPlatform = LoginPlatform.google;
-
       if (context.mounted) {
-          const SnackBar sb = SnackBar(
-            content: Text('Loginned with google.'),
-            duration: Duration(seconds: 2),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(sb);
+        SnackBar sb = const SnackBar(
+          content: Text('Loginned with google'),
+          duration: Duration(seconds: 2),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(sb);
       }
     } catch(error) {
       print('구글계정으로 로그인 실패 $error');
       _loginPlatform = LoginPlatform.none;
     }
-    setState(() {});
+    setLoginState(_loginPlatform.toString());
   }
 
   Future<void> googleLoginWeb() async {
+    showLoading(context);
     try{
       GoogleAuthProvider googleProvider = GoogleAuthProvider();
 
@@ -183,20 +232,21 @@ class _LoginState extends State<Login> {
       print('구글계정으로 로그인 성공');
       _loginPlatform = LoginPlatform.google;
       if (context.mounted) {
-          const SnackBar sb = SnackBar(
-            content: Text('Loginned with google.'),
-            duration: Duration(seconds: 2),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(sb);
+        SnackBar sb = const SnackBar(
+          content: Text('Loginned with google'),
+          duration: Duration(seconds: 2),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(sb);
       }
     } catch(error) {
       print('구글계정으로 로그인 실패 $error');
       _loginPlatform = LoginPlatform.none;
     }
-    setState(() {});
+    setLoginState(_loginPlatform.toString());
   }
 
   Future<void> signOut() async {
+    showLoading(context);
     switch(_loginPlatform){
       case LoginPlatform.kakao:
         await UserApi.instance.logout();
@@ -206,13 +256,26 @@ class _LoginState extends State<Login> {
         await FirebaseAuth.instance.signOut();
         break;
       case LoginPlatform.none:
-        break;
+        if(context.mounted){
+          const SnackBar sb = SnackBar(
+            content: Text('Already logoutted.'),
+            duration: Duration(seconds: 2),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(sb);
+          return;
+        }
     }
-  
-    setState(() {
-      _loginPlatform = LoginPlatform.none;
-    });
+    _loginPlatform = LoginPlatform.none;
+    setLoginState(_loginPlatform.toString());
     print('로그아웃됨');
   }
-}
 
+  void showLoading(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(child: AlertDialog(content: CircularProgressIndicator()));
+      }
+    );
+  }
+}
