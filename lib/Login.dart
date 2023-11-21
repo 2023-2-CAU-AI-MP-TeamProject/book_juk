@@ -227,7 +227,7 @@ class _LoginState extends State<Login> {
         'login_hint': 'user@example.com'
       });
 
-      await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+      await FirebaseAuth.instance.signInWithPopup(googleProvider);
       
       print('구글계정으로 로그인 성공');
       _loginPlatform = LoginPlatform.google;
@@ -274,7 +274,22 @@ class _LoginState extends State<Login> {
     showDialog(
       context: context,
       builder: (context) {
-        return const Center(child: AlertDialog(content: CircularProgressIndicator()));
+        return Container(
+          width: 1000,
+          height: 1000,
+          padding: const EdgeInsets.all(10),
+          child: const Dialog(
+            alignment: Alignment.center,
+            insetPadding: EdgeInsets.all(100),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                Text('Loading...')
+              ],
+            ),
+          )
+        );
       }
     );
   }
