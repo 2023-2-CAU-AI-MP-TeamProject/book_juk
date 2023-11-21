@@ -12,7 +12,7 @@ class Search extends StatefulWidget {
   State<Search> createState() => SearchState();
 }
 
-class SearchState extends State<Search> {
+class SearchState extends State<Search>{
   String input = '';
   final int booksPerPage = 10;
   final String ttb = 'ttbsdyhappy2211001';
