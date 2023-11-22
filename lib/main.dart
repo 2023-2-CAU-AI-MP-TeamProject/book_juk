@@ -4,6 +4,8 @@ import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
 import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'CustomNavigator.dart';
+import 'MyTabBar.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -50,65 +52,51 @@ class Landing extends StatefulWidget {
   const Landing({super.key});
 
   @override
-  State<Landing> createState() => _MyLanding();
+  State<Landing> createState() => _LandingState();
 }
 
-class _MyLanding extends State<Landing> {
-  int _selectedIndex = 0;
+class _LandingState extends State<Landing> {
+  PageController pageController = PageController();
+
+  final List<Widget> _pages = [
+    MyHome(),
+    Search(),
+    Text(
+      "Analytics!!!!!!!!!!!!!!",
+      style: TextStyle(
+        fontSize: 100
+      ),
+      textAlign: TextAlign.center,
+    ),
+    Text(
+      "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
+      style: TextStyle(
+        fontSize: 100
+      ),
+      textAlign: TextAlign.center,
+    )
+  ];
+  final _navigatorKeyList = List.generate(4, (index) => GlobalKey<NavigatorState>());
 
   @override
   Widget build(BuildContext context) {
-    void _onItemTapped(int index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-
-    List<Widget> navItems = [
-      MyHome(),
-      Search(),
-      Text(
-        "Analytics!!!!!!!!!!!!!!",
-        style: TextStyle(
-          fontSize: 100
+    return DefaultTabController(
+      length: _pages.length,
+      animationDuration: Duration.zero,
+      child: Scaffold(
+        body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          children: _pages.map(
+            (page) {
+              int index = _pages.indexOf(page);
+              return CustomNavigator(
+                page: page,
+                navigatorKey: _navigatorKeyList[index]
+              );
+            },
+          ).toList()
         ),
-        textAlign: TextAlign.center,
-      ),
-      Text(
-        "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
-        style: TextStyle(
-          fontSize: 100
-        ),
-        textAlign: TextAlign.center,
-      )
-    ];
-
-    return Scaffold(
-      body: navItems[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "홈 화면"
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: "검색"
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.analytics),
-            label: "통계"
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: "설정"
-          )
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blueAccent,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        onTap: _onItemTapped
+        bottomNavigationBar: MyTabBar(),
       ),
     );
   }
