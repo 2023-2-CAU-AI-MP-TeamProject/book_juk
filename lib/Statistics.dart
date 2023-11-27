@@ -18,6 +18,8 @@ class Statistics extends StatelessWidget { //이건 책 저장되는 것 구현�
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
+
               Container(
                 width: 300, // 원하는 폭으로 조절
                 height: 200, // 원하는 높이로 조절
@@ -41,7 +43,7 @@ class Statistics extends StatelessWidget { //이건 책 저장되는 것 구현�
 
     List<charts.Series<Book, String>> seriesList = [
       charts.Series<Book, String>(
-        id: 'Books',
+        id: '월별 독서 현황',
         domainFn: (Book book, _) => book.month,
         measureFn: (Book book, _) => bookCounts[book.month],
         data: savedBooks,
