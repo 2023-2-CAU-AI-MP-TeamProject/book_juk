@@ -52,11 +52,31 @@ class Landing extends StatefulWidget {
   const Landing({super.key});
 
   @override
-  State<Landing> createState() => _MyLanding();
+  State<Landing> createState() => _LandingState();
 }
 
-class _MyLanding extends State<Landing> {
-  int _selectedIndex = 0;
+class _LandingState extends State<Landing> {
+  PageController pageController = PageController();
+
+  final List<Widget> _pages = [
+    MyHome(),
+    Search(),
+    Text(
+      "Analytics!!!!!!!!!!!!!!",
+      style: TextStyle(
+        fontSize: 100
+      ),
+      textAlign: TextAlign.center,
+    ),
+    Text(
+      "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
+      style: TextStyle(
+        fontSize: 100
+      ),
+      textAlign: TextAlign.center,
+    )
+  ];
+  final _navigatorKeyList = List.generate(4, (index) => GlobalKey<NavigatorState>());
 
   @override
   Widget build(BuildContext context) {
