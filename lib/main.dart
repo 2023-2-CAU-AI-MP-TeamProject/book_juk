@@ -4,6 +4,7 @@ import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
 import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'Statistics.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -28,11 +29,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '책:크',
       theme: ThemeData(
-        primarySwatch: Colors.blue
+        primarySwatch: Colors.blue,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+          }
+        )
       ),
       routes: {
         '/': (context) => Landing(),
-        '/search':(context) => Search()
+        '/search':(context) => Search(),
+        '/statistics':(context) => Statistics()
       },
       debugShowCheckedModeBanner: false,
     );
@@ -44,11 +52,31 @@ class Landing extends StatefulWidget {
   const Landing({super.key});
 
   @override
-  State<Landing> createState() => _MyLanding();
+  State<Landing> createState() => _LandingState();
 }
 
-class _MyLanding extends State<Landing> {
-  int _selectedIndex = 0;
+class _LandingState extends State<Landing> {
+  PageController pageController = PageController();
+
+  final List<Widget> _pages = [
+    MyHome(),
+    Search(),
+    Text(
+      "Analytics!!!!!!!!!!!!!!",
+      style: TextStyle(
+        fontSize: 100
+      ),
+      textAlign: TextAlign.center,
+    ),
+    Text(
+      "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
+      style: TextStyle(
+        fontSize: 100
+      ),
+      textAlign: TextAlign.center,
+    )
+  ];
+  final _navigatorKeyList = List.generate(4, (index) => GlobalKey<NavigatorState>());
 
   @override
   Widget build(BuildContext context) {
@@ -61,13 +89,7 @@ class _MyLanding extends State<Landing> {
     List<Widget> navItems = [
       MyHome(),
       Search(),
-      Text(
-        "Analytics!!!!!!!!!!!!!!",
-        style: TextStyle(
-          fontSize: 100
-        ),
-        textAlign: TextAlign.center,
-      ),
+      Statistics(),
       Text(
         "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
         style: TextStyle(
@@ -107,3 +129,4 @@ class _MyLanding extends State<Landing> {
     );
   }
 }
+
