@@ -6,6 +6,7 @@ import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'CustomNavigator.dart';
 import 'MyTabBar.dart';
+import 'Statistics.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +41,8 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => Landing(),
-        '/search':(context) => Search()
+        '/search':(context) => Search(),
+        '/statistics':(context) => Statistics()
       },
       debugShowCheckedModeBanner: false,
     );
