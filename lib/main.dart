@@ -63,13 +63,7 @@ class _LandingState extends State<Landing> {
   final List<Widget> _pages = [
     MyHome(),
     Search(),
-    Text(
-      "Analytics!!!!!!!!!!!!!!",
-      style: TextStyle(
-        fontSize: 100
-      ),
-      textAlign: TextAlign.center,
-    ),
+    Statistics(),
     Text(
       "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
       style: TextStyle(
