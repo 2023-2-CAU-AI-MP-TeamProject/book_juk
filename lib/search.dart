@@ -96,24 +96,33 @@ class SearchState extends State<Search>{
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: body()
+      body: body
     );
   }
 
-  Widget body(){
+  Widget get body{
     if(_isFirstLoadRunning && input !=''){
       return const Center(child: CircularProgressIndicator());
     }
     else if(input == ''){
-      return GestureDetector(child: const Center(child: Text('검색어를 입력하세요.')));
+      return GestureDetector(
+        onTap:() {
+          FocusScope.of(context).unfocus();
+        },
+        child: const Center(
+          child: Text('검색어를 입력하세요.')
+        )
+      );
     }
     else{
-    return Column(
+    return (searchedBooks.isEmpty) ? const Center(child: Text('검색 결과가 없습니다.'),) :
+    Column(
       children: [
         Expanded(
           child: ListView.separated(
             controller: _scrollController,
             shrinkWrap: true,
+            primary: false,
             padding: const EdgeInsets.all(8.0),
             itemCount: searchedBooks.length,
             itemBuilder: (context, idx) => searchCard(book: searchedBooks[idx]),
@@ -125,11 +134,11 @@ class SearchState extends State<Search>{
           padding: EdgeInsets.all(30),
           child: Center(child: CircularProgressIndicator())
         ),
-        if(_hasNextPage == false)
+        if(_hasNextPage == false && searchedBooks.isNotEmpty)
         Container(
-          padding: EdgeInsets.all(20),
-          color: Colors.blue,
-          child: const Center(child: Text('더 이상 검색결과가 없습니다.'),)
+          padding: const EdgeInsets.all(20),
+          color: Colors.transparent,
+          child: const Center(child: Text('모든 결과를 검색했습니다.'),)
         )
       ],
     );

@@ -80,6 +80,11 @@ class BookDetail extends StatelessWidget {
           }
         )
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pop(context);
+        }
+      ),
     );
   }
 
