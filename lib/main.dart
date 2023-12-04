@@ -7,6 +7,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'CustomNavigator.dart';
 import 'MyTabBar.dart';
 import 'Statistics.dart';
+import 'setting.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +43,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Landing(),
         '/search':(context) => Search(),
-        '/statistics':(context) => Statistics()
+        '/statistics':(context) => Statistics(),
+        '/setting':(context)=> Setting()
       },
       debugShowCheckedModeBanner: false,
     );
@@ -64,13 +66,7 @@ class _LandingState extends State<Landing> {
     MyHome(),
     Search(),
     Statistics(),
-    Text(
-      "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
-      style: TextStyle(
-        fontSize: 100
-      ),
-      textAlign: TextAlign.center,
-    )
+    Setting(),
   ];
   final _navigatorKeyList = List.generate(4, (index) => GlobalKey<NavigatorState>());
 
