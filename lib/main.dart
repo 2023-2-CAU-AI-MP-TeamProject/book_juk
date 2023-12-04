@@ -4,6 +4,8 @@ import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
 import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'CustomNavigator.dart';
+import 'MyTabBar.dart';
 import 'Statistics.dart';
 
 void main() {
@@ -61,13 +63,7 @@ class _LandingState extends State<Landing> {
   final List<Widget> _pages = [
     MyHome(),
     Search(),
-    Text(
-      "Analytics!!!!!!!!!!!!!!",
-      style: TextStyle(
-        fontSize: 100
-      ),
-      textAlign: TextAlign.center,
-    ),
+    Statistics(),
     Text(
       "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
       style: TextStyle(
@@ -80,51 +76,23 @@ class _LandingState extends State<Landing> {
 
   @override
   Widget build(BuildContext context) {
-    void _onItemTapped(int index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-
-    List<Widget> navItems = [
-      MyHome(),
-      Search(),
-      Statistics(),
-      Text(
-        "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
-        style: TextStyle(
-          fontSize: 100
+    return DefaultTabController(
+      length: _pages.length,
+      animationDuration: Duration.zero,
+      child: Scaffold(
+        body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          children: _pages.map(
+            (page) {
+              int index = _pages.indexOf(page);
+              return CustomNavigator(
+                page: page,
+                navigatorKey: _navigatorKeyList[index]
+              );
+            },
+          ).toList()
         ),
-        textAlign: TextAlign.center,
-      )
-    ];
-
-    return Scaffold(
-      body: navItems[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "홈 화면"
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: "검색"
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.analytics),
-            label: "통계"
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: "설정"
-          )
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blueAccent,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        onTap: _onItemTapped
+        bottomNavigationBar: MyTabBar(),
       ),
     );
   }
