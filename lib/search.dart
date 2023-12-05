@@ -115,33 +115,40 @@ class SearchState extends State<Search>{
       );
     }
     else{
-    return (searchedBooks.isEmpty) ? const Center(child: Text('검색 결과가 없습니다.'),) :
-    Column(
-      children: [
-        Expanded(
-          child: ListView.separated(
-            controller: _scrollController,
-            shrinkWrap: true,
-            primary: false,
-            padding: const EdgeInsets.all(8.0),
-            itemCount: searchedBooks.length,
-            itemBuilder: (context, idx) => searchCard(book: searchedBooks[idx]),
-            separatorBuilder: (context, index) => const Divider(),
-          ),
+      return (searchedBooks.isEmpty) ? const Center(child: Text('검색 결과가 없습니다.'),) :
+      SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          children: [
+            ListView.separated(
+              shrinkWrap: true,
+              primary: false,
+              padding: const EdgeInsets.all(8.0),
+              itemCount: searchedBooks.length,
+              itemBuilder: (context, idx) => searchCard(book: searchedBooks[idx]),
+              separatorBuilder: (context, index) => const Divider(),
+            ),
+            if(_isLoadMoreRunning)
+            Container(
+              height: 70,
+              padding: EdgeInsets.all(10),
+              child: Center(child: CircularProgressIndicator())
+            ),
+            if(_hasNextPage == false && searchedBooks.isNotEmpty)
+            Column(
+              children: [
+                const Divider(),
+                Container(
+                  height: 50,
+                  padding: const EdgeInsets.all(10),
+                  color: Colors.transparent,
+                  child: const Center(child: Text('모든 결과를 검색했습니다.'),)
+                ),
+              ],
+            )
+          ],
         ),
-        if(_isLoadMoreRunning == true)
-        const Padding(
-          padding: EdgeInsets.all(30),
-          child: Center(child: CircularProgressIndicator())
-        ),
-        if(_hasNextPage == false && searchedBooks.isNotEmpty)
-        Container(
-          padding: const EdgeInsets.all(20),
-          color: Colors.transparent,
-          child: const Center(child: Text('모든 결과를 검색했습니다.'),)
-        )
-      ],
-    );
+      );
     }
   }
 
@@ -158,7 +165,7 @@ class SearchState extends State<Search>{
   }
 
   void _nextLoad() async {
-    if(_hasNextPage && !_isFirstLoadRunning && !_isLoadMoreRunning && _scrollController.position.extentAfter < 1) {
+    if(_hasNextPage && !_isFirstLoadRunning && !_isLoadMoreRunning && _scrollController.position.extentAfter < 10) {
       setState(() {
         _isLoadMoreRunning = true;
       });
