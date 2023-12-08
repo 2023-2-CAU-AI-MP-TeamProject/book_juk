@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class MyTabBar extends StatelessWidget {
-  const MyTabBar({super.key});
+  TabController tabController;
+
+  MyTabBar({
+    super.key,
+    required this.tabController
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
-      child: const TabBar(
-        tabs: <Tab>[
+      child: TabBar(
+        tabs: const <Tab>[
           Tab(
             icon: Icon(Icons.home, size: 30),
             //text: "홈 화면"
@@ -27,10 +33,11 @@ class MyTabBar extends StatelessWidget {
           )
         ],
         labelColor: Colors.blue,
-        unselectedLabelColor: Color.fromRGBO(20, 20, 20, 0.3),
+        unselectedLabelColor: const Color.fromRGBO(20, 20, 20, 0.3),
         isScrollable: false,
         indicatorColor: Colors.transparent,
         tabAlignment: TabAlignment.fill,
+        controller: tabController,
       ),
     );
   }

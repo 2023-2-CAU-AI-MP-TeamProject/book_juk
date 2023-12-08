@@ -4,7 +4,7 @@ import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
 import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'CustomNavigator.dart';
+import 'KeepAliveScreen.dart';
 import 'MyTabBar.dart';
 import 'Statistics.dart';
 
@@ -57,9 +57,8 @@ class Landing extends StatefulWidget {
   State<Landing> createState() => _LandingState();
 }
 
-class _LandingState extends State<Landing> {
-  PageController pageController = PageController();
-
+class _LandingState extends State<Landing>
+with SingleTickerProviderStateMixin {
   final List<Widget> _pages = [
     MyHome(),
     Search(),
@@ -72,28 +71,27 @@ class _LandingState extends State<Landing> {
       textAlign: TextAlign.center,
     )
   ];
-  final _navigatorKeyList = List.generate(4, (index) => GlobalKey<NavigatorState>());
+  //final _navigatorKeyList = List.generate(4, (index) => GlobalKey<NavigatorState>());
+  late TabController tabController = TabController(
+    length: 4,
+    vsync: this,
+    animationDuration: Duration.zero
+  );
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: _pages.length,
-      animationDuration: Duration.zero,
-      child: Scaffold(
-        body: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
-          children: _pages.map(
-            (page) {
-              int index = _pages.indexOf(page);
-              return CustomNavigator(
-                page: page,
-                navigatorKey: _navigatorKeyList[index]
-              );
-            },
-          ).toList()
-        ),
-        bottomNavigationBar: MyTabBar(),
+    return Scaffold(
+      body: TabBarView(
+        controller: tabController,
+        physics: NeverScrollableScrollPhysics(),
+        children: _pages.map(
+          (page) {
+            //int index = _pages.indexOf(page);
+            return KeepAliveScreen(page: page);
+          },
+        ).toList()
       ),
+      bottomNavigationBar: MyTabBar(tabController: tabController),
     );
   }
 }
