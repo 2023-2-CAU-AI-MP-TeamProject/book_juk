@@ -51,7 +51,8 @@ class MyApp extends StatelessWidget {
 
 
 class Landing extends StatefulWidget {
-  const Landing({super.key});
+  Landing({super.key});
+  
 
   @override
   State<Landing> createState() => _LandingState();
@@ -59,18 +60,7 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing>
 with SingleTickerProviderStateMixin {
-  final List<Widget> _pages = [
-    MyHome(),
-    Search(),
-    Statistics(),
-    Text(
-      "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
-      style: TextStyle(
-        fontSize: 100
-      ),
-      textAlign: TextAlign.center,
-    )
-  ];
+  final GlobalKey<NavigatorState> _searchKey = GlobalKey<NavigatorState>();
   //final _navigatorKeyList = List.generate(4, (index) => GlobalKey<NavigatorState>());
   late TabController tabController = TabController(
     length: 4,
@@ -80,18 +70,41 @@ with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: TabBarView(
-        controller: tabController,
-        physics: NeverScrollableScrollPhysics(),
-        children: _pages.map(
-          (page) {
-            //int index = _pages.indexOf(page);
-            return KeepAliveScreen(page: page);
-          },
-        ).toList()
+    final List<Widget> pages = [
+      MyHome(),
+      Navigator(
+        key: _searchKey,
+        onGenerateRoute: (settings) {
+          return MaterialPageRoute(builder: (context) => Search());
+        }
       ),
-      bottomNavigationBar: MyTabBar(tabController: tabController),
+      Statistics(),
+      Text(
+        "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
+        style: TextStyle(
+          fontSize: 100
+        ),
+        textAlign: TextAlign.center,
+      )
+    ];
+
+    return WillPopScope(
+      onWillPop: () async {
+        return !await _searchKey.currentState!.maybePop();
+      },
+      child: Scaffold(
+        body: TabBarView(
+          controller: tabController,
+          physics: NeverScrollableScrollPhysics(),
+          children: pages.map(
+            (page) {
+              //int index = _pages.indexOf(page);
+              return KeepAliveScreen(page: page);
+            },
+          ).toList()
+        ),
+        bottomNavigationBar: MyTabBar(tabController: tabController),
+      ),
     );
   }
 }
