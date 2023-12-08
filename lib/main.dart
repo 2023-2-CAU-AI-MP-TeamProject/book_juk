@@ -68,18 +68,7 @@ with SingleTickerProviderStateMixin {
     animationDuration: Duration.zero
   );
 
-  void showSnackBar() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("현재 index: $_selectedIndex\n '뒤로' 버튼 한번 더 눌러 종료"),
-        duration: Duration(seconds: 2),
-      )
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> pages = [
+  final List<Widget> _pages = [
       MyHome(),
       Search(),
       Statistics(),
@@ -92,6 +81,17 @@ with SingleTickerProviderStateMixin {
       )
     ];
 
+  void showSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("현재 index: $_selectedIndex\n '뒤로' 버튼 한번 더 눌러 종료"),
+        duration: Duration(seconds: 2),
+      )
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
         if(await _navigatorKeyList[_selectedIndex].currentState!.maybePop()){
@@ -110,9 +110,9 @@ with SingleTickerProviderStateMixin {
         body: TabBarView(
           controller: tabController,
           physics: NeverScrollableScrollPhysics(),
-          children: pages.map(
+          children: _pages.map(
             (page) {
-              int index = pages.indexOf(page);
+              int index = _pages.indexOf(page);
               return CustomNavigator(
                 page: page,
                 navigatorKey: _navigatorKeyList[index]
@@ -156,4 +156,3 @@ with SingleTickerProviderStateMixin {
     );
   }
 }
-
