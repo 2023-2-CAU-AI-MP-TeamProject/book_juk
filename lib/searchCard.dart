@@ -10,7 +10,8 @@ class searchCard extends StatelessWidget {
 
   const searchCard(
     {Key? key,
-    required this.book}
+    required this.book
+    }
   ) : super(key: key);
 
   @override
@@ -35,7 +36,7 @@ class searchCard extends StatelessWidget {
       ),
       isThreeLine: true,
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => BookDetail(isbn13: book.isbn13),));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => BookDetail(isbn13: book.isbn13),));
       },
     );
   }

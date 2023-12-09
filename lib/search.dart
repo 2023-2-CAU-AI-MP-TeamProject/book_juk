@@ -18,6 +18,7 @@ class SearchState extends State<Search>{
   String input = '';
   final String ttb = 'ttbsdyhappy2211001';
   final TextEditingController tec = TextEditingController();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   int page = 1;
   final int booksPerPage = 10;
@@ -125,14 +126,16 @@ class SearchState extends State<Search>{
               primary: false,
               padding: const EdgeInsets.all(8.0),
               itemCount: searchedBooks.length,
-              itemBuilder: (context, idx) => searchCard(book: searchedBooks[idx]),
+              itemBuilder: (context, idx) => searchCard(
+                book: searchedBooks[idx],
+              ),
               separatorBuilder: (context, index) => const Divider(),
             ),
             if(_isLoadMoreRunning)
             Container(
               height: 70,
-              padding: EdgeInsets.all(10),
-              child: Center(child: CircularProgressIndicator())
+              padding: const EdgeInsets.all(10),
+              child: const Center(child: CircularProgressIndicator())
             ),
             if(_hasNextPage == false && searchedBooks.isNotEmpty)
             Column(
