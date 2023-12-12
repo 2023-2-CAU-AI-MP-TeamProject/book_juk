@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'main.dart';
+import 'Statistics.dart';
 
 class Setting extends StatelessWidget {
 
@@ -41,13 +43,14 @@ class Setting extends StatelessWidget {
                 border: Border.all(
                   color: Colors.black,
                   width: 1,
-                ),
+                ),// Adjust the radius as needed
               ),
-              child: Center(
-                child: Text(
-                  '테마 수정',
-                  style: TextStyle(color: Colors.black),
-                ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Statistics()));
+                  //print('눌림');
+                },
+                child: Text('테마 설정'),
               ),
             ),
             SizedBox(height: 10),
