@@ -9,6 +9,9 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'CustomNavigator.dart';
+import 'MyTabBar.dart';
+import 'Statistics.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -44,11 +47,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '책:크',
       theme: ThemeData(
-        primarySwatch: Colors.blue
+        primarySwatch: Colors.blue,
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+          }
+        )
       ),
       routes: {
         '/': (context) => Landing(),
-        '/search':(context) => Search()
+        '/search':(context) => Search(),
+        '/statistics':(context) => Statistics()
       },
       debugShowCheckedModeBanner: false,
     );
@@ -60,7 +70,7 @@ class Landing extends StatefulWidget {
   const Landing({super.key});
 
   @override
-  State<Landing> createState() => _MyLanding();
+  State<Landing> createState() => _LandingState();
 }
 
 class _MyLanding extends State<Landing> {
@@ -148,6 +158,7 @@ class _MyLanding extends State<Landing> {
         ),
       );
     }
+
   }
 }
 
