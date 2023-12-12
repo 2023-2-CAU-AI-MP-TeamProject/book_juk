@@ -1,9 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'models/BookModel.dart';
-import 'MyAppBar.dart';
 import 'package:html/parser.dart';
 
 
@@ -26,7 +26,50 @@ class BookDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar: AppBar(
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              showDialog(context: context,
+                builder: (context) {
+                  return Dialog(
+                    insetPadding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      clipBehavior: Clip.hardEdge,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height / 2,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                      ),
+                      child: ColoredBox(color: Colors.white)
+                    ),
+                  );
+                },
+              );
+            },
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.resolveWith(
+                (states) {
+                  if(states.contains(MaterialState.pressed)) {return Colors.blue;}
+                  return Colors.black;
+                }
+              ),
+              overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+              animationDuration: Duration.zero
+            ),
+            child: const Text('저장')
+          )
+        ],
+        leading: BackButton(
+          onPressed: () => Navigator.pop(context),
+          // splashColor: Colors.transparent,
+          // highlightColor: Colors.transparent,
+          // icon: const Icon(CupertinoIcons.back, color: Colors.black),
+          color: Colors.black
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Center(
         child: FutureBuilder(
           future: detailBook(),

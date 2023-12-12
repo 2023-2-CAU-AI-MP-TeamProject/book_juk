@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'models/BookModel.dart';
 import 'searchCard.dart';
+
+import 'globals.dart' as globals;
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -25,6 +28,7 @@ class SearchState extends State<Search>{
   bool _hasNextPage = true;
   bool _isLoadMoreRunning = false;
   bool _isFirstLoadRunning = false;
+  bool _isFilled = false;
   late ScrollController _scrollController;
 
   final List<String> baseURL = [
@@ -40,6 +44,7 @@ class SearchState extends State<Search>{
     super.initState();
     _scrollController = ScrollController()..addListener(_nextLoad);
     _isFirstLoadRunning = false;
+    
   }
 
   @override
@@ -61,57 +66,80 @@ class SearchState extends State<Search>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          padding: const EdgeInsets.all(8.0),
-          width: MediaQuery.of(context).size.width,
-          child: Row(
-            children: [
-              Expanded(
-                flex: 10,
-                child: TextFormField(
-                  cursorColor: Colors.black,
-                  decoration: const InputDecoration(
-                    hintText: '도서 검색',
-                  ),
-                  textInputAction: TextInputAction.search,
-                  onFieldSubmitted: _onSubmitted,
-                  controller: tec,
-                ),
+        title: Padding(
+          padding: const EdgeInsets.all(20),
+          child: TextField(
+            autofocus: true,
+            focusNode: globals.focusNode,
+            cursorColor: Colors.black54,
+            decoration: InputDecoration(
+              hintText: '도서 검색',
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide.none
               ),
-              Flexible(
-                flex: 1,
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      _onSubmitted(tec.text);
-                    },
-                    icon: const Icon(Icons.search, color: Colors.black,)
-                  ),
-                ),
-              )
-            ],
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide.none
+              ),
+              suffixIcon: (_isFilled) ? 
+              IconButton(
+                onPressed: () => setState(() {
+                  tec.clear();
+                  _isFilled = false;
+                  input = '';
+                }),
+                icon: const Icon(CupertinoIcons.xmark_circle_fill, size: 20, color: Colors.black54,)
+              ) : const SizedBox.shrink(),
+              filled: true,
+              fillColor: Colors.black12,
+            ),
+            textInputAction: TextInputAction.search,
+            onSubmitted: _onSubmitted,
+            controller: tec,
+            onChanged: (value) {
+              setState(() {
+                if(value == ''){_isFilled = false;}
+                else{_isFilled = true;}
+              });
+            },
           ),
         ),
-        backgroundColor: Colors.white,
+        titleSpacing: 0,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: body
+      body: body,
+      backgroundColor: Colors.white,
     );
   }
 
   Widget get body{
-    if(_isFirstLoadRunning && input !=''){
+    if(globals.isSearchedViaHome){
+      setState(() {
+        initialize();
+        tec.clear();
+        input = '';
+        _isFilled = false;
+        globals.isSearchedViaHome = false;
+      });
+    }
+    if(_isFirstLoadRunning && input != ''){
       return const Center(child: CircularProgressIndicator());
     }
     else if(input == ''){
       return GestureDetector(
-        onTap:() {
-          FocusScope.of(context).unfocus();
-        },
-        child: const Center(
-          child: Text('검색어를 입력하세요.')
+        onTap:() => FocusScope.of(context).unfocus(),
+        onVerticalDragStart: (details) => FocusScope.of(context).unfocus(),
+        onHorizontalDragStart: (details) => FocusScope.of(context).unfocus(),
+        child: const SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: AbsorbPointer(
+            absorbing: true,
+            child: Center(
+              child: Text('검색어를 입력하세요.')
+            ),
+          ),
         )
       );
     }

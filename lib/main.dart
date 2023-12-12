@@ -7,6 +7,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'CustomNavigator.dart';
 import 'Statistics.dart';
 
+import 'globals.dart' as globals;
+
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -39,9 +41,7 @@ class MyApp extends StatelessWidget {
         )
       ),
       routes: {
-        '/': (context) => Landing(),
-        '/search':(context) => Search(),
-        '/statistics':(context) => Statistics()
+        '/': (context) => Landing()
       },
       debugShowCheckedModeBanner: false,
     );
@@ -68,19 +68,6 @@ with SingleTickerProviderStateMixin {
     animationDuration: Duration.zero
   );
 
-  final List<Widget> _pages = [
-      MyHome(),
-      Search(),
-      Statistics(),
-      Text(
-        "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
-        style: TextStyle(
-          fontSize: 100
-        ),
-        textAlign: TextAlign.center,
-      )
-    ];
-
   void showSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -91,7 +78,31 @@ with SingleTickerProviderStateMixin {
   }
 
   @override
+  void initState() {
+    tabController.addListener(() {
+      if(tabController.index == 1 && tabController.previousIndex != 1){
+        setState(() {
+          FocusScope.of(context).requestFocus(globals.focusNode);
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      MyHome(tabController: tabController),
+      Search(),
+      Statistics(),
+      Text(
+        "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
+        style: TextStyle(
+          fontSize: 100
+        ),
+        textAlign: TextAlign.center,
+      )
+    ];
     return WillPopScope(
       onWillPop: () async {
         if(await _navigatorKeyList[_selectedIndex].currentState!.maybePop()){
@@ -110,12 +121,12 @@ with SingleTickerProviderStateMixin {
         body: TabBarView(
           controller: tabController,
           physics: NeverScrollableScrollPhysics(),
-          children: _pages.map(
+          children: pages.map(
             (page) {
-              int index = _pages.indexOf(page);
+              int index = pages.indexOf(page);
               return CustomNavigator(
                 page: page,
-                navigatorKey: _navigatorKeyList[index]
+                navigatorKey: _navigatorKeyList[index],
               );
             },
           ).toList()
