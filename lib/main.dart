@@ -2,24 +2,40 @@
 
 import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'Login.dart';
 import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'CustomNavigator.dart';
 import 'MyTabBar.dart';
 import 'Statistics.dart';
 
-void main() {
+void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  Future.delayed(const Duration(seconds: 3));
+  if(!(await initLoad())) {
+    throw Error();
+  }
   FlutterNativeSplash.remove();
   runApp(const MyApp());
 }
 
-Future<bool> fetchData() async {
-  bool data =false;
+Future<bool> initLoad() async {
+  bool data = false;
 
-  await Future.delayed(const Duration(seconds: 3), () {data = true;});
+  KakaoSdk.init(
+    nativeAppKey: '650492dd92ba874f33ebcb55c010e883',
+    javaScriptAppKey: 'afa87686307e58f3967f15ac07b60253'
+  );
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+
+  data = true;
   return data;
 }
 
@@ -57,44 +73,92 @@ class Landing extends StatefulWidget {
   State<Landing> createState() => _LandingState();
 }
 
-class _LandingState extends State<Landing> {
-  PageController pageController = PageController();
+class _MyLanding extends State<Landing> {
+  int _selectedIndex = 0;
+  Future? _loading;
+  String _isLoginned = "none";
 
-  final List<Widget> _pages = [
-    MyHome(),
-    Search(),
-    Statistics(),
-    Text(
-      "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
-      style: TextStyle(
-        fontSize: 100
-      ),
-      textAlign: TextAlign.center,
-    )
-  ];
-  final _navigatorKeyList = List.generate(4, (index) => GlobalKey<NavigatorState>());
+  @override
+  void initState() {
+    super.initState();
+    _loading = getLoginInfo();
+  }
+
+  Future<void> getLoginInfo() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    _isLoginned = pref.getString("login_platform") ?? LoginPlatform.none.toString();
+    print('end: $_isLoginned');
+    setState(() {});
+    return;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: _pages.length,
-      animationDuration: Duration.zero,
-      child: Scaffold(
-        body: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
-          children: _pages.map(
-            (page) {
-              int index = _pages.indexOf(page);
-              return CustomNavigator(
-                page: page,
-                navigatorKey: _navigatorKeyList[index]
-              );
-            },
-          ).toList()
+    
+    void _onItemTapped(int index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+
+    List<Widget> navItems = [
+      MyHome(),
+      Search(),
+      Login(),
+      Text(
+        "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
+        style: TextStyle(
+          fontSize: 100
         ),
-        bottomNavigationBar: MyTabBar(),
-      ),
-    );
+        textAlign: TextAlign.center,
+      )
+    ];
+
+    if(_isLoginned == "LoginPlatform.none") {
+      return FutureBuilder<dynamic>(
+        future: _loading,
+        builder: (context, snapshot) {
+          switch(snapshot.connectionState){
+            case ConnectionState.waiting:
+            case ConnectionState.none:
+              return Scaffold(body: Center(child: CircularProgressIndicator()));
+            default:
+              return Login();
+          }
+        },
+      );
+    }
+    else {
+      return Scaffold(
+        body: navItems[_selectedIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: "홈 화면"
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: "검색"
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.analytics),
+              label: "통계"
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: "설정"
+            )
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blueAccent,
+          unselectedItemColor: Colors.grey,
+          type: BottomNavigationBarType.fixed,
+          onTap: _onItemTapped
+        ),
+      );
+    }
+
   }
 }
 
