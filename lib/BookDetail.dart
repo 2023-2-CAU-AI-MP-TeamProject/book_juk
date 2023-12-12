@@ -33,15 +33,38 @@ class BookDetail extends StatelessWidget {
               showDialog(context: context,
                 builder: (context) {
                   return Dialog(
-                    insetPadding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      clipBehavior: Clip.hardEdge,
+                    alignment: Alignment.bottomCenter,
+                    insetPadding: const EdgeInsets.all(0.0),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(50),
+                        topRight: Radius.circular(50)
+                      )
+                    ),
+                    backgroundColor: Colors.white,
+                    elevation: 1,
+                    child: SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 2,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                      height: MediaQuery.of(context).size.height / 2.5,
+                      child: Column(
+                        children: [
+                          Text('안녕'),
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(onPressed: () {}, child: SizedBox(height: 100, width: 100,)),
+                                SizedBox(width: 20,),
+                                ElevatedButton(onPressed: () {}, child: SizedBox(height: 100, width: 100,))
+                              ],
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: SizedBox(height: 50, width: MediaQuery.of(context).size.width - 100,)
+                          )
+                        ],
                       ),
-                      child: ColoredBox(color: Colors.white)
                     ),
                   );
                 },
