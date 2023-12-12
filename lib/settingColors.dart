@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'Statistics.dart';
-import 'settingColors.dart';
 
-class Setting extends StatelessWidget {
+class SettingColors extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('설정'),
+        title: Text('테마 설정'),
       ),
       body: Center(
         child: Column(
@@ -19,7 +18,7 @@ class Setting extends StatelessWidget {
               width: 200,
               height: 50,
               decoration: BoxDecoration(
-                color: Colors.black12,
+                color: Colors.blue,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: Colors.black,
@@ -36,7 +35,7 @@ class Setting extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   primary: Colors.transparent,
                 ),
-                child: Text('초기화'),
+                child: Text(' '),
               ),
             ),
             SizedBox(height: 10),
@@ -44,7 +43,7 @@ class Setting extends StatelessWidget {
               width: 200,
               height: 50,
               decoration: BoxDecoration(
-                color: Colors.black12,
+                color: Colors.yellow,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: Colors.black,
@@ -53,13 +52,13 @@ class Setting extends StatelessWidget {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingColors()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Statistics()));
                   //print('눌림');
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.transparent,
                 ),
-                child: Text('테마 설정'),
+                child: Text(' '),
               ),
             ),
             SizedBox(height: 10),
@@ -67,7 +66,7 @@ class Setting extends StatelessWidget {
               width: 200,
               height: 50,
               decoration: BoxDecoration(
-                color: Colors.black12,
+                color: Colors.green,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: Colors.black,
@@ -82,11 +81,34 @@ class Setting extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   primary: Colors.transparent,
                 ),
-                child: Text('로그아웃'),
+                child: Text(' '),
               ),
             ),
             SizedBox(height: 10),
-            Text('라이선스 정보'),
+            Container(
+              width: 200,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.pink,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
+                ),
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Statistics())); //임시
+                  //print('눌림');
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.transparent,
+                ),
+                child: Text(' '),
+              ),
+            ),
+            SizedBox(height: 10),
+            Text('확인'),
           ],
         ),
 
