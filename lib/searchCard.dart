@@ -24,7 +24,10 @@ class searchCard extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(_decodeHtmlEntities(book.author)),
+          Text(_decodeHtmlEntities(book.author),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
           Text(_decodeHtmlEntities(book.description ?? '',),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

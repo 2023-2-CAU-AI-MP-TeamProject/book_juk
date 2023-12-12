@@ -44,7 +44,6 @@ class SearchState extends State<Search>{
     super.initState();
     _scrollController = ScrollController()..addListener(_nextLoad);
     _isFirstLoadRunning = false;
-    
   }
 
   @override
@@ -196,7 +195,7 @@ class SearchState extends State<Search>{
   }
 
   void _nextLoad() async {
-    if(_hasNextPage && !_isFirstLoadRunning && !_isLoadMoreRunning && _scrollController.position.extentAfter < 10) {
+    if(_hasNextPage && !_isFirstLoadRunning && !_isLoadMoreRunning && _scrollController.position.extentAfter < 50) {
       setState(() {
         _isLoadMoreRunning = true;
       });
