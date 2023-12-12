@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -15,7 +16,8 @@ class Search extends StatefulWidget {
   State<Search> createState() => SearchState();
 }
 
-class SearchState extends State<Search>{
+class SearchState extends State<Search>
+with TickerProviderStateMixin{
   List<BookModel> searchedBooks = [];
 
   String input = '';
@@ -30,7 +32,6 @@ class SearchState extends State<Search>{
   bool _isFirstLoadRunning = false;
   bool _isFilled = false;
   late ScrollController _scrollController;
-
   final List<String> baseURL = [
     'https://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=',
     '&Query=',
@@ -42,7 +43,13 @@ class SearchState extends State<Search>{
   @override
   void initState(){
     super.initState();
-    _scrollController = ScrollController()..addListener(_nextLoad);
+    _scrollController = ScrollController()
+    ..addListener(_nextLoad)
+    ..addListener(() {
+      if(_scrollController.position.userScrollDirection != ScrollDirection.idle){
+        FocusScope.of(context).unfocus();
+      }
+    });
     _isFirstLoadRunning = false;
   }
 
@@ -230,6 +237,4 @@ class SearchState extends State<Search>{
     }
     return searchedBooks;
   }
-
-
 }

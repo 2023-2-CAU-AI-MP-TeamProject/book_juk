@@ -1,3 +1,4 @@
+import 'package:book_juk/BookStoreDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -31,43 +32,7 @@ class BookDetail extends StatelessWidget {
           TextButton(
             onPressed: () {
               showDialog(context: context,
-                builder: (context) {
-                  return Dialog(
-                    alignment: Alignment.bottomCenter,
-                    insetPadding: const EdgeInsets.all(0.0),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(50),
-                        topRight: Radius.circular(50)
-                      )
-                    ),
-                    backgroundColor: Colors.white,
-                    elevation: 1,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 2.5,
-                      child: Column(
-                        children: [
-                          Text('안녕'),
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ElevatedButton(onPressed: () {}, child: SizedBox(height: 100, width: 100,)),
-                                SizedBox(width: 20,),
-                                ElevatedButton(onPressed: () {}, child: SizedBox(height: 100, width: 100,))
-                              ],
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: SizedBox(height: 50, width: MediaQuery.of(context).size.width - 100,)
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                builder: (context) => BookStoreDialog(),
               );
             },
             style: ButtonStyle(
