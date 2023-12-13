@@ -7,7 +7,6 @@ import 'dart:convert';
 import 'models/BookModel.dart';
 import 'package:html/parser.dart';
 
-
 class BookDetail extends StatelessWidget {
   BookDetail(
     {super.key, 
@@ -23,6 +22,11 @@ class BookDetail extends StatelessWidget {
   ];
 
   final String itemIdType = 'isbn13';
+  late final BookModel book;
+
+  void storeBook(BookStatus status, DateTime date) async {
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +35,9 @@ class BookDetail extends StatelessWidget {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              showDialog(context: context,
-                builder: (context) => BookStoreDialog(),
+              showDialog(
+                context: context,
+                builder: (context) => BookStoreDialog(callBackBook: storeBook),
               );
             },
             style: ButtonStyle(
@@ -69,7 +74,7 @@ class BookDetail extends StatelessWidget {
               return const Text('Error!');
             }
             else {
-              BookModel book = snapshot.data;
+              book = snapshot.data;
               return SingleChildScrollView(
                 child: Column(
                   children: [
