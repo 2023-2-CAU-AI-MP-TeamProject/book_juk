@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'models/BookModel.dart';
 import 'package:html/parser.dart';
+import 'globals.dart' as globals;
 
 class BookDetail extends StatelessWidget {
   BookDetail(
@@ -22,10 +23,11 @@ class BookDetail extends StatelessWidget {
   ];
 
   final String itemIdType = 'isbn13';
-  late final BookModel book;
+  late BookModel book;
 
-  void storeBook(BookStatus status, DateTime date) async {
+  void storeBook(BookStatus status, DateTime date) {
     //todo : implement storing book via Firestore databases
+    globals.books.add(StoredBook(book: book, status: status, date: date));
   }
 
   @override

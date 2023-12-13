@@ -1,3 +1,4 @@
+import 'package:book_juk/models/BookModel.dart';
 import 'package:flutter/material.dart';
 import 'globals.dart' as globals;
 
@@ -49,12 +50,29 @@ class _MyHomeState extends State<MyHome> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: const Center(
-        child: Text('Home',
+      body: Center(
+        child: (globals.books.isEmpty) ? const Text('Home',
           style: TextStyle(
             fontSize: 100
           ),
           textAlign: TextAlign.center,
+        )
+        : ListView.builder(
+          itemBuilder: (context, index) {
+            return ListTile(
+              leading: (globals.books[index].status == BookStatus.read)
+              ? const Icon(Icons.check, color: Colors.green) : const Icon(Icons.close, color: Colors.red),
+              title: Text(globals.books[index].book.title),
+              subtitle: Text(globals.books[index].book.author),
+              trailing: IconButton(
+                onPressed: () {
+                  setState(() => globals.books.removeAt(index));
+                },
+                icon: const Icon(Icons.cancel)
+              ),
+            );
+          },
+          itemCount: globals.books.length,
         )
       )
     );

@@ -68,6 +68,15 @@ with TickerProviderStateMixin{
     searchedBooks.clear();
   }
 
+  void fullInitialize(){
+    initialize();
+    tec.clear();
+    input = '';
+    _isFilled = false;
+    globals.isSearchedViaHome = false;
+    globals.isAdded = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +84,7 @@ with TickerProviderStateMixin{
         title: Padding(
           padding: const EdgeInsets.all(20),
           child: TextField(
-            autofocus: true,
+            autofocus: false,
             focusNode: globals.focusNode,
             cursorColor: Colors.black54,
             decoration: InputDecoration(
@@ -120,13 +129,9 @@ with TickerProviderStateMixin{
   }
 
   Widget get body{
-    if(globals.isSearchedViaHome){
+    if(globals.isSearchedViaHome || globals.isAdded){
       setState(() {
-        initialize();
-        tec.clear();
-        input = '';
-        _isFilled = false;
-        globals.isSearchedViaHome = false;
+        fullInitialize();
       });
     }
     if(_isFirstLoadRunning && input != ''){
@@ -160,9 +165,12 @@ with TickerProviderStateMixin{
               primary: false,
               padding: const EdgeInsets.all(8.0),
               itemCount: searchedBooks.length,
-              itemBuilder: (context, idx) => searchCard(
-                book: searchedBooks[idx],
-              ),
+              itemBuilder: (context, idx) {
+                FocusScope.of(context).unfocus;
+                return searchCard(
+                  book: searchedBooks[idx],
+                );
+              },
               separatorBuilder: (context, index) => const Divider(),
             ),
             if(_isLoadMoreRunning)

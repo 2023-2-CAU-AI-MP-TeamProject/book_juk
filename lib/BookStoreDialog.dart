@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'models/BookModel.dart';
 
+import 'globals.dart' as globals;
+
 class BookStoreDialog extends StatefulWidget {
   const BookStoreDialog({super.key, required this.callBackBook});
   final Function(BookStatus status, DateTime date) callBackBook;
@@ -136,9 +138,21 @@ class _BookStoreDialogState extends State<BookStoreDialog> {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: () {
-                  BookStatus curStatus = (_isRead) ? BookStatus.read : BookStatus.unread;
-                  DateTime curDate = date;
-                  widget.callBackBook(curStatus, curDate);
+                  setState(() {
+                    BookStatus curStatus = (_isRead) ? BookStatus.read : BookStatus.unread;
+                    DateTime curDate = date;
+                    widget.callBackBook(curStatus, curDate);
+                    globals.navigatorKeys[globals.Screen.search]!.currentState!.pop();
+                    Navigator.of(context).popUntil(ModalRoute.withName(Navigator.defaultRouteName));
+                    globals.tabController.index = 0;
+                    globals.isAdded = true;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('성공적으로 저장되었습니다.'),
+                        duration: Duration(seconds: 1),
+                      )
+                    );
+                  });
                 },
                 child: SizedBox(
                   height: 30,

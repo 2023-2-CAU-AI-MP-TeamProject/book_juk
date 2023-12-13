@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Landing()
       },
+      navigatorKey: globals.navigatorKeys['root'],
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -53,7 +54,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 class Landing extends StatefulWidget {
   const Landing({super.key});
@@ -66,25 +66,41 @@ class _LandingState extends State<Landing>
 with SingleTickerProviderStateMixin {
 
   DateTime? currentBackPressTime;
-  int _selectedIndex = 0;
-  final _navigatorKeyList = List.generate(4, (index) => GlobalKey<NavigatorState>());
-  late TabController tabController = TabController(
-    length: 4,
-    vsync: this,
-    animationDuration: Duration.zero
-  );
+  globals.Screen _selectedScreen = globals.Screen.home;
+  final Map<Object, GlobalKey<NavigatorState>> _navigatorKeyList = globals.navigatorKeys;
+  late TabController tabController;
 
   void showSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("현재 index: $_selectedIndex\n '뒤로' 버튼 한번 더 눌러 종료"),
+        content: Text("현재 index: $_selectedScreen\n '뒤로' 버튼 한번 더 눌러 종료"),
         duration: Duration(seconds: 2),
       )
     );
   }
 
+  globals.Screen indexToEnum(int index){
+    switch(index){
+      case 0:
+        return globals.Screen.home;
+      case 1:
+       return globals.Screen.search;
+      case 2:
+        return globals.Screen.statistics;
+      case 3:
+        return globals.Screen.settings;
+    }
+    return globals.Screen.home;
+  }
+
   @override
   void initState() {
+    globals.tabController = TabController(
+      length: 4,
+      vsync: this,
+      animationDuration: Duration.zero
+    );
+    tabController = globals.tabController;
     tabController.addListener(() {
       if(tabController.index == 1 && tabController.previousIndex != 1){
         setState(() {
@@ -111,7 +127,7 @@ with SingleTickerProviderStateMixin {
     ];
     return WillPopScope(
       onWillPop: () async {
-        if(await _navigatorKeyList[_selectedIndex].currentState!.maybePop()){
+        if(await _navigatorKeyList[_selectedScreen]!.currentState!.maybePop()){
           return Future.value(false);
         } else {
           DateTime now = DateTime.now();
@@ -129,10 +145,10 @@ with SingleTickerProviderStateMixin {
           physics: NeverScrollableScrollPhysics(),
           children: pages.map(
             (page) {
-              int index = pages.indexOf(page);
+              globals.Screen screen = indexToEnum(pages.indexOf(page));
               return CustomNavigator(
                 page: page,
-                navigatorKey: _navigatorKeyList[index],
+                navigatorKey: _navigatorKeyList[screen]!,
               );
             },
           ).toList()
@@ -165,7 +181,7 @@ with SingleTickerProviderStateMixin {
             tabAlignment: TabAlignment.fill,
             controller: tabController,
             onTap: (value) => setState(() {
-              _selectedIndex = value;
+              _selectedScreen = indexToEnum(value);
             }),
           ),
         )
