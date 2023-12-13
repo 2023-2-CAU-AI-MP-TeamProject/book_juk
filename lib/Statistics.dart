@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'themes.dart';
 
 class Statistics extends StatelessWidget { //이건 책 저장되는 것 구현한 후에 수정하기. 일단 예시로 써뒀음.
   final List<Book> savedBooks = [
@@ -14,23 +15,24 @@ class Statistics extends StatelessWidget { //이건 책 저장되는 것 구현�
         appBar: AppBar(
           title: Text('책 통계'),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-
-
-              Container(
-                width: 300, // 원하는 폭으로 조절
-                height: 200, // 원하는 높이로 조절
-                child: _buildHistogram(),
-              ),
-              Text(
-                '지금까지 총 ' + savedBooks.length.toString() + '권 읽으셨어요!',
-                style: TextStyle(fontSize: 20),
-              ),
-            ],
-          ),
+        body: Theme(
+          data: baseTheme,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 300, // 원하는 폭으로 조절
+                  height: 200, // 원하는 높이로 조절
+                  child: _buildHistogram(),
+                ),
+                Text(
+                  '지금까지 총 ' + savedBooks.length.toString() + '권 읽으셨어요!',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
+            ),
+        ),
         ),
       );
   }
@@ -46,13 +48,16 @@ class Statistics extends StatelessWidget { //이건 책 저장되는 것 구현�
         id: '월별 독서 현황',
         domainFn: (Book book, _) => book.month,
         measureFn: (Book book, _) => bookCounts[book.month],
+        colorFn: (Book, book) => charts.ColorUtil.fromDartColor(Colors.black38),
         data: savedBooks,
       ),
     ];
 
+
+
     return charts.BarChart(
       seriesList,
-      animate: true,
+      animate: false,
       vertical: true,
       behaviors: [charts.SeriesLegend()],
       defaultRenderer: charts.BarRendererConfig(

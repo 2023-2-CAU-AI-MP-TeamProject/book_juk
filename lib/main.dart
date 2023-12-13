@@ -8,14 +8,16 @@ import 'CustomNavigator.dart';
 import 'MyTabBar.dart';
 import 'Statistics.dart';
 import 'setting.dart';
+import 'package:flutter/material.dart';
+import 'themes.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Future.delayed(const Duration(seconds: 3));
   FlutterNativeSplash.remove();
-  runApp(const MyApp());
-}
+  runApp(MyApp(themeData:baseTheme));
+  }
 
 Future<bool> fetchData() async {
   bool data =false;
@@ -25,21 +27,23 @@ Future<bool> fetchData() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ThemeData themeData;
+  const MyApp({super.key, required this.themeData});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '책:크',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        pageTransitionsTheme: PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
-          }
-        )
-      ),
+      theme: themeData,
+      // theme: ThemeData(
+      //   primarySwatch: Colors.blue,
+      //   pageTransitionsTheme: PageTransitionsTheme(
+      //     builders: {
+      //       TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+      //       TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
+      //     }
+      //   )
+      // ),
       routes: {
         '/': (context) => Landing(),
         '/search':(context) => Search(),

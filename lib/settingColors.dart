@@ -1,8 +1,16 @@
+import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'Statistics.dart';
+import 'themes.dart';
 
-class SettingColors extends StatelessWidget {
+class SettingColors extends StatefulWidget {
+  @override
+  _SettingColorsState createState() => _SettingColorsState();
+}
+
+class _SettingColorsState extends State<SettingColors> {
+  ThemeData selectedTheme = baseTheme; // Default theme
 
   @override
   Widget build(BuildContext context) {
@@ -14,105 +22,58 @@ class SettingColors extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 200,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1,
-                ),// Adjust the radius as needed
+            getColorButton(Colors.blue, baseTheme),
+            SizedBox(height: 10),
+            getColorButton(Colors.yellow, theme1),
+            SizedBox(height: 10),
+            getColorButton(Colors.green, theme2),
+            SizedBox(height: 10),
+            getColorButton(Colors.pink, theme3),
+            SizedBox(height: 10),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent,
+                shadowColor: Colors.transparent,
+                onPrimary: Colors.black,
               ),
+              onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MyApp(themeData: selectedTheme),
+                    ),
+                  );
+              },
+              child: Text('확인'),
+            ),
 
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Statistics())); //임시
-                  //print('눌림');
-                },
-
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
-                ),
-                child: Text(' '),
-              ),
-            ),
-            SizedBox(height: 10),
-            Container(
-              width: 200,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.yellow,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1,
-                ),// Adjust the radius as needed
-              ),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Statistics()));
-                  //print('눌림');
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
-                ),
-                child: Text(' '),
-              ),
-            ),
-            SizedBox(height: 10),
-            Container(
-              width: 200,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1,
-                ),
-              ),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Statistics())); //임시
-                  //print('눌림');
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
-                ),
-                child: Text(' '),
-              ),
-            ),
-            SizedBox(height: 10),
-            Container(
-              width: 200,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.pink,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1,
-                ),
-              ),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Statistics())); //임시
-                  //print('눌림');
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
-                ),
-                child: Text(' '),
-              ),
-            ),
-            SizedBox(height: 10),
-            Text('확인'),
           ],
         ),
+      ),
+    );
+  }
 
-
+  Widget getColorButton(Color color, ThemeData theme) {
+    return Container(
+      width: 200,
+      height: 50,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: Colors.black,
+          width: 1,
+        ),
+      ),
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            selectedTheme = theme;
+          });
+        },
+        style: ElevatedButton.styleFrom(
+          primary: Colors.transparent,
+        ),
+        child: Text(' '),
       ),
     );
   }
