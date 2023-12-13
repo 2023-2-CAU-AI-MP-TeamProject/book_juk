@@ -84,7 +84,7 @@ with TickerProviderStateMixin{
         title: Padding(
           padding: const EdgeInsets.all(20),
           child: TextField(
-            autofocus: false,
+            autofocus: true,
             focusNode: globals.focusNode,
             cursorColor: Colors.black54,
             decoration: InputDecoration(
@@ -165,12 +165,9 @@ with TickerProviderStateMixin{
               primary: false,
               padding: const EdgeInsets.all(8.0),
               itemCount: searchedBooks.length,
-              itemBuilder: (context, idx) {
-                FocusScope.of(context).unfocus;
-                return searchCard(
-                  book: searchedBooks[idx],
-                );
-              },
+              itemBuilder: (context, idx) => searchCard(
+                book: searchedBooks[idx],
+              ),
               separatorBuilder: (context, index) => const Divider(),
             ),
             if(_isLoadMoreRunning)

@@ -39,6 +39,7 @@ class searchCard extends StatelessWidget {
       ),
       isThreeLine: true,
       onTap: () {
+        FocusScope.of(context).unfocus();
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => BookDetail(isbn13: book.isbn13),));
       },
     );
