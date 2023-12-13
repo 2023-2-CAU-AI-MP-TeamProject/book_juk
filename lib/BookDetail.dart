@@ -25,7 +25,7 @@ class BookDetail extends StatelessWidget {
   late final BookModel book;
 
   void storeBook(BookStatus status, DateTime date) async {
-
+    //todo : implement storing book via Firestore databases
   }
 
   @override
