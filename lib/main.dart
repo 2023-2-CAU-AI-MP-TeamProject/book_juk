@@ -6,12 +6,13 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'Login.dart';
 import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'CustomNavigator.dart';
-import 'MyTabBar.dart';
 import 'Statistics.dart';
+import 'globals.dart' as globals;
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -56,15 +57,18 @@ class MyApp extends StatelessWidget {
         )
       ),
       routes: {
-        '/': (context) => Landing(),
-        '/search':(context) => Search(),
-        '/statistics':(context) => Statistics()
+        '/': (context) => Landing()
       },
+      navigatorKey: globals.navigatorKeys['root'],
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
     );
   }
 }
-
 
 class Landing extends StatefulWidget {
   const Landing({super.key});
@@ -73,15 +77,53 @@ class Landing extends StatefulWidget {
   State<Landing> createState() => _LandingState();
 }
 
-class _MyLanding extends State<Landing> {
-  int _selectedIndex = 0;
-  Future? _loading;
-  String _isLoginned = "none";
+class _LandingState extends State<Landing>
+with SingleTickerProviderStateMixin {
+
+  DateTime? currentBackPressTime;
+  globals.Screen _selectedScreen = globals.Screen.home;
+  final Map<Object, GlobalKey<NavigatorState>> _navigatorKeyList = globals.navigatorKeys;
+  late TabController tabController;
+
+  void showSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("현재 index: $_selectedScreen\n '뒤로' 버튼 한번 더 눌러 종료"),
+        duration: Duration(seconds: 2),
+      )
+    );
+  }
+
+  globals.Screen indexToEnum(int index){
+    switch(index){
+      case 0:
+        return globals.Screen.home;
+      case 1:
+       return globals.Screen.search;
+      case 2:
+        return globals.Screen.statistics;
+      case 3:
+        return globals.Screen.settings;
+    }
+    return globals.Screen.home;
+  }
 
   @override
   void initState() {
+    globals.tabController = TabController(
+      length: 4,
+      vsync: this,
+      animationDuration: Duration.zero
+    );
+    tabController = globals.tabController;
+    tabController.addListener(() {
+      if(tabController.index == 1 && tabController.previousIndex != 1){
+        setState(() {
+          FocusScope.of(context).requestFocus(globals.focusNode);
+        });
+      }
+    });
     super.initState();
-    _loading = getLoginInfo();
   }
 
   Future<void> getLoginInfo() async {
@@ -94,17 +136,10 @@ class _MyLanding extends State<Landing> {
 
   @override
   Widget build(BuildContext context) {
-    
-    void _onItemTapped(int index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-
-    List<Widget> navItems = [
-      MyHome(),
+    final List<Widget> pages = [
+      MyHome(tabController: tabController),
       Search(),
-      Login(),
+      Statistics(),
       Text(
         "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
         style: TextStyle(
@@ -113,7 +148,6 @@ class _MyLanding extends State<Landing> {
         textAlign: TextAlign.center,
       )
     ];
-
     if(_isLoginned == "LoginPlatform.none") {
       return FutureBuilder<dynamic>(
         future: _loading,
@@ -128,37 +162,69 @@ class _MyLanding extends State<Landing> {
         },
       );
     }
-    else {
-      return Scaffold(
-        body: navItems[_selectedIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "홈 화면"
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: "검색"
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.analytics),
-              label: "통계"
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: "설정"
-            )
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.blueAccent,
-          unselectedItemColor: Colors.grey,
-          type: BottomNavigationBarType.fixed,
-          onTap: _onItemTapped
+    else{return WillPopScope(
+      onWillPop: () async {
+        if(await _navigatorKeyList[_selectedScreen]!.currentState!.maybePop()){
+          return Future.value(false);
+        } else {
+          DateTime now = DateTime.now();
+          if(currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)){
+            currentBackPressTime = now;
+            showSnackBar();
+            return Future.value(false);
+          }
+          return Future.value(true);
+        }
+      },
+      child: Scaffold(
+        body: TabBarView(
+          controller: tabController,
+          physics: NeverScrollableScrollPhysics(),
+          children: pages.map(
+            (page) {
+              globals.Screen screen = indexToEnum(pages.indexOf(page));
+              return CustomNavigator(
+                page: page,
+                navigatorKey: _navigatorKeyList[screen]!,
+              );
+            },
+          ).toList()
         ),
-      );
-    }
-
+        bottomNavigationBar: Container(
+          color: Colors.transparent,
+          child: TabBar(
+            tabs: const <Tab>[
+              Tab(
+                icon: Icon(Icons.home, size: 30),
+                //text: "홈 화면"
+              ),
+              Tab(
+                icon: Icon(Icons.search, size: 30),
+                //text: "검색"
+              ),
+              Tab(
+                icon: Icon(Icons.analytics, size: 30),
+                //text: "통계"
+              ),
+              Tab(
+                icon: Icon(Icons.settings, size: 30),
+                //text: "설정"
+              )
+            ],
+            labelColor: Colors.blue,
+            unselectedLabelColor: const Color.fromRGBO(20, 20, 20, 0.3),
+            isScrollable: false,
+            indicatorColor: Colors.transparent,
+            tabAlignment: TabAlignment.fill,
+            controller: tabController,
+            onTap: (value) => setState(() {
+              _selectedScreen = indexToEnum(value);
+            }),
+          ),
+        )
+      ),
+    );
+  }
+  }
   }
 }
-

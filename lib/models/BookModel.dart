@@ -1,3 +1,8 @@
+// ignore_for_file: file_names
+
+enum BookStatus {
+  read, unread
+}
 class BookModel {
   String title;
   String link;
@@ -7,20 +12,20 @@ class BookModel {
   String isbn;
   String isbn13;
   int itemId;
-  int priceSales;
-  int priceStandard;
-  String mallType;
-  String? stockStatus;
-  int mileage;
+  // int priceSales;
+  // int priceStandard;
+  // String mallType;
+  // String? stockStatus;
+  // int mileage;
   String cover;
-  int categoryId;
-  String categoryName;
+  // int categoryId;
+  // String categoryName;
   String publisher;
-  int salesPoint;
-  bool adult;
-  bool fixedPrice;
-  int customerReviewRank;
-  dynamic subInfo;
+  // int salesPoint;
+  // bool adult;
+  // bool fixedPrice;
+  // int customerReviewRank;
+  // dynamic subInfo;
 
   BookModel({
     required this.title,
@@ -31,20 +36,20 @@ class BookModel {
     required this.isbn,
     required this.isbn13,
     required this.itemId,
-    required this.priceSales,
-    required this.priceStandard,
-    required this.mallType,
-    this.stockStatus,
-    required this.mileage,
+    // required this.priceSales,
+    // required this.priceStandard,
+    // required this.mallType,
+    // this.stockStatus,
+    // required this.mileage,
     required this.cover,
-    required this.categoryId,
-    required this.categoryName,
+    // required this.categoryId,
+    // required this.categoryName,
     required this.publisher,
-    required this.salesPoint,
-    required this.adult,
-    required this.fixedPrice,
-    required this.customerReviewRank,
-    this.subInfo
+    // required this.salesPoint,
+    // required this.adult,
+    // required this.fixedPrice,
+    // required this.customerReviewRank,
+    // this.subInfo
   });
 
   factory BookModel.fromJson(Map<String, dynamic> json) {
@@ -57,21 +62,40 @@ class BookModel {
       isbn: json["isbn"],
       isbn13: json["isbn13"],
       itemId: json["itemId"],
-      priceSales: json["priceSales"],
-      priceStandard: json["priceStandard"],
-      mallType: json["mallType"],
-      stockStatus: json["stockStatus"],
-      mileage: json["mileage"],
+      // priceSales: json["priceSales"],
+      // priceStandard: json["priceStandard"],
+      // mallType: json["mallType"],
+      // stockStatus: json["stockStatus"],
+      // mileage: json["mileage"],
       cover: json["cover"],
-      categoryId: json["categoryId"],
-      categoryName: json["categoryName"],
+      // categoryId: json["categoryId"],
+      // categoryName: json["categoryName"],
       publisher: json["publisher"],
-      salesPoint: json["salesPoint"],
-      adult: json["adult"],
-      fixedPrice: json["fixedPrice"],
-      customerReviewRank: json["customerReviewRank"],
-      subInfo: json["subInfo"]
+      // salesPoint: json["salesPoint"],
+      // adult: json["adult"],
+      // fixedPrice: json["fixedPrice"],
+      // customerReviewRank: json["customerReviewRank"],
+      // subInfo: json["subInfo"]
     );
   }
+}
 
+class StoredBook {
+  BookModel book;
+  BookStatus status;
+  DateTime date;
+
+  StoredBook({
+    required this.book,
+    required this.status,
+    required this.date}
+  );
+
+  factory StoredBook.create(BookModel book, BookStatus status, DateTime date){
+    return StoredBook(
+      book: book,
+      status: status,
+      date: date
+    );
+  }
 }
