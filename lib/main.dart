@@ -84,6 +84,8 @@ with SingleTickerProviderStateMixin {
   globals.Screen _selectedScreen = globals.Screen.home;
   final Map<Object, GlobalKey<NavigatorState>> _navigatorKeyList = globals.navigatorKeys;
   late TabController tabController;
+  String? _isLoginned;
+  Future? _loading;
 
   void showSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -162,69 +164,69 @@ with SingleTickerProviderStateMixin {
         },
       );
     }
-    else{return WillPopScope(
-      onWillPop: () async {
-        if(await _navigatorKeyList[_selectedScreen]!.currentState!.maybePop()){
-          return Future.value(false);
-        } else {
-          DateTime now = DateTime.now();
-          if(currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)){
-            currentBackPressTime = now;
-            showSnackBar();
+    else{
+      return WillPopScope(
+        onWillPop: () async {
+          if(await _navigatorKeyList[_selectedScreen]!.currentState!.maybePop()){
             return Future.value(false);
+          } else {
+            DateTime now = DateTime.now();
+            if(currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)){
+              currentBackPressTime = now;
+              showSnackBar();
+              return Future.value(false);
+            }
+            return Future.value(true);
           }
-          return Future.value(true);
-        }
-      },
-      child: Scaffold(
-        body: TabBarView(
-          controller: tabController,
-          physics: NeverScrollableScrollPhysics(),
-          children: pages.map(
-            (page) {
-              globals.Screen screen = indexToEnum(pages.indexOf(page));
-              return CustomNavigator(
-                page: page,
-                navigatorKey: _navigatorKeyList[screen]!,
-              );
-            },
-          ).toList()
-        ),
-        bottomNavigationBar: Container(
-          color: Colors.transparent,
-          child: TabBar(
-            tabs: const <Tab>[
-              Tab(
-                icon: Icon(Icons.home, size: 30),
-                //text: "홈 화면"
-              ),
-              Tab(
-                icon: Icon(Icons.search, size: 30),
-                //text: "검색"
-              ),
-              Tab(
-                icon: Icon(Icons.analytics, size: 30),
-                //text: "통계"
-              ),
-              Tab(
-                icon: Icon(Icons.settings, size: 30),
-                //text: "설정"
-              )
-            ],
-            labelColor: Colors.blue,
-            unselectedLabelColor: const Color.fromRGBO(20, 20, 20, 0.3),
-            isScrollable: false,
-            indicatorColor: Colors.transparent,
-            tabAlignment: TabAlignment.fill,
+        },
+        child: Scaffold(
+          body: TabBarView(
             controller: tabController,
-            onTap: (value) => setState(() {
-              _selectedScreen = indexToEnum(value);
-            }),
+            physics: NeverScrollableScrollPhysics(),
+            children: pages.map(
+              (page) {
+                globals.Screen screen = indexToEnum(pages.indexOf(page));
+                return CustomNavigator(
+                  page: page,
+                  navigatorKey: _navigatorKeyList[screen]!,
+                );
+              },
+            ).toList()
           ),
-        )
-      ),
-    );
-  }
-  }
+          bottomNavigationBar: Container(
+            color: Colors.transparent,
+            child: TabBar(
+              tabs: const <Tab>[
+                Tab(
+                  icon: Icon(Icons.home, size: 30),
+                  //text: "홈 화면"
+                ),
+                Tab(
+                  icon: Icon(Icons.search, size: 30),
+                  //text: "검색"
+                ),
+                Tab(
+                  icon: Icon(Icons.analytics, size: 30),
+                  //text: "통계"
+                ),
+                Tab(
+                  icon: Icon(Icons.settings, size: 30),
+                  //text: "설정"
+                )
+              ],
+              labelColor: Colors.blue,
+              unselectedLabelColor: const Color.fromRGBO(20, 20, 20, 0.3),
+              isScrollable: false,
+              indicatorColor: Colors.transparent,
+              tabAlignment: TabAlignment.fill,
+              controller: tabController,
+              onTap: (value) => setState(() {
+                _selectedScreen = indexToEnum(value);
+              }),
+            ),
+          )
+        ),
+      );
+    }
   }
 }
