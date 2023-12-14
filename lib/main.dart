@@ -8,6 +8,7 @@ import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'CustomNavigator.dart';
@@ -125,6 +126,7 @@ with SingleTickerProviderStateMixin {
         });
       }
     });
+    _loading = getLoginInfo();
     super.initState();
   }
 
@@ -136,20 +138,94 @@ with SingleTickerProviderStateMixin {
     return;
   }
 
+  void setLoginState(String loginPlatform) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      pref.setString("login_platform", loginPlatform);
+      _isLoginned = _isLoginned;
+    });
+  }
+
+  Future<void> signOut() async {
+    switch(_isLoginned){
+      case "LoginPlatform.kakao":
+        await UserApi.instance.logout();
+        await FirebaseAuth.instance.signOut();
+        break;
+      case "LoginPlatform.google":
+        await FirebaseAuth.instance.signOut();
+        break;
+      case "LoginPlatform.none":
+        if(context.mounted){
+          const SnackBar sb = SnackBar(
+            content: Text('Already logoutted.'),
+            duration: Duration(seconds: 2),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(sb);
+          return;
+        }
+    }
+    _isLoginned = "LoginPlatform.none";
+    setLoginState(_isLoginned!);
+    print('로그아웃됨');
+  }
+
+  void showLoading(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Container(
+          width: 1000,
+          height: 1000,
+          padding: const EdgeInsets.all(10),
+          child: const Dialog(
+            alignment: Alignment.center,
+            insetPadding: EdgeInsets.all(100),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                Text('Loading...')
+              ],
+            ),
+          )
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       MyHome(tabController: tabController),
       Search(),
       Statistics(),
-      Text(
-        "SEEEEEEEEEETTTTTTTTTTTTTTTTTINGSSSSSSSSS!!!!!!!",
-        style: TextStyle(
-          fontSize: 100
-        ),
-        textAlign: TextAlign.center,
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "$_isLoginned",
+            style: TextStyle(
+              fontSize: 30
+            ),
+            textAlign: TextAlign.center,
+          ),
+          TextButton.icon(
+            onPressed: () async {
+              showLoading(context);
+              await Future.delayed(Duration(seconds: 2));
+              await signOut();
+              if(context.mounted){
+                Navigator.pop(context);
+              }
+            }, 
+            icon: Icon(Icons.logout),
+            label: Text('logout')
+          )
+        ],
       )
     ];
+
     if(_isLoginned == "LoginPlatform.none") {
       return FutureBuilder<dynamic>(
         future: _loading,
