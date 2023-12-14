@@ -2,26 +2,41 @@
 
 import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'Login.dart';
 import 'Search.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'CustomNavigator.dart';
 import 'Statistics.dart';
-
 import 'globals.dart' as globals;
 
-void main() {
+void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  Future.delayed(const Duration(seconds: 3));
+  if(!(await initLoad())) {
+    throw Error();
+  }
   FlutterNativeSplash.remove();
   runApp(const MyApp());
 }
 
-Future<bool> fetchData() async {
-  bool data =false;
+Future<bool> initLoad() async {
+  bool data = false;
 
-  await Future.delayed(const Duration(seconds: 3), () {data = true;});
+  KakaoSdk.init(
+    nativeAppKey: '650492dd92ba874f33ebcb55c010e883',
+    javaScriptAppKey: 'afa87686307e58f3967f15ac07b60253'
+  );
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+
+  data = true;
   return data;
 }
 
@@ -111,6 +126,14 @@ with SingleTickerProviderStateMixin {
     super.initState();
   }
 
+  Future<void> getLoginInfo() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    _isLoginned = pref.getString("login_platform") ?? LoginPlatform.none.toString();
+    print('end: $_isLoginned');
+    setState(() {});
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
@@ -125,7 +148,21 @@ with SingleTickerProviderStateMixin {
         textAlign: TextAlign.center,
       )
     ];
-    return WillPopScope(
+    if(_isLoginned == "LoginPlatform.none") {
+      return FutureBuilder<dynamic>(
+        future: _loading,
+        builder: (context, snapshot) {
+          switch(snapshot.connectionState){
+            case ConnectionState.waiting:
+            case ConnectionState.none:
+              return Scaffold(body: Center(child: CircularProgressIndicator()));
+            default:
+              return Login();
+          }
+        },
+      );
+    }
+    else{return WillPopScope(
       onWillPop: () async {
         if(await _navigatorKeyList[_selectedScreen]!.currentState!.maybePop()){
           return Future.value(false);
@@ -187,5 +224,7 @@ with SingleTickerProviderStateMixin {
         )
       ),
     );
+  }
+  }
   }
 }
