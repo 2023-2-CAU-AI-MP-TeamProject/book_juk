@@ -2,75 +2,112 @@ import 'package:flutter/material.dart';
 import 'main.dart';
 import 'Statistics.dart';
 import 'settingColors.dart';
+import 'license.dart';
 
 class Setting extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('설정'),
       ),
-      body: Center(
+      body: Align(
+        alignment: Alignment.centerLeft,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text('     유저 설정'),
             Container(
-              width: 200,
+              margin: EdgeInsets.all(10),
+              width: 400,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.black,
+                    width: 0.5,
+                  ),
+                ),
+              ),
+            ),
+            Container(
               height: 50,
               decoration: BoxDecoration(
-                color: Colors.black12,
-                borderRadius: BorderRadius.circular(10),
+                color: Colors.transparent,
                 border: Border.all(
-                  color: Colors.black,
+                  color: Colors.transparent,
                   width: 1,
-                ), // Adjust the radius as needed
+                ),
               ),
-
               child: ElevatedButton(
                 onPressed: () {
                   _showInitializationDialog(context);
                 },
-
                 style: ElevatedButton.styleFrom(
                   primary: Colors.transparent,
+                    elevation: 0
                 ),
-                child: Text('초기화'),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.delete_forever,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8),
+                    Text('초기화',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 10),
             Container(
-              width: 200,
               height: 50,
               decoration: BoxDecoration(
-                color: Colors.black12,
+                color: Colors.transparent,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: Colors.black,
+                  color: Colors.transparent,
                   width: 1,
-                ), // Adjust the radius as needed
+                ),
               ),
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => SettingColors()));
-                  //print('눌림');
+                    MaterialPageRoute(builder: (context) => SettingColors()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.transparent,
+                    elevation: 0
                 ),
-                child: Text('테마 설정'),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.palette,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8),
+                    Text('테마 설정',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),),
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 10),
             Container(
-              width: 200,
               height: 50,
               decoration: BoxDecoration(
-                color: Colors.black12,
+                color: Colors.transparent,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: Colors.black,
+                  color: Colors.transparent,
                   width: 1,
                 ),
               ),
@@ -78,21 +115,82 @@ class Setting extends StatelessWidget {
                 onPressed: () {
                   _showLogoutDialog(context);
                 },
-
                 style: ElevatedButton.styleFrom(
                   primary: Colors.transparent,
+                  elevation: 0
                 ),
-                child: Text('로그아웃'),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.door_back_door,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8),
+                    Text('로그아웃',
+                      style: TextStyle(
+                      color: Colors.black,
+                    ),),
+                  ],
+                ),
               ),
             ),
-            SizedBox(height: 10),
-            Text('라이선스 정보'),
+            SizedBox(height: 50),
+            Text('     기타'),
+            Container(
+              margin: EdgeInsets.all(10),
+              width: 400,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.black,
+                    width: 0.5,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Colors.transparent,
+                  width: 1,
+                ),
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => License()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.transparent,
+                    elevation: 0
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.more_vert,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8),
+                    Text('라이선스 정보',
+                      style: TextStyle(
+                      color: Colors.black,
+
+                    ),),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
-
-
       ),
     );
+
   }
 
   void _showInitializationDialog(BuildContext context) {

@@ -10,7 +10,7 @@ class SettingColors extends StatefulWidget {
 }
 
 class _SettingColorsState extends State<SettingColors> {
-  ThemeData selectedTheme = baseTheme; // Default theme
+  ThemeData selectedTheme = baseTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class _SettingColorsState extends State<SettingColors> {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: Colors.black,
-          width: 1,
+          width: 0.5,
         ),
       ),
       child: ElevatedButton(
@@ -72,6 +72,7 @@ class _SettingColorsState extends State<SettingColors> {
         },
         style: ElevatedButton.styleFrom(
           primary: Colors.transparent,
+          elevation: 0
         ),
         child: Text(' '),
       ),
