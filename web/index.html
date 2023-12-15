@@ -37,8 +37,26 @@
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer=""></script>
   
-  
-  
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyDpNwegVz4c3urD_sGc-NR3sXjyosphBlQ",
+        authDomain: "chac-k.firebaseapp.com",
+        projectId: "chac-k",
+        storageBucket: "chac-k.appspot.com",
+        messagingSenderId: "906096207491",
+        appId: "1:906096207491:web:c419dfd79170bace3d1db6",
+        measurementId: "G-R4YWXKZEVN"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      //firebase.analytics(); //analytics를 사용할 경우 주석 해제
+    </script>
+    
   
   
   
