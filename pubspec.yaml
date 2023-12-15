@@ -75,6 +75,8 @@ flutter:
     - assets/images/kakao_login_large_wide.png
     - assets/images/kakao_login_large_narrow.png
     - assets/images/android_light_sq_SI@2x.png
+    - assets/google.png
+    - assets/kakao.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

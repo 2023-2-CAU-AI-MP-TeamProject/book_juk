@@ -16,10 +16,10 @@ class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
-  State<Login> createState() => LoginState();
+  State<Login> createState() => _LoginState();
 }
 
-class LoginState extends State<Login> {
+class _LoginState extends State<Login> {
 
   LoginPlatform _loginPlatform = LoginPlatform.none;
 
@@ -89,8 +89,8 @@ class LoginState extends State<Login> {
           (_loginPlatform == LoginPlatform.none) ? InkWell(
             onTap: kakaoLogin,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset('assets/images/kakao_login_large_wide.png',
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              child: Image.asset('assets/kakao.png',
                 fit:BoxFit.fitWidth
               )
             ),
@@ -104,8 +104,8 @@ class LoginState extends State<Login> {
               }
             },
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset('assets/images/android_light_sq_SI@2x.png',
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              child: Image.asset('assets/google.png',
                 fit:BoxFit.fitWidth
               )
             ),
@@ -274,21 +274,16 @@ class LoginState extends State<Login> {
     showDialog(
       context: context,
       builder: (context) {
-        return Container(
-          width: 1000,
-          height: 1000,
-          padding: const EdgeInsets.all(10),
-          child: const Dialog(
-            alignment: Alignment.center,
-            insetPadding: EdgeInsets.all(100),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                Text('Loading...')
-              ],
+        return const Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Center(
+            child: SizedBox(
+              height: 30,
+              width: 30,
+              child: CircularProgressIndicator()
             ),
-          )
+          ),
         );
       }
     );

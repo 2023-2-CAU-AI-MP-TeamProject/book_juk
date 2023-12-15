@@ -85,8 +85,9 @@ with SingleTickerProviderStateMixin {
   globals.Screen _selectedScreen = globals.Screen.home;
   final Map<Object, GlobalKey<NavigatorState>> _navigatorKeyList = globals.navigatorKeys;
   late TabController tabController;
-  String? _isLoginned;
+  LoginPlatform _loginPlatform = LoginPlatform.none;
   Future? _loading;
+  final double tabHeight = 72;
 
   void showSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -97,18 +98,32 @@ with SingleTickerProviderStateMixin {
     );
   }
 
-  globals.Screen indexToEnum(int index){
-    switch(index){
-      case 0:
-        return globals.Screen.home;
-      case 1:
-       return globals.Screen.search;
-      case 2:
-        return globals.Screen.statistics;
-      case 3:
-        return globals.Screen.settings;
+  dynamic toEnum(dynamic value){
+    if(value is int){
+      switch(value){
+        case 0:
+          return globals.Screen.home;
+        case 1:
+          return globals.Screen.search;
+        case 2:
+          return globals.Screen.statistics;
+        case 3:
+          return globals.Screen.settings;
+      }
+      return globals.Screen.home;
     }
-    return globals.Screen.home;
+    else if(value is String){
+      switch(value){
+        case "LoginPlatform.kakao":
+          return LoginPlatform.kakao;
+        case "LoginPlatform.google":
+          return LoginPlatform.google;
+        case "LoginPlatform.none":
+          return LoginPlatform.none;
+      }
+      return LoginPlatform.none;
+    }
+    return value;
   }
 
   @override
@@ -132,30 +147,29 @@ with SingleTickerProviderStateMixin {
 
   Future<void> getLoginInfo() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    _isLoginned = pref.getString("login_platform") ?? LoginPlatform.none.toString();
-    print('end: $_isLoginned');
+    _loginPlatform = toEnum(pref.getString("login_platform")) ?? LoginPlatform.none;
+    print('end: $_loginPlatform');
     setState(() {});
     return;
   }
 
-  void setLoginState(String loginPlatform) async {
+  void setLoginState(LoginPlatform loginPlatform) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
-      pref.setString("login_platform", loginPlatform);
-      _isLoginned = _isLoginned;
+      pref.setString("login_platform", loginPlatform.toString());
     });
   }
 
   Future<void> signOut() async {
-    switch(_isLoginned){
-      case "LoginPlatform.kakao":
+    switch(_loginPlatform){
+      case LoginPlatform.kakao:
         await UserApi.instance.logout();
         await FirebaseAuth.instance.signOut();
         break;
-      case "LoginPlatform.google":
+      case LoginPlatform.google:
         await FirebaseAuth.instance.signOut();
         break;
-      case "LoginPlatform.none":
+      case LoginPlatform.none:
         if(context.mounted){
           const SnackBar sb = SnackBar(
             content: Text('Already logoutted.'),
@@ -165,8 +179,8 @@ with SingleTickerProviderStateMixin {
           return;
         }
     }
-    _isLoginned = "LoginPlatform.none";
-    setLoginState(_isLoginned!);
+    _loginPlatform = LoginPlatform.none;
+    setLoginState(_loginPlatform);
     print('로그아웃됨');
   }
 
@@ -174,21 +188,16 @@ with SingleTickerProviderStateMixin {
     showDialog(
       context: context,
       builder: (context) {
-        return Container(
-          width: 1000,
-          height: 1000,
-          padding: const EdgeInsets.all(10),
-          child: const Dialog(
-            alignment: Alignment.center,
-            insetPadding: EdgeInsets.all(100),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                Text('Loading...')
-              ],
+        return const Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Center(
+            child: SizedBox(
+              height: 30,
+              width: 30,
+              child: CircularProgressIndicator()
             ),
-          )
+          ),
         );
       }
     );
@@ -204,7 +213,7 @@ with SingleTickerProviderStateMixin {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "$_isLoginned",
+            _loginPlatform.toString(),
             style: TextStyle(
               fontSize: 30
             ),
@@ -226,7 +235,7 @@ with SingleTickerProviderStateMixin {
       )
     ];
 
-    if(_isLoginned == "LoginPlatform.none") {
+    if(_loginPlatform == LoginPlatform.none) {
       return FutureBuilder<dynamic>(
         future: _loading,
         builder: (context, snapshot) {
@@ -261,7 +270,7 @@ with SingleTickerProviderStateMixin {
             physics: NeverScrollableScrollPhysics(),
             children: pages.map(
               (page) {
-                globals.Screen screen = indexToEnum(pages.indexOf(page));
+                globals.Screen screen = toEnum(pages.indexOf(page));
                 return CustomNavigator(
                   page: page,
                   navigatorKey: _navigatorKeyList[screen]!,
@@ -272,21 +281,25 @@ with SingleTickerProviderStateMixin {
           bottomNavigationBar: Container(
             color: Colors.transparent,
             child: TabBar(
-              tabs: const <Tab>[
+              tabs: <Tab>[
                 Tab(
                   icon: Icon(Icons.home, size: 30),
+                  height: tabHeight,
                   //text: "홈 화면"
                 ),
                 Tab(
                   icon: Icon(Icons.search, size: 30),
+                  height: tabHeight,
                   //text: "검색"
                 ),
                 Tab(
                   icon: Icon(Icons.analytics, size: 30),
+                  height: tabHeight,
                   //text: "통계"
                 ),
                 Tab(
                   icon: Icon(Icons.settings, size: 30),
+                  height: tabHeight,
                   //text: "설정"
                 )
               ],
@@ -297,7 +310,7 @@ with SingleTickerProviderStateMixin {
               tabAlignment: TabAlignment.fill,
               controller: tabController,
               onTap: (value) => setState(() {
-                _selectedScreen = indexToEnum(value);
+                _selectedScreen = toEnum(value);
               }),
             ),
           )

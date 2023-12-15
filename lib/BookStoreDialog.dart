@@ -123,7 +123,7 @@ class _BookStoreDialogState extends State<BookStoreDialog> {
                   child: Center(
                     child: LayoutBuilder(
                       builder: (context, constraints) => Text(
-                        '날짜 : ${date.year} - ${date.month} - ${date.day}',
+                        '읽은 날짜 : ${date.year} - ${date.month} - ${date.day}',
                         style: TextStyle(
                           fontSize: constraints.maxWidth / 20,
                           color: Colors.black
