@@ -167,12 +167,17 @@ class _LoginState extends State<Login> {
 
   Future<void> kakaoSendInfo(OAuthToken token) async {
     var provider = OAuthProvider('oidc.kakao'); // 제공업체 id
+    var me = await UserApi.instance.me();
     var credential = provider.credential(
       idToken: token.idToken, 
       // 카카오 로그인에서 발급된 idToken(카카오 설정에서 OpenID Connect가 활성화 되어있어야함)
       accessToken: token.accessToken, // 카카오 로그인에서 발급된 accessToken
     );
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+    final user = userCredential.user;
+    await user!.updateDisplayName(me.kakaoAccount!.profile!.nickname);
+    await user.updatePhotoURL(me.kakaoAccount!.profile!.profileImageUrl);
+    print(me.kakaoAccount!.profile!.profileImageUrl);
 
     if (context.mounted) {
       SnackBar sb = const SnackBar(

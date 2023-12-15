@@ -137,7 +137,10 @@ with SingleTickerProviderStateMixin {
     tabController.addListener(() {
       if(tabController.index == 1 && tabController.previousIndex != 1){
         setState(() {
-          FocusScope.of(context).requestFocus(globals.focusNode);
+          final temp = globals.navigatorKeys[globals.Screen.search]!.currentState;
+          if(temp != null && !temp.canPop()){
+            FocusScope.of(context).requestFocus(globals.focusNode);
+          }
         });
       }
     });
@@ -212,6 +215,17 @@ with SingleTickerProviderStateMixin {
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Builder(builder: (context) {
+            final user = FirebaseAuth.instance.currentUser;
+            if(user != null){
+              final name = user.displayName;
+              final email = user.email;
+              final photoUrl = user.photoURL;
+              final uid = user.uid;
+              return Text('$name, $email, $photoUrl, $uid');
+            }
+            return Text('');
+          },),
           Text(
             _loginPlatform.toString(),
             style: TextStyle(
