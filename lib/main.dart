@@ -222,7 +222,23 @@ with SingleTickerProviderStateMixin {
               final email = user.email;
               final photoUrl = user.photoURL;
               final uid = user.uid;
-              return Text('$name, $email, $photoUrl, $uid');
+              return Column(
+                children: [
+                  Text('$name, $email, $uid'),
+                  if (photoUrl != null)
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(photoUrl),
+                        ),
+                      ),
+                    ),
+                ],
+              );
             }
             return Text('');
           },),
