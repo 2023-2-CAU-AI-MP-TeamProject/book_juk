@@ -249,7 +249,7 @@ class _SettingState extends State<Setting> {
                 globals.flush();
                 await widget.logout();
                 setState(() {
-                  if(context.mounted) Navigator.of(context).pushNamed('/');
+                  Navigator.of(context).pushNamed('/');
                 });
               },
               child: const Text('확인'),
@@ -292,7 +292,7 @@ class _SettingState extends State<Setting> {
                 Navigator.of(context).popUntil((route) => false,);
                 await widget.logout();
                 setState(() {
-                  if(context.mounted) Navigator.of(context).pushNamed('/');
+                  Navigator.of(context).pushNamed('/');
                 });
               },
               child: const Text('확인'),
