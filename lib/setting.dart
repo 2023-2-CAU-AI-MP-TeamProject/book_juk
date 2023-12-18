@@ -38,7 +38,7 @@ class _SettingState extends State<Setting> {
                     child: Column(
                       children: [
                         (photoUrl != null)
-                        ? ClipOval(child: Image.network(photoUrl))
+                        ? ClipOval(child: Image.network(photoUrl, width: 100, height: 100, fit: BoxFit.cover,))
                         : const FlutterLogo(),
                         const SizedBox(height: 10),
                         Text('$name',
