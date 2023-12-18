@@ -244,12 +244,12 @@ class _SettingState extends State<Setting> {
               child: const Text('취소'),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                Navigator.of(context).popUntil((route) => false,);
+                globals.flush();
+                await widget.logout();
                 setState(() {
-                  Navigator.of(context).popUntil((route) => false,);
-                  globals.flush();
-                  widget.logout();
-                  Navigator.of(context).pushNamed('/');
+                  if(context.mounted) Navigator.of(context).pushNamed('/');
                 });
               },
               child: const Text('확인'),
@@ -288,11 +288,11 @@ class _SettingState extends State<Setting> {
               child: const Text('취소'),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                Navigator.of(context).popUntil((route) => false,);
+                await widget.logout();
                 setState(() {
-                  Navigator.of(context).popUntil((route) => false,);
-                  widget.logout();
-                  Navigator.of(context).pushNamed('/');
+                  if(context.mounted) Navigator.of(context).pushNamed('/');
                 });
               },
               child: const Text('확인'),
