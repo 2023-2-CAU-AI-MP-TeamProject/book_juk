@@ -248,9 +248,7 @@ class _SettingState extends State<Setting> {
                 Navigator.of(context).popUntil((route) => false,);
                 globals.flush();
                 await widget.logout();
-                setState(() {
-                  Navigator.of(context).pushNamed('/');
-                });
+                Navigator.of(context).pushNamed('/');
               },
               child: const Text('확인'),
             ),
@@ -291,9 +289,7 @@ class _SettingState extends State<Setting> {
               onPressed: () async {
                 Navigator.of(context).popUntil((route) => false,);
                 await widget.logout();
-                setState(() {
-                  Navigator.of(context).pushNamed('/');
-                });
+                Navigator.of(context).pushNamed('/');
               },
               child: const Text('확인'),
             ),
