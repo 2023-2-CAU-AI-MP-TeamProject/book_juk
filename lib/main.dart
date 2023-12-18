@@ -162,11 +162,12 @@ with SingleTickerProviderStateMixin {
     return;
   }
 
-  void setLoginState(LoginPlatform loginPlatform) async {
+  Future<void> setLoginState(LoginPlatform loginPlatform) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       pref.setString("login_platform", loginPlatform.toString());
     });
+    return;
   }
 
   Future<void> signOut() async {

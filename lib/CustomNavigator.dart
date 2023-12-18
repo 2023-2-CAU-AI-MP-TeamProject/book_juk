@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomNavigator extends StatefulWidget {
   final Widget page;
-  final Key navigatorKey;
+  final GlobalKey<NavigatorState> navigatorKey;
   const CustomNavigator({Key? key, required this.page, required this.navigatorKey}) : super(key: key);
 
   @override
