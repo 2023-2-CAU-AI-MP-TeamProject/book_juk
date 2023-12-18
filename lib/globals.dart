@@ -1,4 +1,3 @@
-import 'package:book_juk/themes.dart';
 import 'package:flutter/material.dart';
 import 'models/BookModel.dart';
 
@@ -23,11 +22,9 @@ final navigatorKeys = {
   Screen.settings: GlobalKey<NavigatorState>(),
 };
 
-class ThemeProvider extends ChangeNotifier {
-  ThemeData theme = MyTheme.blue;
-
-  void switchTheme(ThemeData selectedTheme) {
-    theme = selectedTheme;
-    notifyListeners();
-  }
+void flush(){
+  isSearchedViaHome = false;
+  isAdded = false;
+  isFilled = false;
+  books.clear();
 }

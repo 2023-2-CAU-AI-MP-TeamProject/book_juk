@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+
+class ThemeProvider extends ChangeNotifier {
+  ThemeData theme = MyTheme.blue;
+
+  void switchTheme(ThemeData selectedTheme) {
+    theme = selectedTheme;
+    notifyListeners();
+  }
+}
 class MyTheme {
   static final ThemeData blue= ThemeData(
     primarySwatch: Colors.blue,

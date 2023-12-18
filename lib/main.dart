@@ -15,6 +15,7 @@ import 'CustomNavigator.dart';
 import 'Statistics.dart';
 import 'Setting.dart';
 import 'package:provider/provider.dart';
+import 'Themes.dart';
 import 'globals.dart' as globals;
 
 void main() async {
@@ -53,9 +54,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create:(context) => globals.ThemeProvider(),
+      create:(context) => ThemeProvider(),
       builder: (context, child) {
-        final themeProvider = Provider.of<globals.ThemeProvider>(context);
+        final themeProvider = Provider.of<ThemeProvider>(context);
         return MaterialApp(
           title: '책:크',
           theme: themeProvider.theme,
@@ -139,6 +140,7 @@ with SingleTickerProviderStateMixin {
     );
     tabController = globals.tabController;
     tabController.addListener(() {
+      setState(() {});
       if(tabController.index == 1 && tabController.previousIndex != 1 && !globals.isFilled){
         setState(() {
           final temp = globals.navigatorKeys[globals.Screen.search]!.currentState;
@@ -179,7 +181,7 @@ with SingleTickerProviderStateMixin {
       case LoginPlatform.none:
         if(context.mounted){
           const SnackBar sb = SnackBar(
-            content: Text('Already logoutted.'),
+            content: Text('Error: Already logoutted.'),
             duration: Duration(seconds: 2),
           );
           ScaffoldMessenger.of(context).showSnackBar(sb);
@@ -216,7 +218,7 @@ with SingleTickerProviderStateMixin {
       MyHome(tabController: tabController),
       Search(),
       Statistics(),
-      Setting()
+      Setting(logout: signOut)
       // Column(
       //   mainAxisAlignment: MainAxisAlignment.center,
       //   children: [

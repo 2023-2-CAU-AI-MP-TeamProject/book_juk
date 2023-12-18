@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'themes.dart';
+import 'Themes.dart';
 import 'package:provider/provider.dart';
 import 'globals.dart' as globals;
 
@@ -59,7 +59,7 @@ class _SettingColorsState extends State<SettingColors> {
       ),
       child: ElevatedButton(
         onPressed: () {
-          final provider = Provider.of<globals.ThemeProvider>(context, listen: false);
+          final provider = Provider.of<ThemeProvider>(context, listen: false);
           provider.switchTheme(theme);
         },
         style: ElevatedButton.styleFrom(

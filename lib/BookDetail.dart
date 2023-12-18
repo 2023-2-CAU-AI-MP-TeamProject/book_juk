@@ -47,7 +47,9 @@ class BookDetail extends StatelessWidget {
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.resolveWith(
                 (states) {
-                  if(states.contains(MaterialState.pressed)) {return Colors.blue;}
+                  if(states.contains(MaterialState.pressed)) {
+                    return Theme.of(context).colorScheme.primary;
+                  }
                   return Colors.black;
                 }
               ),

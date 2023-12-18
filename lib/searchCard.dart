@@ -31,8 +31,8 @@ class searchCard extends StatelessWidget {
           Text(_decodeHtmlEntities(book.description ?? '',),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Colors.blue
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary
             )
           )
         ]

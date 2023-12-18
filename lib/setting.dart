@@ -5,7 +5,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'globals.dart' as globals;
 
-class Setting extends StatelessWidget {
+class Setting extends StatefulWidget {
+  final Future<void> Function() logout;
+  const Setting({super.key, required this.logout});
+
+  @override
+  State<Setting> createState() => _SettingState();
+}
+
+class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +105,7 @@ class Setting extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 globals.navigatorKeys[globals.Screen.settings]!.currentState!.push(
-                  MaterialPageRoute(builder: (context) => SettingColors()),
+                  MaterialPageRoute(builder: (context) => const SettingColors()),
                 );
               },
               style: ButtonStyle(
@@ -237,7 +245,12 @@ class Setting extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                setState(() {
+                  Navigator.of(context).popUntil((route) => false,);
+                  globals.flush();
+                  widget.logout();
+                  Navigator.of(context).pushNamed('/');
+                });
               },
               child: const Text('확인'),
             ),
@@ -276,7 +289,11 @@ class Setting extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                setState(() {
+                  Navigator.of(context).popUntil((route) => false,);
+                  widget.logout();
+                  Navigator.of(context).pushNamed('/');
+                });
               },
               child: const Text('확인'),
             ),
