@@ -18,7 +18,9 @@ class _CustomNavigatorState extends State<CustomNavigator> with AutomaticKeepAli
     super.build(context);
     return Navigator(
       key: widget.navigatorKey,
-      onGenerateRoute: (_) => MaterialPageRoute(builder: (context) => widget.page),
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(builder: (context) => widget.page);
+      },
     );
   }
 }

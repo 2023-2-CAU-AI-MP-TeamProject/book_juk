@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "906096207491",
+    "project_id": "chac-k",
+    "storage_bucket": "chac-k.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906096207491:android:a7807595738679b83d1db6",
+        "android_client_info": {
+          "package_name": "com.chac.k"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906096207491-ecu72q103ovpulc414n90fa8jb6e9l82.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlbvfvCqlu2skPVtEbteEeACpmC6sBYZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906096207491-cdnpsnm8pvh4g4nn65asbh9oafb51b62.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "906096207491-87qr3g3cdi8u4746m3a0tnm8gpnq1aq9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bookJuk"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

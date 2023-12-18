@@ -1,9 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'models/BookModel.dart';
 import 'searchCard.dart';
+
+import 'globals.dart' as globals;
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -12,14 +16,22 @@ class Search extends StatefulWidget {
   State<Search> createState() => SearchState();
 }
 
-class SearchState extends State<Search>{
+class SearchState extends State<Search>
+with TickerProviderStateMixin{
+  List<BookModel> searchedBooks = [];
+
   String input = '';
-  final int booksPerPage = 10;
   final String ttb = 'ttbsdyhappy2211001';
   final TextEditingController tec = TextEditingController();
-  int page = 1;
-  bool isSubmitted = false;
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+  int page = 1;
+  final int booksPerPage = 10;
+  bool _hasNextPage = true;
+  bool _isLoadMoreRunning = false;
+  bool _isFirstLoadRunning = false;
+  bool _isFilled = false;
+  late ScrollController _scrollController;
   final List<String> baseURL = [
     'https://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=',
     '&Query=',
@@ -31,127 +43,203 @@ class SearchState extends State<Search>{
   @override
   void initState(){
     super.initState();
-    isSubmitted = false;
+    _scrollController = ScrollController()
+    ..addListener(_nextLoad)
+    ..addListener(() {
+      if(_scrollController.position.userScrollDirection != ScrollDirection.idle){
+        FocusScope.of(context).unfocus();
+      }
+    });
+    _isFirstLoadRunning = false;
   }
 
   @override
   void dispose(){
     super.dispose();
     tec.dispose();
+    _scrollController.dispose();
+  }
+
+  void initialize(){
+    page = 1;
+    _hasNextPage = true;
+    _isLoadMoreRunning = false;
+    _isFirstLoadRunning = false;
+    searchedBooks.clear();
+  }
+
+  void fullInitialize(){
+    initialize();
+    tec.clear();
+    input = '';
+    _isFilled = false;
+    globals.isSearchedViaHome = false;
+    globals.isAdded = false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          padding: const EdgeInsets.all(8.0),
-          width: MediaQuery.of(context).size.width,
-          child: Row(
-            children: [
-              Expanded(
-                flex: 10,
-                child: TextFormField(
-                  cursorColor: Colors.black,
-                  decoration: const InputDecoration(
-                    hintText: '도서 검색',
-                  ),
-                  textInputAction: TextInputAction.search,
-                  onFieldSubmitted: _onSubmitted,
-                  controller: tec,
-                ),
+        title: Padding(
+          padding: const EdgeInsets.all(20),
+          child: TextField(
+            autofocus: true,
+            focusNode: globals.focusNode,
+            cursorColor: Colors.black54,
+            decoration: InputDecoration(
+              hintText: '도서 검색',
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide.none
               ),
-              Flexible(
-                flex: 1,
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      _onSubmitted(tec.text);
-                    },
-                    icon: const Icon(Icons.search, color: Colors.black,)
-                  ),
-                ),
-              )
-            ],
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide.none
+              ),
+              suffixIcon: (_isFilled) ? 
+              IconButton(
+                onPressed: () => setState(() {
+                  tec.clear();
+                  _isFilled = false;
+                  input = '';
+                }),
+                icon: const Icon(CupertinoIcons.xmark_circle_fill, size: 20, color: Colors.black54,)
+              ) : const SizedBox.shrink(),
+              filled: true,
+              fillColor: Colors.black12,
+            ),
+            textInputAction: TextInputAction.search,
+            onSubmitted: _onSubmitted,
+            controller: tec,
+            onChanged: (value) {
+              setState(() {
+                if(value == ''){_isFilled = false;}
+                else{_isFilled = true;}
+              });
+            },
           ),
         ),
-        backgroundColor: Colors.white,
+        titleSpacing: 0,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: (isSubmitted && input !='') ? FutureBuilder(
-        future: searchBook(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if(snapshot.hasData == false){
-            isSubmitted = false;
-            return const Center(child: CircularProgressIndicator());
-          }
-          else if (snapshot.hasError) {
-            isSubmitted = false;
-            return const Center(child: Text('Error!'));
-          }
-          else if (snapshot.data.length == 0) {
-            isSubmitted = false;
-            return const Center(
-              child: Text('검색 결과가 없습니다.',
-                style: TextStyle(fontSize: 20)
-              ),
-            );
-          }
-          else {
-            isSubmitted = false;
-            return ListView.separated(
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(8.0),
-              itemCount: (snapshot.data.length >= 10) ? 10 : snapshot.data.length,
-              itemBuilder: (context, idx) {
-                BookModel book = snapshot.data[idx];
-                return searchCard(
-                  title: book.title,
-                  author: book.author,
-                  cover: book.cover,
-                  description: book.description,
-                  isbn13: book.isbn13,
-                );
-              },
-              separatorBuilder: (context, index) => const Divider(),
-            );
-          }
-        }
-      ) : 
-      GestureDetector(
-        onTap:() {
-          FocusScope.of(context).unfocus();
-        },
-        child: Container()
-      )
+      body: body,
+      backgroundColor: Colors.white,
     );
   }
 
-  void _onSubmitted(String value) {
+  Widget get body{
+    if(globals.isSearchedViaHome || globals.isAdded){
+      setState(() {
+        fullInitialize();
+      });
+    }
+    if(_isFirstLoadRunning && input != ''){
+      return const Center(child: CircularProgressIndicator());
+    }
+    else if(input == ''){
+      return GestureDetector(
+        onTap:() => FocusScope.of(context).unfocus(),
+        onVerticalDragStart: (details) => FocusScope.of(context).unfocus(),
+        onHorizontalDragStart: (details) => FocusScope.of(context).unfocus(),
+        child: const SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: AbsorbPointer(
+            absorbing: true,
+            child: Center(
+              child: Text('검색어를 입력하세요.')
+            ),
+          ),
+        )
+      );
+    }
+    else{
+      return (searchedBooks.isEmpty) ? const Center(child: Text('검색 결과가 없습니다.'),) :
+      SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          children: [
+            ListView.separated(
+              shrinkWrap: true,
+              primary: false,
+              padding: const EdgeInsets.all(8.0),
+              itemCount: searchedBooks.length,
+              itemBuilder: (context, idx) => searchCard(
+                book: searchedBooks[idx],
+              ),
+              separatorBuilder: (context, index) => const Divider(),
+            ),
+            if(_isLoadMoreRunning)
+            Container(
+              height: 70,
+              padding: const EdgeInsets.all(10),
+              child: const Center(child: CircularProgressIndicator())
+            ),
+            if(_hasNextPage == false && searchedBooks.isNotEmpty)
+            Column(
+              children: [
+                const Divider(),
+                Container(
+                  height: 50,
+                  padding: const EdgeInsets.all(10),
+                  color: Colors.transparent,
+                  child: const Center(child: Text('모든 결과를 검색했습니다.'),)
+                ),
+              ],
+            )
+          ],
+        ),
+      );
+    }
+  }
+
+  void _onSubmitted(String value) async {
+    initialize();
     setState(() {
       input = value;
-      isSubmitted = true;
+      _isFirstLoadRunning = true;
+    });
+    await searchBook(page);
+    setState(() {
+      _isFirstLoadRunning = false;
     });
   }
 
-  Future<List<BookModel>> searchBook() async {
-    List<BookModel> searchedBooks = [];
-    String URL = '${baseURL[0]}$ttb${baseURL[1]}$input${baseURL[2]}${booksPerPage.toString()}${baseURL[3]}${page.toString()}${baseURL[4]}';
-
-    final Uri url = Uri.parse(URL);
-    print('current URL: $URL');
-    final response = await http.get(url);
-    if(response.statusCode == 200) {
-      List<dynamic> books = jsonDecode(response.body)['item'];
-      for (var book in books) {
-        searchedBooks.add(BookModel.fromJson(book));
-      }
-      return searchedBooks;
+  void _nextLoad() async {
+    if(_hasNextPage && !_isFirstLoadRunning && !_isLoadMoreRunning && _scrollController.position.extentAfter < 50) {
+      setState(() {
+        _isLoadMoreRunning = true;
+      });
+      page += 1;
+      await searchBook(page);
+      setState(() {
+        _isLoadMoreRunning = false;
+      });
     }
-    throw Error();
   }
 
-
+  Future<List<BookModel>> searchBook(int page) async {
+    String URL = '${baseURL[0]}$ttb${baseURL[1]}$input${baseURL[2]}${booksPerPage.toString()}${baseURL[3]}${page.toString()}${baseURL[4]}';
+    try {
+      final Uri url = Uri.parse(URL);
+      print('current URL: $URL');
+      final response = await http.get(url);
+      if(response.statusCode == 200) {
+        List<dynamic> books = jsonDecode(response.body)['item'];
+        if (books.isNotEmpty) {
+          for (var book in books) {
+            searchedBooks.add(BookModel.fromJson(book));
+          }
+          setState(() {});
+        } else {
+          _hasNextPage = false;
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      return [];
+    }
+    return searchedBooks;
+  }
 }
