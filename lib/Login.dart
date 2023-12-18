@@ -178,7 +178,7 @@ class _LoginState extends State<Login> {
     await user!.updateDisplayName(me.kakaoAccount!.profile!.nickname);
     await user.updatePhotoURL(me.kakaoAccount!.profile!.profileImageUrl);
     if(me.kakaoAccount!.email != null){
-      await user.verifyBeforeUpdateEmail(me.kakaoAccount!.email!);
+      await user.updateEmail(me.kakaoAccount!.email!);
     }
     print(me.kakaoAccount!.profile!.profileImageUrl);
 

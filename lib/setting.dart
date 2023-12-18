@@ -245,10 +245,10 @@ class _SettingState extends State<Setting> {
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(context).popUntil((route) => false,);
+                globals.navigatorKeys['root']!.currentState!.popUntil((route) => false,);
                 globals.flush();
                 await widget.logout();
-                Navigator.of(context).pushNamed('/');
+                globals.navigatorKeys['root']!.currentState!.pushNamed('/');
               },
               child: const Text('확인'),
             ),
@@ -287,9 +287,9 @@ class _SettingState extends State<Setting> {
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(context).popUntil((route) => false,);
+                globals.navigatorKeys['root']!.currentState!.popUntil((route) => false,);
                 await widget.logout();
-                Navigator.of(context).pushNamed('/');
+                globals.navigatorKeys['root']!.currentState!.pushNamed('/');
               },
               child: const Text('확인'),
             ),
