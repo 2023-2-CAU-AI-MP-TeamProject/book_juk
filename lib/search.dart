@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'models/BookModel.dart';
-import 'searchCard.dart';
+import 'SearchCard.dart';
 
 import 'globals.dart' as globals;
 
@@ -75,6 +75,7 @@ with TickerProviderStateMixin{
     _isFilled = false;
     globals.isSearchedViaHome = false;
     globals.isAdded = false;
+    globals.isFilled = _isFilled;
   }
 
   @override
@@ -101,7 +102,9 @@ with TickerProviderStateMixin{
                 onPressed: () => setState(() {
                   tec.clear();
                   _isFilled = false;
+                  globals.isFilled = _isFilled;
                   input = '';
+                  FocusScope.of(context).requestFocus(globals.focusNode);
                 }),
                 icon: const Icon(CupertinoIcons.xmark_circle_fill, size: 20, color: Colors.black54,)
               ) : const SizedBox.shrink(),
@@ -115,6 +118,7 @@ with TickerProviderStateMixin{
               setState(() {
                 if(value == ''){_isFilled = false;}
                 else{_isFilled = true;}
+                globals.isFilled = _isFilled;
               });
             },
           ),

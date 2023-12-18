@@ -1,52 +1,45 @@
-import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
-import 'main.dart';
-import 'Statistics.dart';
 import 'themes.dart';
+import 'package:provider/provider.dart';
+import 'globals.dart' as globals;
 
 class SettingColors extends StatefulWidget {
+  const SettingColors({super.key});
+
   @override
-  _SettingColorsState createState() => _SettingColorsState();
+  State<SettingColors> createState() => _SettingColorsState();
 }
 
 class _SettingColorsState extends State<SettingColors> {
-  ThemeData selectedTheme = baseTheme;
+  ThemeData selectedTheme = MyTheme.blue;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('테마 설정'),
+        title: const Text('테마 설정'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            getColorButton(Colors.blue, baseTheme),
-            SizedBox(height: 10),
-            getColorButton(Colors.yellow, theme1),
-            SizedBox(height: 10),
-            getColorButton(Colors.green, theme2),
-            SizedBox(height: 10),
-            getColorButton(Colors.pink, theme3),
-            SizedBox(height: 10),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.transparent,
-                shadowColor: Colors.transparent,
-                onPrimary: Colors.black,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height / 2.5,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              getColorButton(Colors.blue, MyTheme.blue),
+              getColorButton(Colors.yellow, MyTheme.yellow),
+              getColorButton(Colors.green, MyTheme.green),
+              getColorButton(Colors.pink, MyTheme.pink),
+              TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                ),
+                onPressed: () {
+                  globals.navigatorKeys[globals.Screen.settings]!.currentState!.pop();
+                },
+                child: const Text('확인'),
               ),
-              onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MyApp(themeData: selectedTheme),
-                    ),
-                  );
-              },
-              child: Text('확인'),
-            ),
-
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -66,15 +59,14 @@ class _SettingColorsState extends State<SettingColors> {
       ),
       child: ElevatedButton(
         onPressed: () {
-          setState(() {
-            selectedTheme = theme;
-          });
+          final provider = Provider.of<globals.ThemeProvider>(context, listen: false);
+          provider.switchTheme(theme);
         },
         style: ElevatedButton.styleFrom(
-          primary: Colors.transparent,
+          backgroundColor: Colors.transparent,
           elevation: 0
         ),
-        child: Text(' '),
+        child: Container(),
       ),
     );
   }

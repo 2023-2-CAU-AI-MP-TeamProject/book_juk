@@ -1,3 +1,4 @@
+import 'package:book_juk/themes.dart';
 import 'package:flutter/material.dart';
 import 'models/BookModel.dart';
 
@@ -8,6 +9,7 @@ enum Screen{
 FocusNode focusNode = FocusNode();
 bool isSearchedViaHome = false;
 bool isAdded = false;
+bool isFilled = false;
 
 late TabController tabController;
 
@@ -20,3 +22,12 @@ final navigatorKeys = {
   Screen.statistics: GlobalKey<NavigatorState>(),
   Screen.settings: GlobalKey<NavigatorState>(),
 };
+
+class ThemeProvider extends ChangeNotifier {
+  ThemeData theme = MyTheme.blue;
+
+  void switchTheme(ThemeData selectedTheme) {
+    theme = selectedTheme;
+    notifyListeners();
+  }
+}

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'setting.dart';
 
 class License extends StatelessWidget {
+  const License({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('라이선스 정보'),
+        title: const Text('라이선스 정보'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
@@ -35,7 +36,7 @@ class License extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(width: 50.0),
+            const SizedBox(width: 50.0),
             Image.asset(
               'assets/icon.png',
               width: 150.0,
