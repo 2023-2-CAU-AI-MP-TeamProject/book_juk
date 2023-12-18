@@ -21,10 +21,10 @@ class Statistics extends StatelessWidget { //이건 책 저장되는 것 구현�
               Container(
                 width: 300, // 원하는 폭으로 조절
                 height: 200, // 원하는 높이로 조절
-                child: const Text('Hello'),
+                child: Text('샘플'),
               ),
               Text(
-                '지금까지 총 ${savedBooks.length.toString()} 권 읽으셨어요!',
+                '지금까지 총 ' + savedBooks.length.toString() + '권 읽으셨어요!',
                 style: TextStyle(fontSize: 20),
               ),
             ],
