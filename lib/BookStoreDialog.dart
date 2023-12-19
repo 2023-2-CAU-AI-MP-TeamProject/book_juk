@@ -20,6 +20,7 @@ class _BookStoreDialogState extends State<BookStoreDialog> {
   Widget build(BuildContext context) {
     final double buttonWidth = MediaQuery.of(context).size.width / 2.3;
     final double buttonHeight = MediaQuery.of(context).size.width / 3.5;
+    final defaultColorScheme = Theme.of(context).colorScheme;
 
     return Dialog(
       alignment: Alignment.bottomCenter,
@@ -47,7 +48,7 @@ class _BookStoreDialogState extends State<BookStoreDialog> {
                     width: buttonWidth,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: (_isRead) ? Colors.lightBlue : Colors.lightBlue.withOpacity(0.5),
+                      color: (_isRead) ? defaultColorScheme.primary.withAlpha(200) : defaultColorScheme.background,
                     ),
                     child: InkWell(
                       onTap: () {
@@ -55,7 +56,7 @@ class _BookStoreDialogState extends State<BookStoreDialog> {
                         setState(() {});
                       },
                       borderRadius: BorderRadius.circular(20),
-                      splashColor: Colors.blue,
+                      splashColor: defaultColorScheme.primary,
                       child: Center(
                         child: Text('읽은 책',
                           style: TextStyle(
@@ -74,7 +75,7 @@ class _BookStoreDialogState extends State<BookStoreDialog> {
                     width: buttonWidth,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: (!_isRead) ? Colors.lightBlue : Colors.lightBlue.withOpacity(0.5),
+                      color: (!_isRead) ? defaultColorScheme.primary.withAlpha(200) : defaultColorScheme.background
                     ),
                     child: InkWell(
                       onTap: () {
@@ -82,7 +83,7 @@ class _BookStoreDialogState extends State<BookStoreDialog> {
                         setState(() {});
                       },
                       borderRadius: BorderRadius.circular(20),
-                      splashColor: Colors.blue,
+                      splashColor: defaultColorScheme.primary,
                       child: Center(
                         child: Text('읽고 싶은 책',
                           style: TextStyle(

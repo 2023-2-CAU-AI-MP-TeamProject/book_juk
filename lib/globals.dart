@@ -8,6 +8,7 @@ enum Screen{
 FocusNode focusNode = FocusNode();
 bool isSearchedViaHome = false;
 bool isAdded = false;
+bool isFilled = false;
 
 late TabController tabController;
 
@@ -20,3 +21,10 @@ final navigatorKeys = {
   Screen.statistics: GlobalKey<NavigatorState>(),
   Screen.settings: GlobalKey<NavigatorState>(),
 };
+
+void flush(){
+  isSearchedViaHome = false;
+  isAdded = false;
+  isFilled = false;
+  books.clear();
+}

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:book_juk/MyHome.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +13,9 @@ import 'firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'CustomNavigator.dart';
 import 'Statistics.dart';
+import 'Setting.dart';
+import 'package:provider/provider.dart';
+import 'Themes.dart';
 import 'globals.dart' as globals;
 
 void main() async {
@@ -22,7 +25,7 @@ void main() async {
     throw Error();
   }
   FlutterNativeSplash.remove();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 Future<bool> initLoad() async {
@@ -41,32 +44,34 @@ Future<bool> initLoad() async {
   return data;
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+class _MyAppState extends State<MyApp> {
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '책:크',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        pageTransitionsTheme: PageTransitionsTheme(
-          builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
-          }
-        )
-      ),
-      routes: {
-        '/': (context) => Landing()
+    return ChangeNotifierProvider(
+      create:(context) => ThemeProvider(),
+      builder: (context, child) {
+        final themeProvider = Provider.of<ThemeProvider>(context);
+        return MaterialApp(
+          title: '책:크',
+          theme: themeProvider.theme,
+          routes: {
+            '/': (context) => Landing()
+          },
+          navigatorKey: globals.navigatorKeys['root'],
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate
+          ],
+        );
       },
-      navigatorKey: globals.navigatorKeys['root'],
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
     );
   }
 }
@@ -135,7 +140,8 @@ with SingleTickerProviderStateMixin {
     );
     tabController = globals.tabController;
     tabController.addListener(() {
-      if(tabController.index == 1 && tabController.previousIndex != 1){
+      setState(() {});
+      if(tabController.index == 1 && tabController.previousIndex != 1 && !globals.isFilled){
         setState(() {
           final temp = globals.navigatorKeys[globals.Screen.search]!.currentState;
           if(temp != null && !temp.canPop()){
@@ -156,11 +162,12 @@ with SingleTickerProviderStateMixin {
     return;
   }
 
-  void setLoginState(LoginPlatform loginPlatform) async {
+  Future<void> setLoginState(LoginPlatform loginPlatform) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       pref.setString("login_platform", loginPlatform.toString());
     });
+    return;
   }
 
   Future<void> signOut() async {
@@ -175,7 +182,7 @@ with SingleTickerProviderStateMixin {
       case LoginPlatform.none:
         if(context.mounted){
           const SnackBar sb = SnackBar(
-            content: Text('Already logoutted.'),
+            content: Text('Error: Already logoutted.'),
             duration: Duration(seconds: 2),
           );
           ScaffoldMessenger.of(context).showSnackBar(sb);
@@ -212,57 +219,42 @@ with SingleTickerProviderStateMixin {
       MyHome(tabController: tabController),
       Search(),
       Statistics(),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Builder(builder: (context) {
-            final user = FirebaseAuth.instance.currentUser;
-            if(user != null){
-              final name = user.displayName;
-              final email = user.email;
-              final photoUrl = user.photoURL;
-              final uid = user.uid;
-              return Column(
-                children: [
-                  Text('$name, $email, $uid'),
-                  if (photoUrl != null)
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(photoUrl),
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            }
-            return Text('');
-          },),
-          Text(
-            _loginPlatform.toString(),
-            style: TextStyle(
-              fontSize: 30
-            ),
-            textAlign: TextAlign.center,
-          ),
-          TextButton.icon(
-            onPressed: () async {
-              showLoading(context);
-              await Future.delayed(Duration(seconds: 2));
-              await signOut();
-              if(context.mounted){
-                Navigator.pop(context);
-              }
-            }, 
-            icon: Icon(Icons.logout),
-            label: Text('logout')
-          )
-        ],
-      )
+      Setting(logout: signOut)
+      // Column(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   children: [
+      //     Builder(builder: (context) {
+      //       final user = FirebaseAuth.instance.currentUser;
+      //       if(user != null){
+      //         final name = user.displayName;
+      //         final email = user.email;
+      //         final photoUrl = user.photoURL;
+      //         final uid = user.uid;
+      //         return Text('$name, $email, $photoUrl, $uid');
+      //       }
+      //       return Text('');
+      //     },),
+      //     Text(
+      //       _loginPlatform.toString(),
+      //       style: TextStyle(
+      //         fontSize: 30
+      //       ),
+      //       textAlign: TextAlign.center,
+      //     ),
+      //     TextButton.icon(
+      //       onPressed: () async {
+      //         showLoading(context);
+      //         await Future.delayed(Duration(seconds: 2));
+      //         await signOut();
+      //         if(context.mounted){
+      //           Navigator.pop(context);
+      //         }
+      //       }, 
+      //       icon: Icon(Icons.logout),
+      //       label: Text('logout')
+      //     )
+      //   ],
+      // )
     ];
 
     if(_loginPlatform == LoginPlatform.none) {
@@ -333,8 +325,6 @@ with SingleTickerProviderStateMixin {
                   //text: "설정"
                 )
               ],
-              labelColor: Colors.blue,
-              unselectedLabelColor: const Color.fromRGBO(20, 20, 20, 0.3),
               isScrollable: false,
               indicatorColor: Colors.transparent,
               tabAlignment: TabAlignment.fill,
