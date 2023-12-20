@@ -1,14 +1,14 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:book_juk/BookStoreDialog.dart';
+import 'package:book_juk/detail/BookStoreDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'models/BookModel.dart';
+import 'package:book_juk/models/BookModel.dart';
 import 'package:html/parser.dart';
-import 'globals.dart' as globals;
+import 'package:book_juk/globals.dart' as globals;
 
 class BookDetail extends StatelessWidget {
   BookDetail(

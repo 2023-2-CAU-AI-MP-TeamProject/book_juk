@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'models/BookModel.dart';
+import 'package:book_juk/models/BookModel.dart';
 
 enum Screen{
   home, search, statistics, settings

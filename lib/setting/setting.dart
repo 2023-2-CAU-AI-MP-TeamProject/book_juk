@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'SettingColors.dart';
-import 'License.dart';
+import 'package:book_juk/SettingColors.dart';
+import 'package:book_juk/License.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'globals.dart' as globals;
+import '../globals.dart' as globals;
 
 class Setting extends StatefulWidget {
   final Future<void> Function() logout;

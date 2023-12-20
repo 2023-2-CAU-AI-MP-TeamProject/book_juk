@@ -1,22 +1,23 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
+import 'package:flutter/material.dart';
 
 import 'package:book_juk/MyHome.dart';
-import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'Login.dart';
-import 'Search.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:book_juk/Login.dart';
+import 'package:book_juk/search/Search.dart';
+import 'package:book_juk/firebase/firebase_options.dart';
+import 'package:book_juk/utilities/CustomNavigator.dart';
+import 'package:book_juk/Statistics.dart';
+import 'package:book_juk/setting/Setting.dart';
+import 'package:book_juk/Themes.dart';
+import 'package:book_juk/globals.dart' as globals;
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'firebase_options.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'CustomNavigator.dart';
-import 'Statistics.dart';
-import 'Setting.dart';
 import 'package:provider/provider.dart';
-import 'Themes.dart';
-import 'globals.dart' as globals;
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
