@@ -11,21 +11,29 @@ class Statistics extends StatefulWidget {
 class _StatisticsState extends State<Statistics> {
   @override
   Widget build(BuildContext context) {
-    Map<int, int> readBooksPerMonth = {};
+    Map<String, int> readBooksPerMonth = {};
 
     globals.books.forEach((book) {
       if (book.status == BookStatus.read) {
-        int month = book.date.month;
-        readBooksPerMonth[month] = (readBooksPerMonth[month] ?? 0) + 1;
+        String yearMonth = '${book.date.year}-${book.date.month}';
+        readBooksPerMonth[yearMonth] = (readBooksPerMonth[yearMonth] ?? 0) + 1;
       }
     });
 
+    readBooksPerMonth = Map.fromEntries(
+      readBooksPerMonth.entries.toList()..sort((a, b) => a.key.compareTo(b.key)),
+    );
+
     List<BarChartGroupData> barGroups = [];
 
-    readBooksPerMonth.forEach((month, count) {
+    readBooksPerMonth.forEach((yearMonth, count) {
+      List<String> yearMonthList = yearMonth.split('-');
+      int year = int.parse(yearMonthList[0]);
+      int month = int.parse(yearMonthList[1]);
+
       barGroups.add(
         BarChartGroupData(
-          x: month.toInt(),
+          x: year * 12 + month.toInt(),
           barRods: [
             BarChartRodData(
               y: count.toDouble(),
@@ -43,34 +51,44 @@ class _StatisticsState extends State<Statistics> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text('월별 독서 현황'),
+            SizedBox(height: 10),
             Container(
               width: 300,
               height: 200,
-              child: BarChart(
-                BarChartData(
-                  barGroups: barGroups,
-                  titlesData: FlTitlesData(
-                    bottomTitles: SideTitles(
-                      showTitles: true,
-                      getTitles: (value) {
-                        int month = value.toInt();
-                        if (readBooksPerMonth.containsKey(month)) {
-                          return readBooksPerMonth[month].toString();
-                        } else {
-                          return '';
-                        }
-                      },
-                    ),
-                  ),
-
-                ),
-                //swapAnimationDuration: Duration(milliseconds: 150),
-                //swapAnimationCurve: Curves.linear,
+              child: Builder(
+                builder: (BuildContext context) {
+                  if (barGroups.isEmpty) {
+                    return Center(
+                      child: Text('아직 저장된 책이 없습니다.'),
+                    );
+                  } else {
+                    return BarChart(
+                      BarChartData(
+                        barGroups: barGroups,
+                        gridData: FlGridData(show: false),
+                        titlesData: FlTitlesData(
+                          bottomTitles: SideTitles(
+                            showTitles: true,
+                            getTitles: (value) {
+                              int combinedValue = value.toInt();
+                              int month = (combinedValue - 1) % 12 + 1;
+                              return '$month월';
+                            },
+                          ),
+                          topTitles: SideTitles(showTitles: false),
+                          leftTitles: SideTitles(showTitles: false),
+                          rightTitles: SideTitles(showTitles: false),
+                        ),
+                      ),
+                    );
+                  }
+                },
               ),
             ),
             Text(
-              '지금까지 총 ${readBooksPerMonth.values.reduce((a, b) => a + b)}권 읽으셨어요!',
-              style: TextStyle(fontSize: 20),
+                '지금까지 총 ${readBooksPerMonth.isNotEmpty ? readBooksPerMonth.values.reduce((a, b) => a + b) : 0} 권 읽으셨어요!',
+                style: TextStyle(fontSize: 20),
             ),
           ],
         ),
