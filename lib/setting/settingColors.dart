@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:book_juk/Themes.dart';
+import 'package:book_juk/utilities/Themes.dart';
 import 'package:provider/provider.dart';
 import 'package:book_juk/globals.dart' as globals;
 

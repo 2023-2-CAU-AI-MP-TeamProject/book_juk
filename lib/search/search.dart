@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:book_juk/models/BookModel.dart';
-import 'package:book_juk/SearchCard.dart';
+import 'package:book_juk/search/SearchCard.dart';
 
 import 'package:book_juk/globals.dart' as globals;
 

@@ -1,4 +1,6 @@
 // ignore_for_file: file_names
+import 'package:book_juk/utilities/utilities.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum BookStatus {
   read, unread
@@ -78,24 +80,99 @@ class BookModel {
       // subInfo: json["subInfo"]
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    "title": title,
+    "link": link,
+    "author": author,
+    "pubDate": pubDate,
+    "description": description,
+    "isbn": isbn,
+    "isbn13": isbn13,
+    "itemId": itemId,
+    "cover": cover,
+    "publisher": publisher,
+  };
 }
 
-class StoredBook {
-  BookModel book;
+class StoredBook extends BookModel{
   BookStatus status;
   DateTime date;
 
   StoredBook({
-    required this.book,
+    required String title,
+    required String link,
+    required String author,
+    required String pubDate,
+    String? description,
+    required String isbn,
+    required String isbn13,
+    required int itemId,
+    required String cover,
+    required String publisher,
     required this.status,
-    required this.date}
+    required this.date
+  }) : super(
+    title: title,
+    link: link,
+    author: author,
+    pubDate: pubDate,
+    description: description,
+    isbn: isbn,
+    isbn13: isbn13,
+    itemId: itemId,
+    cover: cover,
+    publisher: publisher,
   );
 
   factory StoredBook.create(BookModel book, BookStatus status, DateTime date){
     return StoredBook(
-      book: book,
+      title: book.title,
+      link: book.link,
+      author: book.author,
+      pubDate: book.pubDate,
+      description: book.description,
+      isbn: book.isbn,
+      isbn13: book.isbn13,
+      itemId: book.itemId,
+      cover: book.cover,
+      publisher: book.publisher,
       status: status,
       date: date
     );
   }
+
+  @override
+  factory StoredBook.fromJson(Map<String, dynamic> json) {
+    return StoredBook(
+      title: json["title"],
+      link: json["link"],
+      author: json["author"],
+      pubDate: json["pubDate"],
+      description: json["description"],
+      isbn: json["isbn"],
+      isbn13: json["isbn13"],
+      itemId: json["itemId"],
+      cover: json["cover"],
+      publisher: json["publisher"],
+      status: toEnum(json["status"]),
+      date: DateTime.parse(json["date"].toDate().toString())
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() => {
+    "title": title,
+    "link": link,
+    "author": author,
+    "pubDate": pubDate,
+    "description": description,
+    "isbn": isbn,
+    "isbn13": isbn13,
+    "itemId": itemId,
+    "cover": cover,
+    "publisher": publisher,
+    "status": status.toString(),
+    "date": Timestamp.fromDate(date)
+  };
 }

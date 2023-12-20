@@ -28,3 +28,10 @@ void flush(){
   isFilled = false;
   books.clear();
 }
+
+bool isInBookList(String isbn13){
+  for(StoredBook book in books){
+    if(book.isbn13 == isbn13) return true;
+  }
+  return false;
+}

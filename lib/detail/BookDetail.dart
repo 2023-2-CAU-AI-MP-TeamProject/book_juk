@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:book_juk/detail/BookStoreDialog.dart';
+import 'package:book_juk/firebase/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -25,63 +26,75 @@ class BookDetail extends StatelessWidget {
   ];
 
   final String itemIdType = 'isbn13';
+  final FireStoreService firestore = FireStoreService();
   late BookModel book;
 
   void storeBook(BookStatus status, DateTime date) {
-    //todo : implement storing book via Firestore databases
-    globals.books.add(StoredBook(book: book, status: status, date: date));
+    final b = StoredBook.create(book, status, date);
+    globals.books.add(b);
+    firestore.storeBook(b);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => BookStoreDialog(callBackBook: storeBook),
-              );
-            },
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.resolveWith(
-                (states) {
-                  if(states.contains(MaterialState.pressed)) {
-                    return Theme.of(context).colorScheme.primary;
-                  }
-                  return Colors.black;
-                }
+    return FutureBuilder(
+      future: loadBook(),
+      builder:(context, snapshot) {
+        if(!snapshot.hasData){
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator()
+            )
+          );
+        }
+        else if(snapshot.hasError){
+          return const Scaffold(
+            body: Center(
+              child: Text('Error!')
+            )
+          );
+        }
+        else{
+          book = snapshot.data!;
+          return Scaffold(
+            appBar: AppBar(
+              actions: (!globals.isInBookList(isbn13))
+              ? <Widget>[
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => BookStoreDialog(callBackBook: storeBook),
+                    );
+                  },
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.resolveWith(
+                      (states) {
+                        if(states.contains(MaterialState.pressed)) {
+                          return Theme.of(context).colorScheme.primary;
+                        }
+                        return Colors.black;
+                      }
+                    ),
+                    overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+                    animationDuration: Duration.zero
+                  ),
+                  child: const Text('저장')
+                )
+              ]
+              : [],
+              leading: BackButton(
+                onPressed: () => Navigator.pop(context),
+                // splashColor: Colors.transparent,
+                // highlightColor: Colors.transparent,
+                // icon: const Icon(CupertinoIcons.back, color: Colors.black),
+                color: Colors.black
               ),
-              overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
-              animationDuration: Duration.zero
+              backgroundColor: Colors.transparent,
+              elevation: 0,
             ),
-            child: const Text('저장')
-          )
-        ],
-        leading: BackButton(
-          onPressed: () => Navigator.pop(context),
-          // splashColor: Colors.transparent,
-          // highlightColor: Colors.transparent,
-          // icon: const Icon(CupertinoIcons.back, color: Colors.black),
-          color: Colors.black
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: Center(
-        child: FutureBuilder(
-          future: detailBook(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if(snapshot.hasData == false){
-              return const CircularProgressIndicator();
-            }
-            else if (snapshot.hasError) {
-              return const Text('Error!');
-            }
-            else {
-              book = snapshot.data;
-              return SingleChildScrollView(
+            body: Center(
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     Padding(
@@ -117,15 +130,15 @@ class BookDetail extends StatelessWidget {
                     )
                   ],
                 ),
-              );
-            }
-          }
-        )
-      )
+              )
+            )
+          );
+        }
+      },
     );
   }
 
-  Future<BookModel> detailBook() async {
+  Future<BookModel> loadBook() async {
     List<dynamic> searchedBook;
 
     final Uri url = Uri.parse('${baseURL[0]}$ttb${baseURL[1]}$itemIdType${baseURL[2]}$isbn13${baseURL[3]}');

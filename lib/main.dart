@@ -5,10 +5,12 @@ import 'package:book_juk/MyHome.dart';
 import 'package:book_juk/Login.dart';
 import 'package:book_juk/search/Search.dart';
 import 'package:book_juk/firebase/firebase_options.dart';
+import 'package:book_juk/firebase/firestore.dart';
 import 'package:book_juk/utilities/CustomNavigator.dart';
 import 'package:book_juk/Statistics.dart';
 import 'package:book_juk/setting/Setting.dart';
-import 'package:book_juk/Themes.dart';
+import 'package:book_juk/utilities/Themes.dart';
+import 'package:book_juk/utilities/utilities.dart';
 import 'package:book_juk/globals.dart' as globals;
 
 import 'package:firebase_core/firebase_core.dart';
@@ -95,6 +97,8 @@ with SingleTickerProviderStateMixin {
   Future? _loading;
   final double tabHeight = 72;
 
+  final FireStoreService firestore = FireStoreService();
+
   void showSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -102,34 +106,6 @@ with SingleTickerProviderStateMixin {
         duration: Duration(seconds: 2),
       )
     );
-  }
-
-  dynamic toEnum(dynamic value){
-    if(value is int){
-      switch(value){
-        case 0:
-          return globals.Screen.home;
-        case 1:
-          return globals.Screen.search;
-        case 2:
-          return globals.Screen.statistics;
-        case 3:
-          return globals.Screen.settings;
-      }
-      return globals.Screen.home;
-    }
-    else if(value is String){
-      switch(value){
-        case "LoginPlatform.kakao":
-          return LoginPlatform.kakao;
-        case "LoginPlatform.google":
-          return LoginPlatform.google;
-        case "LoginPlatform.none":
-          return LoginPlatform.none;
-      }
-      return LoginPlatform.none;
-    }
-    return value;
   }
 
   @override
@@ -152,6 +128,8 @@ with SingleTickerProviderStateMixin {
       }
     });
     _loading = getLoginInfo();
+    firestore.initOrUpdateFireStore();
+    firestore.loadBooks().then((books) => setState(() {globals.books = books;}));
     super.initState();
   }
 
@@ -221,41 +199,6 @@ with SingleTickerProviderStateMixin {
       Search(),
       Statistics(),
       Setting(logout: signOut)
-      // Column(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   children: [
-      //     Builder(builder: (context) {
-      //       final user = FirebaseAuth.instance.currentUser;
-      //       if(user != null){
-      //         final name = user.displayName;
-      //         final email = user.email;
-      //         final photoUrl = user.photoURL;
-      //         final uid = user.uid;
-      //         return Text('$name, $email, $photoUrl, $uid');
-      //       }
-      //       return Text('');
-      //     },),
-      //     Text(
-      //       _loginPlatform.toString(),
-      //       style: TextStyle(
-      //         fontSize: 30
-      //       ),
-      //       textAlign: TextAlign.center,
-      //     ),
-      //     TextButton.icon(
-      //       onPressed: () async {
-      //         showLoading(context);
-      //         await Future.delayed(Duration(seconds: 2));
-      //         await signOut();
-      //         if(context.mounted){
-      //           Navigator.pop(context);
-      //         }
-      //       }, 
-      //       icon: Icon(Icons.logout),
-      //       label: Text('logout')
-      //     )
-      //   ],
-      // )
     ];
 
     if(_loginPlatform == LoginPlatform.none) {
