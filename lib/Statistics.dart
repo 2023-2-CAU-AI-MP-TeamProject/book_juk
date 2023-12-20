@@ -37,6 +37,11 @@ class _StatisticsState extends State<Statistics> {
           barRods: [
             BarChartRodData(
               y: count.toDouble(),
+              width: 20,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5)
+              )
             ),
           ],
         ),
@@ -45,7 +50,7 @@ class _StatisticsState extends State<Statistics> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('책 통계'),
+        title: Text('월별 통계'),
       ),
       body: Center(
         child: Column(
@@ -63,7 +68,9 @@ class _StatisticsState extends State<Statistics> {
                       child: Text('아직 저장된 책이 없습니다.'),
                     );
                   } else {
-                    return BarChart(
+                    return Container(
+                        margin: const EdgeInsets.only(top: 8.0),
+                        child: BarChart(
                       BarChartData(
                         barGroups: barGroups,
                         gridData: FlGridData(show: false),
@@ -77,10 +84,11 @@ class _StatisticsState extends State<Statistics> {
                             },
                           ),
                           topTitles: SideTitles(showTitles: false),
-                          leftTitles: SideTitles(showTitles: false),
+                          leftTitles: SideTitles(showTitles: true),
                           rightTitles: SideTitles(showTitles: false),
                         ),
                       ),
+                    )
                     );
                   }
                 },
