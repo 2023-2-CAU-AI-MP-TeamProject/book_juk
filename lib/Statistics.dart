@@ -57,46 +57,43 @@ class _StatisticsState extends State<Statistics> {
                 topLeft: Radius.circular(5),
                 topRight: Radius.circular(5),
               ),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 width: 1
               ),
             ),
           ],
         ),
       );
-
-
     });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('독서 통계'),
-        actions: [
-          DropdownButton<int>(
-            value: selectedYear,
-            items: List.generate(5, (index) {
-              return DropdownMenuItem<int>(
-                value: DateTime.now().year - index,
-                child: Text((DateTime.now().year - index).toString(),
-                  style: TextStyle(
-                    color: Colors.black54,
-                  ),),
-
-              );
-            }),
-            onChanged: (value) {
-              setState(() {
-                selectedYear = value!;
-              });
-            },
-          ),
-        ],
+        title: const Text('월별 통계'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
+            DropdownButton<int>(
+              value: selectedYear,
+              items: List.generate(5, (index) {
+                return DropdownMenuItem<int>(
+                  value: DateTime.now().year - index,
+                  child: Text("${(DateTime.now().year - index).toString()}년",
+                    style: const TextStyle(
+                      color: Colors.black54,
+                    ),),
+                );
+              }),
+              onChanged: (value) {
+                setState(() {
+                  selectedYear = value!;
+                });
+              },
+              underline: Container(),
+              icon: Container(),
+            ),
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.menu_book, size: 15),
@@ -106,59 +103,56 @@ class _StatisticsState extends State<Statistics> {
                 Icon(Icons.menu_book, size: 15,),
               ],
             ),
-            SizedBox(height: 20),
-            Container(
+            const SizedBox(height: 20),
+            SizedBox(
               width: 300,
               height: 200,
               child: Builder(
                 builder: (BuildContext context) {
                   if (barGroups.isEmpty) {
-                    return Center(
+                    return const Center(
                       child: Text('아직 저장된 책이 없습니다.'),
                     );
                   } else {
-                    return Container(
-                      child: BarChart(
-                        BarChartData(
-                          barGroups: barGroups,
-                          gridData: FlGridData(show: false),
-                          titlesData: FlTitlesData(
-                            bottomTitles: SideTitles(
-                              showTitles: true,
-                              getTitles: (value) {
-                                int combinedValue = value.toInt();
-                                //int year = (combinedValue - 1) ~/ 12 - 2000;
-                                int month = (combinedValue - 1) % 12 + 1;
-                                //return '${year.toString()}.${month.toString().padLeft(2, '0')}';
-                                return '${month.toString().padLeft(2, '0')}';
-                              },
-                            ),
-                            topTitles: SideTitles(showTitles: false),
-                            leftTitles: SideTitles(showTitles: true,
-                              getTitles: (value) {
-                                int intValue = value.toInt();
-                                if (lastIntValue != intValue) {
-                                  lastIntValue = intValue;
-                                  return intValue.toString();
-                                } else {
-                                  return '';
-                                }
-                              },),
-                            rightTitles: SideTitles(showTitles: false),
+                    return BarChart(
+                      BarChartData(
+                        barGroups: barGroups,
+                        gridData: FlGridData(show: false),
+                        titlesData: FlTitlesData(
+                          bottomTitles: SideTitles(
+                            showTitles: true,
+                            getTitles: (value) {
+                              int combinedValue = value.toInt();
+                              //int year = (combinedValue - 1) ~/ 12 - 2000;
+                              int month = (combinedValue - 1) % 12 + 1;
+                              //return '${year.toString()}.${month.toString().padLeft(2, '0')}';
+                              return '${month.toString().padLeft(2, '0')}';
+                            },
                           ),
-                          minY: 0,
-                          maxY: readBooksPerMonth.isNotEmpty
-                              ? readBooksPerMonth.values.reduce((a, b) => a > b ? a : b) + 1
-                              : 0,
+                          topTitles: SideTitles(showTitles: false),
+                          leftTitles: SideTitles(showTitles: true,
+                            getTitles: (value) {
+                              int intValue = value.toInt();
+                              if (lastIntValue != intValue) {
+                                lastIntValue = intValue;
+                                return intValue.toString();
+                              } else {
+                                return '';
+                              }
+                            },),
+                          rightTitles: SideTitles(showTitles: false),
                         ),
+                        minY: 0,
+                        maxY: readBooksPerMonth.isNotEmpty
+                            ? readBooksPerMonth.values.reduce((a, b) => a > b ? a : b) + 1
+                            : 0,
                       ),
-
                     );
                   }
                 },
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -166,10 +160,9 @@ class _StatisticsState extends State<Statistics> {
                   '${selectedYear}년도에 총 ${readBooksPerMonth.isNotEmpty ? readBooksPerMonth.values.reduce((a, b) => a + b) : 0} 권 읽으셨어요! ',
                   style: TextStyle(fontSize: 20),
                 ),
-                Icon(Icons.thumb_up_alt_outlined, size: 20),
+                const Icon(Icons.thumb_up_alt_outlined, size: 20),
               ],
             ),
-
           ],
         ),
       ),
