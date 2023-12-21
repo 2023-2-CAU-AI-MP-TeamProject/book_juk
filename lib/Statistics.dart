@@ -1,7 +1,8 @@
-import 'package:book_juk/models/BookModel.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'models/BookModel.dart';
 import 'globals.dart' as globals;
+
 
 class Statistics extends StatefulWidget {
   @override
@@ -9,23 +10,36 @@ class Statistics extends StatefulWidget {
 }
 
 class _StatisticsState extends State<Statistics> {
+  int selectedYear = DateTime.now().year;
+
   @override
   Widget build(BuildContext context) {
     Map<String, int> readBooksPerMonth = {};
-
     globals.books.forEach((book) {
-      if (book.status == BookStatus.read) {
+      if (book.status == BookStatus.read && book.date.year == selectedYear) {
         String yearMonth = '${book.date.year}-${book.date.month}';
         readBooksPerMonth[yearMonth] = (readBooksPerMonth[yearMonth] ?? 0) + 1;
       }
     });
-
     readBooksPerMonth = Map.fromEntries(
-      readBooksPerMonth.entries.toList()..sort((a, b) => a.key.compareTo(b.key)),
+      readBooksPerMonth.entries.toList()
+        ..sort((a, b) {
+          List<String> aList = a.key.split('-');
+          List<String> bList = b.key.split('-');
+          int aYear = int.parse(aList[0]);
+          int aMonth = int.parse(aList[1]);
+          int bYear = int.parse(bList[0]);
+          int bMonth = int.parse(bList[1]);
+
+          if (aYear != bYear) {
+            return aYear.compareTo(bYear);
+          } else {
+            return aMonth.compareTo(bMonth);
+          }
+        }),
     );
 
     List<BarChartGroupData> barGroups = [];
-
     readBooksPerMonth.forEach((yearMonth, count) {
       List<String> yearMonthList = yearMonth.split('-');
       int year = int.parse(yearMonthList[0]);
@@ -40,17 +54,42 @@ class _StatisticsState extends State<Statistics> {
               width: 20,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(5),
-                topRight: Radius.circular(5)
-              )
+                topRight: Radius.circular(5),
+              ),
+              borderSide: BorderSide(
+                width: 1
+              ),
             ),
           ],
         ),
       );
+
+
     });
 
     return Scaffold(
       appBar: AppBar(
         title: Text('월별 통계'),
+        actions: [
+          DropdownButton<int>(
+            value: selectedYear,
+            items: List.generate(5, (index) {
+              return DropdownMenuItem<int>(
+                value: DateTime.now().year - index,
+                child: Text((DateTime.now().year - index).toString(),
+                  style: TextStyle(
+                    color: Colors.black54,
+                  ),),
+
+              );
+            }),
+            onChanged: (value) {
+              setState(() {
+                selectedYear = value!;
+              });
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -69,34 +108,40 @@ class _StatisticsState extends State<Statistics> {
                     );
                   } else {
                     return Container(
-                        margin: const EdgeInsets.only(top: 8.0),
-                        child: BarChart(
-                      BarChartData(
-                        barGroups: barGroups,
-                        gridData: FlGridData(show: false),
-                        titlesData: FlTitlesData(
-                          bottomTitles: SideTitles(
-                            showTitles: true,
-                            getTitles: (value) {
-                              int combinedValue = value.toInt();
-                              int month = (combinedValue - 1) % 12 + 1;
-                              return '$month월';
-                            },
+                      child: BarChart(
+                        BarChartData(
+                          barGroups: barGroups,
+                          gridData: FlGridData(show: false),
+                          titlesData: FlTitlesData(
+                            bottomTitles: SideTitles(
+                              showTitles: true,
+                              getTitles: (value) {
+                                int combinedValue = value.toInt();
+                                //int year = (combinedValue - 1) ~/ 12 - 2000;
+                                int month = (combinedValue - 1) % 12 + 1;
+                                //return '${year.toString()}.${month.toString().padLeft(2, '0')}';
+                                return '${month.toString().padLeft(2, '0')}';
+                              },
+                            ),
+                            topTitles: SideTitles(showTitles: false),
+                            leftTitles: SideTitles(showTitles: true),
+                            rightTitles: SideTitles(showTitles: false),
                           ),
-                          topTitles: SideTitles(showTitles: false),
-                          leftTitles: SideTitles(showTitles: true),
-                          rightTitles: SideTitles(showTitles: false),
+                          minY: 0,
+                          maxY: readBooksPerMonth.isNotEmpty
+                              ? readBooksPerMonth.values.reduce((a, b) => a > b ? a : b) + 1
+                              : 0,
                         ),
                       ),
-                    )
+
                     );
                   }
                 },
               ),
             ),
             Text(
-                '지금까지 총 ${readBooksPerMonth.isNotEmpty ? readBooksPerMonth.values.reduce((a, b) => a + b) : 0} 권 읽으셨어요!',
-                style: TextStyle(fontSize: 20),
+              '올해 총 ${readBooksPerMonth.isNotEmpty ? readBooksPerMonth.values.reduce((a, b) => a + b) : 0} 권 읽으셨어요!',
+              style: TextStyle(fontSize: 20),
             ),
           ],
         ),
