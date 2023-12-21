@@ -70,7 +70,7 @@ class _StatisticsState extends State<Statistics> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('월별 통계'),
+        title: Text('독서 통계'),
         actions: [
           DropdownButton<int>(
             value: selectedYear,
@@ -100,7 +100,7 @@ class _StatisticsState extends State<Statistics> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.menu_book, size: 15),
-                Text('  월별 독서 현황  ',
+                Text('  ${selectedYear} 독서 현황  ',
                   style: TextStyle(fontSize: 15),
                 ),
                 Icon(Icons.menu_book, size: 15,),
@@ -163,7 +163,7 @@ class _StatisticsState extends State<Statistics> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '올해 총 ${readBooksPerMonth.isNotEmpty ? readBooksPerMonth.values.reduce((a, b) => a + b) : 0} 권 읽으셨어요! ',
+                  '${selectedYear}년도에 총 ${readBooksPerMonth.isNotEmpty ? readBooksPerMonth.values.reduce((a, b) => a + b) : 0} 권 읽으셨어요! ',
                   style: TextStyle(fontSize: 20),
                 ),
                 Icon(Icons.thumb_up_alt_outlined, size: 20),
