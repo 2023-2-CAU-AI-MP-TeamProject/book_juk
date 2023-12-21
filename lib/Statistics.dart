@@ -93,14 +93,14 @@ class _StatisticsState extends State<Statistics> {
               underline: Container(),
               icon: Container(),
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.menu_book, size: 15),
+                const Icon(Icons.menu_book, size: 15),
                 Text('  ${selectedYear} 독서 현황  ',
                   style: TextStyle(fontSize: 15),
                 ),
-                Icon(Icons.menu_book, size: 15,),
+                const Icon(Icons.menu_book, size: 15,),
               ],
             ),
             const SizedBox(height: 20),
