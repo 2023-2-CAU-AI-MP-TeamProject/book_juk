@@ -11,6 +11,7 @@ class Statistics extends StatefulWidget {
 
 class _StatisticsState extends State<Statistics> {
   int selectedYear = DateTime.now().year;
+  int lastIntValue = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +134,16 @@ class _StatisticsState extends State<Statistics> {
                               },
                             ),
                             topTitles: SideTitles(showTitles: false),
-                            leftTitles: SideTitles(showTitles: true),
+                            leftTitles: SideTitles(showTitles: true,
+                              getTitles: (value) {
+                                int intValue = value.toInt();
+                                if (lastIntValue != intValue) {
+                                  lastIntValue = intValue;
+                                  return intValue.toString();
+                                } else {
+                                  return '';
+                                }
+                              },),
                             rightTitles: SideTitles(showTitles: false),
                           ),
                           minY: 0,
