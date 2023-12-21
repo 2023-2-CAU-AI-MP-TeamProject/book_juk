@@ -1,68 +1,186 @@
 import 'package:flutter/material.dart';
-// import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:fl_chart/fl_chart.dart';
+import 'models/BookModel.dart';
+import 'globals.dart' as globals;
 
-class Statistics extends StatelessWidget { //이건 책 저장되는 것 구현한 후에 수정하기. 일단 예시로 써뒀음.
-  final List<Book> savedBooks = [
-    Book('1월', '제목 1'),
-    Book('1월', '제목 2'),
-    Book('2월','제목 2')
-  ];
+class Statistics extends StatefulWidget {
+  @override
+  _StatisticsState createState() => _StatisticsState();
+}
+
+class _StatisticsState extends State<Statistics> {
+  int selectedYear = DateTime.now().year;
+  int lastIntValue = -1;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('책 통계'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 300, // 원하는 폭으로 조절
-                height: 200, // 원하는 높이로 조절
-                child: Text('샘플'),
+    Map<String, int> readBooksPerMonth = {};
+    globals.books.forEach((book) {
+      if (book.status == BookStatus.read && book.date.year == selectedYear) {
+        String yearMonth = '${book.date.year}-${book.date.month}';
+        readBooksPerMonth[yearMonth] = (readBooksPerMonth[yearMonth] ?? 0) + 1;
+      }
+    });
+    readBooksPerMonth = Map.fromEntries(
+      readBooksPerMonth.entries.toList()
+        ..sort((a, b) {
+          List<String> aList = a.key.split('-');
+          List<String> bList = b.key.split('-');
+          int aYear = int.parse(aList[0]);
+          int aMonth = int.parse(aList[1]);
+          int bYear = int.parse(bList[0]);
+          int bMonth = int.parse(bList[1]);
+
+          if (aYear != bYear) {
+            return aYear.compareTo(bYear);
+          } else {
+            return aMonth.compareTo(bMonth);
+          }
+        }),
+    );
+
+    List<BarChartGroupData> barGroups = [];
+    readBooksPerMonth.forEach((yearMonth, count) {
+      List<String> yearMonthList = yearMonth.split('-');
+      int year = int.parse(yearMonthList[0]);
+      int month = int.parse(yearMonthList[1]);
+
+      int totalBars=readBooksPerMonth.length;
+      double barWidth = MediaQuery.of(context).size.width * 0.8/totalBars;
+      double maxBarWidth = MediaQuery.of(context).size.width * 0.3;
+      barWidth = barWidth > maxBarWidth ? maxBarWidth : barWidth;
+
+      barGroups.add(
+        BarChartGroupData(
+          x: year * 12 + month.toInt(),
+          barRods: [
+            BarChartRodData(
+              y: count.toDouble(),
+              width: barWidth,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5),
               ),
-              Text(
-                '지금까지 총 ' + savedBooks.length.toString() + '권 읽으셨어요!',
-                style: TextStyle(fontSize: 20),
+              borderSide: const BorderSide(
+                width: 1,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
+    });
+
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            DropdownButton<int>(
+              value: selectedYear,
+              items: List.generate(5, (index) {
+                return DropdownMenuItem<int>(
+                  value: DateTime.now().year - index,
+                  child: Text(
+                    "${(DateTime.now().year - index).toString()}년",
+                    style: const TextStyle(
+                      color: Colors.black54,
+                    ),
+                  ),
+                );
+              }),
+              onChanged: (value) {
+                setState(() {
+                  selectedYear = value!;
+                });
+              },
+              underline: Container(),
+              icon: Container(),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.menu_book, size: 15),
+                Text(
+                  '  ${selectedYear} 독서 현황  ',
+                  style: TextStyle(fontSize: 15),
+                ),
+                const Icon(Icons.menu_book, size: 15),
+              ],
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: Builder(
+                builder: (BuildContext context) {
+                  if (barGroups.isEmpty) {
+                    return const Center(
+                      child: Text('아직 저장된 책이 없습니다.'),
+                    );
+                  } else {
+                    return BarChart(
+                      BarChartData(
+                        barGroups: barGroups,
+                        gridData: FlGridData(show: false),
+                        titlesData: FlTitlesData(
+                          bottomTitles: SideTitles(
+                            showTitles: true,
+                            getTitles: (value) {
+                              int combinedValue = value.toInt();
+                              int month = (combinedValue - 1) % 12 + 1;
+                              return '${month.toString().padLeft(2, '0')}';
+                            },
+                          ),
+                          topTitles: SideTitles(showTitles: false),
+                          leftTitles: SideTitles(
+                            showTitles: true,
+                            getTitles: (value) {
+                              int intValue = value.toInt();
+                              if (lastIntValue != intValue) {
+                                lastIntValue = intValue;
+                                return intValue.toString();
+                              } else {
+                                return '';
+                              }
+                            },
+                          ),
+                          rightTitles: SideTitles(showTitles: false),
+                        ),
+                        minY: 0,
+                        maxY: readBooksPerMonth.isNotEmpty
+                            ? readBooksPerMonth.values.reduce((a, b) => a > b ? a : b) + 1
+                            : 0,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.1,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${selectedYear}년도에 총 ${readBooksPerMonth.isNotEmpty ? readBooksPerMonth.values.reduce((a, b) => a + b) : 0} 권 읽으셨어요! ',
+                  style: TextStyle(fontSize: 20),
+                ),
+                const Icon(Icons.thumb_up_alt_outlined, size: 20),
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+          ],
+        ),
+      ),
+    );
   }
-
-  // Widget _buildHistogram() {
-  //   Map<String, int> bookCounts = {};
-  //   for (var book in savedBooks) {
-  //     bookCounts[book.month] = (bookCounts[book.month] ?? 0) + 1;
-  //   }
-
-  //   List<charts.Series<Book, String>> seriesList = [
-  //     charts.Series<Book, String>(
-  //       id: '월별 독서 현황',
-  //       domainFn: (Book book, _) => book.month,
-  //       measureFn: (Book book, _) => bookCounts[book.month],
-  //       data: savedBooks,
-  //     ),
-  //   ];
-
-  //   return charts.BarChart(
-  //     seriesList,
-  //     animate: true,
-  //     vertical: true,
-  //     behaviors: [charts.SeriesLegend()],
-  //     defaultRenderer: charts.BarRendererConfig(
-  //       //cornerStrategy: const charts.ConstCornerStrategy(30), // 차트의 모서리 라운딩 설정
-  //     ),
-  //   );
-  // }
-}
-
-class Book { //이것도 저장하는 거 구현한 후에 수정해야 할듯.
-  String month;
-  String title;
-
-  Book(this.month, this.title);
 }
