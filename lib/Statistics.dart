@@ -3,7 +3,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'models/BookModel.dart';
 import 'globals.dart' as globals;
 
-
 class Statistics extends StatefulWidget {
   @override
   _StatisticsState createState() => _StatisticsState();
@@ -46,19 +45,24 @@ class _StatisticsState extends State<Statistics> {
       int year = int.parse(yearMonthList[0]);
       int month = int.parse(yearMonthList[1]);
 
+      int totalBars=readBooksPerMonth.length;
+      double barWidth = MediaQuery.of(context).size.width * 0.8/totalBars;
+      double maxBarWidth = MediaQuery.of(context).size.width * 0.3;
+      barWidth = barWidth > maxBarWidth ? maxBarWidth : barWidth;
+
       barGroups.add(
         BarChartGroupData(
           x: year * 12 + month.toInt(),
           barRods: [
             BarChartRodData(
               y: count.toDouble(),
-              width: 20,
+              width: barWidth,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(5),
                 topRight: Radius.circular(5),
               ),
               borderSide: const BorderSide(
-                width: 1
+                width: 1,
               ),
             ),
           ],
@@ -67,22 +71,24 @@ class _StatisticsState extends State<Statistics> {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('월별 통계'),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
             DropdownButton<int>(
               value: selectedYear,
               items: List.generate(5, (index) {
                 return DropdownMenuItem<int>(
                   value: DateTime.now().year - index,
-                  child: Text("${(DateTime.now().year - index).toString()}년",
+                  child: Text(
+                    "${(DateTime.now().year - index).toString()}년",
                     style: const TextStyle(
                       color: Colors.black54,
-                    ),),
+                    ),
+                  ),
                 );
               }),
               onChanged: (value) {
@@ -97,16 +103,20 @@ class _StatisticsState extends State<Statistics> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.menu_book, size: 15),
-                Text('  ${selectedYear} 독서 현황  ',
+                Text(
+                  '  ${selectedYear} 독서 현황  ',
                   style: TextStyle(fontSize: 15),
                 ),
-                const Icon(Icons.menu_book, size: 15,),
+                const Icon(Icons.menu_book, size: 15),
               ],
             ),
             const SizedBox(height: 20),
             SizedBox(
-              width: 300,
-              height: 200,
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.95,
+              height: MediaQuery.of(context).size.height * 0.5,
               child: Builder(
                 builder: (BuildContext context) {
                   if (barGroups.isEmpty) {
@@ -123,14 +133,13 @@ class _StatisticsState extends State<Statistics> {
                             showTitles: true,
                             getTitles: (value) {
                               int combinedValue = value.toInt();
-                              //int year = (combinedValue - 1) ~/ 12 - 2000;
                               int month = (combinedValue - 1) % 12 + 1;
-                              //return '${year.toString()}.${month.toString().padLeft(2, '0')}';
                               return '${month.toString().padLeft(2, '0')}';
                             },
                           ),
                           topTitles: SideTitles(showTitles: false),
-                          leftTitles: SideTitles(showTitles: true,
+                          leftTitles: SideTitles(
+                            showTitles: true,
                             getTitles: (value) {
                               int intValue = value.toInt();
                               if (lastIntValue != intValue) {
@@ -139,7 +148,8 @@ class _StatisticsState extends State<Statistics> {
                               } else {
                                 return '';
                               }
-                            },),
+                            },
+                          ),
                           rightTitles: SideTitles(showTitles: false),
                         ),
                         minY: 0,
@@ -152,7 +162,9 @@ class _StatisticsState extends State<Statistics> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.1,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -162,6 +174,9 @@ class _StatisticsState extends State<Statistics> {
                 ),
                 const Icon(Icons.thumb_up_alt_outlined, size: 20),
               ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
             ),
           ],
         ),
