@@ -95,8 +95,17 @@ class _StatisticsState extends State<Statistics> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('월별 독서 현황'),
-            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.menu_book, size: 15),
+                Text('  월별 독서 현황  ',
+                  style: TextStyle(fontSize: 15),
+                ),
+                Icon(Icons.menu_book, size: 15,),
+              ],
+            ),
+            SizedBox(height: 20),
             Container(
               width: 300,
               height: 200,
@@ -139,10 +148,18 @@ class _StatisticsState extends State<Statistics> {
                 },
               ),
             ),
-            Text(
-              '올해 총 ${readBooksPerMonth.isNotEmpty ? readBooksPerMonth.values.reduce((a, b) => a + b) : 0} 권 읽으셨어요!',
-              style: TextStyle(fontSize: 20),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '올해 총 ${readBooksPerMonth.isNotEmpty ? readBooksPerMonth.values.reduce((a, b) => a + b) : 0} 권 읽으셨어요! ',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Icon(Icons.thumb_up_alt_outlined, size: 20),
+              ],
             ),
+
           ],
         ),
       ),
