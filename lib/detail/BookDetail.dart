@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, invalid_use_of_protected_member
 
 import 'package:book_juk/detail/BookStoreDialog.dart';
 import 'package:book_juk/firebase/firestore.dart';
@@ -11,27 +11,43 @@ import 'package:book_juk/models/BookModel.dart';
 import 'package:html/parser.dart';
 import 'package:book_juk/globals.dart' as globals;
 
-class BookDetail extends StatelessWidget {
+class BookDetail extends StatefulWidget {
+  final String isbn13;
+  late StoredBook? storedBook;
   BookDetail(
     {super.key, 
-    required this.isbn13}
+    required this.isbn13,
+    this.storedBook}
   );
+
+  @override
+  State<BookDetail> createState() => _BookDetailState();
+}
+
+class _BookDetailState extends State<BookDetail> {
+  
   final String ttb = 'ttbsdyhappy2211001';
-  final String isbn13;
   final List<String> baseURL = [
     'https://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=',
     '&itemIdType=',
     '&ItemID=',
     '&Output=JS&Cover=big&Version=20131101'
   ];
-
   final String itemIdType = 'isbn13';
   final FireStoreService firestore = FireStoreService();
   late BookModel book;
-
-  void storeBook(BookStatus status, DateTime date) {
-    final b = StoredBook.create(book, status, date);
-    globals.books.add(b);
+  
+  void storeBook(BookStatus status, DateTime date, bool isFavorite) {
+    final b = StoredBook.create(book, status, date, isFavorite);
+    if(globals.isInBookList(widget.isbn13)) {
+      globals.deleteBookInList(widget.isbn13);
+      globals.books.add(b);
+      print(globals.books.length);
+    }else {
+      () {
+        globals.books.add(b);
+      };
+    }
     firestore.storeBook(b);
   }
 
@@ -58,7 +74,7 @@ class BookDetail extends StatelessWidget {
           book = snapshot.data!;
           return Scaffold(
             appBar: AppBar(
-              actions: (!globals.isInBookList(isbn13))
+              actions: (!globals.isInBookList(widget.isbn13))
               ? <Widget>[
                 TextButton(
                   onPressed: () {
@@ -82,7 +98,80 @@ class BookDetail extends StatelessWidget {
                   child: const Text('저장')
                 )
               ]
-              : [],
+              : <Widget>[
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => BookStoreDialog(callBackBook: storeBook, book: widget.storedBook),
+                    );
+                  },
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.resolveWith(
+                      (states) {
+                        if(states.contains(MaterialState.pressed)) {
+                          return Theme.of(context).colorScheme.primary;
+                        }
+                        return Colors.black;
+                      }
+                    ),
+                    overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+                    animationDuration: Duration.zero
+                  ),
+                  child: const Text('수정')
+                ),
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('정말 이 책을 삭제하시겠습니까?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('취소',
+                              style: TextStyle(color: Colors.black)
+                            )
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              globals.books.remove(widget.storedBook!);
+                              firestore.deleteBook(widget.storedBook!);
+                              if(globals.navigatorKeys[globals.Screen.home]!.currentState != null){
+                                globals.navigatorKeys[globals.Screen.home]!.currentState!.setState(() {});
+                                globals.navigatorKeys[globals.Screen.home]!.currentState!.pop();
+                              }
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text("정상적으로 삭제가 완료되었습니다."),
+                                duration: Duration(seconds: 1)
+                              ));
+                            },
+                            child: const Text('삭제', 
+                              style: TextStyle(color: Colors.red)
+                            )
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.resolveWith(
+                      (states) {
+                        if(states.contains(MaterialState.pressed)) {
+                          return Theme.of(context).colorScheme.primary;
+                        }
+                        return Colors.black;
+                      }
+                    ),
+                    overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+                    animationDuration: Duration.zero
+                  ),
+                  child: const Text('삭제')
+                )
+              ],
               leading: BackButton(
                 onPressed: () => Navigator.pop(context),
                 // splashColor: Colors.transparent,
@@ -141,7 +230,7 @@ class BookDetail extends StatelessWidget {
   Future<BookModel> loadBook() async {
     List<dynamic> searchedBook;
 
-    final Uri url = Uri.parse('${baseURL[0]}$ttb${baseURL[1]}$itemIdType${baseURL[2]}$isbn13${baseURL[3]}');
+    final Uri url = Uri.parse('${baseURL[0]}$ttb${baseURL[1]}$itemIdType${baseURL[2]}${widget.isbn13}${baseURL[3]}');
     final response = await http.get(url);
 
     if(response.statusCode == 200) {

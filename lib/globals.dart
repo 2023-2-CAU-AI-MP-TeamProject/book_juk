@@ -38,3 +38,13 @@ bool isInBookList(String isbn13){
   }
   return false;
 }
+
+bool deleteBookInList(String isbn13){
+  for(StoredBook book in books){
+    if(book.isbn13 == isbn13){
+      books.remove(book);
+      return true;
+    }
+  }
+  return false;
+}

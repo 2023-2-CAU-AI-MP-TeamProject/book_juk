@@ -102,7 +102,7 @@ with SingleTickerProviderStateMixin {
   void showSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text("현재 index: $_selectedScreen\n '뒤로' 버튼 한번 더 눌러 종료"),
+        content: Text("'뒤로' 버튼 한번 더 눌러 종료"),
         duration: Duration(seconds: 2),
       )
     );
@@ -127,10 +127,19 @@ with SingleTickerProviderStateMixin {
         });
       }
     });
-    _loading = getLoginInfo();
-    firestore.initOrUpdateFireStore();
-    firestore.loadBooks().then((books) => setState(() {globals.books = books;}));
+    _loading = getLoginInfo().then((_) {
+      if(_loginPlatform != LoginPlatform.none){
+        firestore.initOrUpdateFireStore();
+        firestore.loadBooks().then((books) => setState(() {globals.books = books;}));
+      }
+    });
     super.initState();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    tabController.dispose();
   }
 
   Future<void> getLoginInfo() async {
@@ -195,7 +204,7 @@ with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      MyHome(tabController: tabController),
+      MyHome(tabController: tabController, loginPlatform: _loginPlatform),
       Search(),
       Statistics(),
       Setting(logout: signOut)

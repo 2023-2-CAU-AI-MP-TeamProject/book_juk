@@ -98,6 +98,7 @@ class BookModel {
 class StoredBook extends BookModel{
   BookStatus status;
   DateTime date;
+  bool isFavorite;
 
   StoredBook({
     required String title,
@@ -111,7 +112,8 @@ class StoredBook extends BookModel{
     required String cover,
     required String publisher,
     required this.status,
-    required this.date
+    required this.date,
+    required this.isFavorite
   }) : super(
     title: title,
     link: link,
@@ -125,7 +127,7 @@ class StoredBook extends BookModel{
     publisher: publisher,
   );
 
-  factory StoredBook.create(BookModel book, BookStatus status, DateTime date){
+  factory StoredBook.create(BookModel book, BookStatus status, DateTime date, bool isFavorite){
     return StoredBook(
       title: book.title,
       link: book.link,
@@ -138,7 +140,8 @@ class StoredBook extends BookModel{
       cover: book.cover,
       publisher: book.publisher,
       status: status,
-      date: date
+      date: date,
+      isFavorite: isFavorite
     );
   }
 
@@ -156,7 +159,8 @@ class StoredBook extends BookModel{
       cover: json["cover"],
       publisher: json["publisher"],
       status: toEnum(json["status"]),
-      date: DateTime.parse(json["date"].toDate().toString())
+      date: DateTime.parse(json["date"].toDate().toString()),
+      isFavorite: json["isFavorite"]
     );
   }
 
@@ -173,6 +177,7 @@ class StoredBook extends BookModel{
     "cover": cover,
     "publisher": publisher,
     "status": status.toString(),
-    "date": Timestamp.fromDate(date)
+    "date": Timestamp.fromDate(date),
+    "isFavorite": isFavorite
   };
 }

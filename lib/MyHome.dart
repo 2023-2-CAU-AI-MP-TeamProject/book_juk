@@ -1,14 +1,17 @@
+import 'package:book_juk/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:book_juk/firebase/firestore.dart';
 import 'package:book_juk/models/BookModel.dart';
+import 'package:book_juk/detail/BookDetail.dart';
 import 'package:book_juk/utilities/CustomNavigator.dart';
 import 'globals.dart' as globals;
 import 'dart:math';
 
 class MyHome extends StatefulWidget {
   final TabController tabController;
+  final LoginPlatform loginPlatform;
   final FireStoreService firestore = FireStoreService();
-  MyHome({super.key, required this.tabController});
+  MyHome({super.key, required this.tabController, required this.loginPlatform});
 
   @override
   State<MyHome> createState() => _MyHomeState();
@@ -23,6 +26,12 @@ with SingleTickerProviderStateMixin{
   void initState(){
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    _tabController.dispose();
   }
 
   @override
@@ -107,8 +116,8 @@ with SingleTickerProviderStateMixin{
       body: TabBarView(
         controller: _tabController,
         children: [
-          CustomTab(page: BookShelf(key: globals.readBookShelfKey, status: BookStatus.read)),
-          CustomTab(page: BookShelf(key: globals.unreadBookShelfKey, status: BookStatus.unread))
+          CustomTab(page: BookShelf(key: globals.readBookShelfKey, status: BookStatus.read, loginPlatform: widget.loginPlatform)),
+          CustomTab(page: BookShelf(key: globals.unreadBookShelfKey, status: BookStatus.unread, loginPlatform: widget.loginPlatform))
         ],
       )
     );
@@ -117,7 +126,8 @@ with SingleTickerProviderStateMixin{
 
 class BookShelf extends StatefulWidget {
   final BookStatus status;
-  const BookShelf({super.key, required this.status});
+  final LoginPlatform loginPlatform;
+  const BookShelf({super.key, required this.status, required this.loginPlatform});
 
   @override
   State<BookShelf> createState() => BookShelfState();
@@ -156,12 +166,15 @@ class BookShelfState extends State<BookShelf> {
 
   @override
   void initState(){
-    updateBookShelf();
     super.initState();
+    updateBookShelf();
   }
 
   @override
   Widget build(BuildContext context) {
+    if(widget.loginPlatform != LoginPlatform.none){
+      updateBookShelf(); //not recommended
+    }
     return Column(
       children: [
         Expanded(
@@ -259,19 +272,63 @@ class _BookState extends State<Book> {
 
     return GestureDetector(
       onTap: () {
-        showDialog (context: context,
-            builder: (context) {
-          return AlertDialog(
-            title: Text(widget.book.title),
-            content: Text(widget.book.description ?? '설명 없음'),
-            actions: [
-              TextButton(onPressed: () {
-                Navigator.of(context).pop();
-              }, child: Text('확인'))
-            ],
-          );
-            },
-        barrierDismissible: false);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return Dialog(
+              child: Container(
+                height: 250,
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Image.network(widget.book.cover, height: 100),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              widget.book.title,
+                              maxLines: 3,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: Text(
+                        widget.book.description ?? '',
+                        maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        globals.navigatorKeys[globals.Screen.home]!.currentState!.push(
+                          MaterialPageRoute(builder: (context) => BookDetail(isbn13: widget.book.isbn13, storedBook: widget.book,),)
+                        );
+                      },
+                      child: const Text('상세보기')
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
       },
       child: Container(
         height: 100,
@@ -301,7 +358,6 @@ class _BookState extends State<Book> {
           )
         ),
       ),
-
     );
   }
 }
