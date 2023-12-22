@@ -35,8 +35,8 @@ class _LoginState extends State<Login> {
 
   void setLoginState(String loginPlatform) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    setState(() async {
-      await pref.setString("login_platform", loginPlatform);
+    setState(() {
+      pref.setString("login_platform", loginPlatform);
       _loginPlatform = _loginPlatform;
     });
     if(_loginPlatform != LoginPlatform.none && context.mounted){

@@ -337,7 +337,7 @@ class _BookState extends State<Book> {
       },
       child: Container(
         height: 100,
-        width: MediaQuery.of(context).size.width / 10.305,
+        width: MediaQuery.of(context).size.width / 10.535,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: bookColor,
