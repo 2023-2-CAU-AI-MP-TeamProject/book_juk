@@ -146,7 +146,7 @@ with SingleTickerProviderStateMixin {
 
   Future<void> getTheme(BuildContext context) async {
       final pref = await SharedPreferences.getInstance();
-      ThemeData? theme = themeFromString(await pref.getString('theme') ?? '');
+      ThemeData? theme = themeFromString(pref.getString('theme') ?? '');
       if(theme != null && context.mounted){
         final provider = Provider.of<ThemeProvider>(context, listen: false);
         provider.switchTheme(theme);

@@ -246,11 +246,10 @@ class _SettingState extends State<Setting> {
             ),
             TextButton(
               onPressed: () async {
-                globals.navigatorKeys['root']!.currentState!.popUntil((route) => false,);
+                Navigator.of(context).pop();
                 globals.flush();
-                FireStoreService().deleteUser();
+                await FireStoreService().deleteUser();
                 await widget.logout();
-                globals.navigatorKeys['root']!.currentState!.pushNamed('/');
               },
               child: const Text('확인'),
             ),
@@ -289,9 +288,10 @@ class _SettingState extends State<Setting> {
             ),
             TextButton(
               onPressed: () async {
-                globals.navigatorKeys['root']!.currentState!.popUntil((route) => false,);
+                Navigator.of(context).pop();
+                //globals.navigatorKeys['root']!.currentState!.popUntil((route) => false,);
                 await widget.logout();
-                globals.navigatorKeys['root']!.currentState!.pushNamed('/');
+                //globals.navigatorKeys['root']!.currentState!.pushNamed('/');
               },
               child: const Text('확인'),
             ),
