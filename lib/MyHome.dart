@@ -1,6 +1,7 @@
 // import 'package:book_juk/models/BookModel.dart';
 import 'package:flutter/material.dart';
 import 'globals.dart' as globals;
+import 'dart:math';
 
 class MyHome extends StatefulWidget {
   final TabController tabController;
@@ -12,6 +13,7 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> {
   List<Widget> bookcaseList = [];
+  List<Widget> bookList = [];
 
   @override
   void initState() {
@@ -158,7 +160,70 @@ class BookShelf extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.black),
       ),
-      child: Row(),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Book(),
+          Book(),
+          Book()
+        ]
+      ),
+    );
+  }
+}
+
+class Book extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+
+    final colors = [
+      Theme.of(context).primaryColorLight,
+      Theme.of(context).primaryColor,
+      Theme.of(context).primaryColorDark
+    ];
+    final random = Random();
+    final bookColor = colors[random.nextInt(colors.length)];
+    final bookHeight = 80 + random.nextInt(20);
+    final bookTitle = "AI학과 화이팅";
+
+    return GestureDetector(
+      onTap: () {
+        showDialog (context: context,
+            builder: (context) {
+          return AlertDialog(
+            title: Text('책 제목'),
+            content: Text('책 줄거리'),
+            actions: [
+              TextButton(onPressed: () {
+                Navigator.of(context).pop();
+              }, child: Text('확인'))
+            ],
+          );
+            },
+        barrierDismissible: false);
+      },
+      child: Container(
+        height: bookHeight.toDouble() - 0.5 * 2,
+        width: 20 - 0.5 * 2,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          color: bookColor,
+          border: Border.all(color: Colors.black,
+          width: 0.5)
+        ),
+        child: Center(
+          heightFactor: bookHeight.toDouble() - 0.5 * 2,
+          widthFactor: 20 - 0.5 * 2,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: bookTitle.split('').map((char) =>
+                Text(char, style: TextStyle(fontSize: 6, fontWeight: FontWeight.bold))).toList(),
+          )),
+      ),
+
     );
   }
 }
