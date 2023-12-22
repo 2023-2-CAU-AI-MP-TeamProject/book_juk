@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:book_juk/utilities/Themes.dart';
 import 'package:provider/provider.dart';
 import 'package:book_juk/globals.dart' as globals;
+
+ThemeData? themeFromString(String value){
+  switch(value){
+    case 'blue':
+      return MyTheme.blue;
+    case 'yellow':
+      return MyTheme.yellow;
+    case 'pink':
+      return MyTheme.pink;
+    case 'green':
+      return MyTheme.green;
+  }
+  return null;
+}
 
 class SettingColors extends StatefulWidget {
   const SettingColors({super.key});
@@ -12,6 +27,7 @@ class SettingColors extends StatefulWidget {
 
 class _SettingColorsState extends State<SettingColors> {
   ThemeData selectedTheme = MyTheme.blue;
+  String stringTheme = 'blue';
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +41,18 @@ class _SettingColorsState extends State<SettingColors> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              getColorButton(Colors.blue, MyTheme.blue),
-              getColorButton(Colors.yellow, MyTheme.yellow),
-              getColorButton(Colors.green, MyTheme.green),
-              getColorButton(Colors.pink, MyTheme.pink),
+              getColorButton(Colors.blue, MyTheme.blue, 'blue'),
+              getColorButton(Colors.yellow, MyTheme.yellow, 'yellow'),
+              getColorButton(Colors.green, MyTheme.green, 'green'),
+              getColorButton(Colors.pink, MyTheme.pink, 'pink'),
               TextButton(
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   globals.navigatorKeys[globals.Screen.settings]!.currentState!.pop();
+                  final pref = await SharedPreferences.getInstance();
+                  await pref.setString('theme', stringTheme);
                 },
                 child: const Text('확인'),
               ),
@@ -45,7 +63,7 @@ class _SettingColorsState extends State<SettingColors> {
     );
   }
 
-  Widget getColorButton(Color color, ThemeData theme) {
+  Widget getColorButton(Color color, ThemeData theme, String value) {
     return Container(
       width: 200,
       height: 50,
@@ -61,6 +79,7 @@ class _SettingColorsState extends State<SettingColors> {
         onPressed: () {
           final provider = Provider.of<ThemeProvider>(context, listen: false);
           provider.switchTheme(theme);
+          stringTheme = value;
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,

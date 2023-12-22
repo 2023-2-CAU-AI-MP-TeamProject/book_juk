@@ -11,6 +11,7 @@ import 'package:book_juk/Statistics.dart';
 import 'package:book_juk/setting/Setting.dart';
 import 'package:book_juk/utilities/Themes.dart';
 import 'package:book_juk/utilities/utilities.dart';
+import 'package:book_juk/setting/settingColors.dart';
 import 'package:book_juk/globals.dart' as globals;
 
 import 'package:firebase_core/firebase_core.dart';
@@ -127,6 +128,7 @@ with SingleTickerProviderStateMixin {
         });
       }
     });
+    getTheme(context).then((value) {});
     _loading = getLoginInfo().then((_) {
       if(_loginPlatform != LoginPlatform.none){
         firestore.initOrUpdateFireStore();
@@ -140,6 +142,15 @@ with SingleTickerProviderStateMixin {
   void dispose(){
     super.dispose();
     tabController.dispose();
+  }
+
+  Future<void> getTheme(BuildContext context) async {
+      final pref = await SharedPreferences.getInstance();
+      ThemeData? theme = themeFromString(await pref.getString('theme') ?? '');
+      if(theme != null && context.mounted){
+        final provider = Provider.of<ThemeProvider>(context, listen: false);
+        provider.switchTheme(theme);
+      }
   }
 
   Future<void> getLoginInfo() async {
