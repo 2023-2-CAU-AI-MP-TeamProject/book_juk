@@ -80,7 +80,12 @@ class FireStoreService {
     final firestore = FirebaseFirestore.instance;
     try{
       final user = await getUser();
-      
+      firestore.collection('users').doc(user.uid)
+        .collection("books").get().then((snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs){
+          ds.reference.delete();
+        };
+      });
       await firestore.collection("users").doc(user.uid).delete();
       return true;
     } catch(e) {

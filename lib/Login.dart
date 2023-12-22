@@ -86,30 +86,53 @@ class _LoginState extends State<Login> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          (_loginPlatform == LoginPlatform.none) ? InkWell(
-            onTap: kakaoLogin,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-              child: Image.asset('assets/kakao.png',
-                fit:BoxFit.fitWidth
-              )
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 1.3,
+            child: Image.asset('assets/logo.png',
+              fit:BoxFit.contain
             ),
-          ) : Container(),
-          (_loginPlatform == LoginPlatform.none) ? InkWell(
-            onTap: () {
-              if(DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.web){
-                googleLoginWeb();
-              } else {
-                googleLogin();
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-              child: Image.asset('assets/google.png',
-                fit:BoxFit.fitWidth
+          ),
+          SizedBox(height: MediaQuery.of(context).size.width / 10),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 1.3,
+            child: Center(
+              child: Text(
+                "책:크 - 나만의 책꽂이",
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width / 15
+                ),
               )
-            ),
-          ) : Container(),
+            )
+          ),
+          SizedBox(height: MediaQuery.of(context).size.width / 5),
+          Column(
+            children: [
+              (_loginPlatform == LoginPlatform.none) ? InkWell(
+                onTap: kakaoLogin,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                  child: Image.asset('assets/kakao.png',
+                    fit:BoxFit.fitWidth
+                  )
+                ),
+              ) : Container(),
+              (_loginPlatform == LoginPlatform.none) ? InkWell(
+                onTap: () {
+                  if(DefaultFirebaseOptions.currentPlatform == DefaultFirebaseOptions.web){
+                    googleLoginWeb();
+                  } else {
+                    googleLogin();
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                  child: Image.asset('assets/google.png',
+                    fit:BoxFit.fitWidth
+                  )
+                ),
+              ) : Container(),
+            ]
+          ),
           Text(_loginText(), style: const TextStyle(fontSize: 20),),
           (_loginPlatform != LoginPlatform.none) ? TextButton(
             onPressed: signOut,
