@@ -75,113 +75,137 @@ class _StatisticsState extends State<Statistics> {
 
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            DropdownButton<int>(
-              value: selectedYear,
-              items: List.generate(5, (index) {
-                return DropdownMenuItem<int>(
-                  value: DateTime.now().year - index,
-                  child: Text(
-                    "${(DateTime.now().year - index).toString()}년",
-                    style: const TextStyle(
-                      color: Colors.black54,
-                    ),
-                  ),
-                );
-              }),
-              onChanged: (value) {
-                setState(() {
-                  selectedYear = value!;
-                });
-              },
-              underline: Container(),
-              icon: Container(),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.menu_book, size: 15),
-                Text(
-                  '  ${selectedYear} 독서 현황  ',
-                  style: TextStyle(fontSize: 15),
-                ),
-                const Icon(Icons.menu_book, size: 15),
-              ],
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.95,
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: Builder(
-                builder: (BuildContext context) {
-                  if (barGroups.isEmpty) {
-                    return const Center(
-                      child: Text('아직 저장된 책이 없습니다.'),
-                    );
-                  } else {
-                    return BarChart(
-                      BarChartData(
-                        barGroups: barGroups,
-                        gridData: FlGridData(show: false),
-                        titlesData: FlTitlesData(
-                          bottomTitles: SideTitles(
-                            showTitles: true,
-                            getTitles: (value) {
-                              int combinedValue = value.toInt();
-                              int month = (combinedValue - 1) % 12 + 1;
-                              return '${month.toString().padLeft(2, '0')}';
-                            },
-                          ),
-                          topTitles: SideTitles(showTitles: false),
-                          leftTitles: SideTitles(
-                            showTitles: true,
-                            getTitles: (value) {
-                              int intValue = value.toInt();
-                              if (lastIntValue != intValue) {
-                                lastIntValue = intValue;
-                                return intValue.toString();
-                              } else {
-                                return '';
-                              }
-                            },
-                          ),
-                          rightTitles: SideTitles(showTitles: false),
-                        ),
-                        minY: 0,
-                        maxY: readBooksPerMonth.isNotEmpty
-                            ? readBooksPerMonth.values.reduce((a, b) => a > b ? a : b) + 1
-                            : 0,
-                      ),
-                    );
-                  }
-                },
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
               ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '${selectedYear}년도에 총 ${readBooksPerMonth.isNotEmpty ? readBooksPerMonth.values.reduce((a, b) => a + b) : 0} 권 읽으셨어요! ',
-                  style: TextStyle(fontSize: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  DropdownButton<int>(
+                    value: selectedYear,
+                    dropdownColor: Colors.white,
+                    items: List.generate(5, (index) {
+                      return DropdownMenuItem<int>(
+                        value: DateTime.now().year - index,
+                        child: Text(
+                          "${(DateTime.now().year - index).toString()}년",
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 20
+                          ),
+                        ),
+                      );
+                    }),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedYear = value!;
+                      });
+                    },
+                    underline: Container(),
+                    icon: Container(),
+                  ),
+                  Icon(Icons.expand_more)
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.menu_book, size: 15),
+                  Text(
+                    '  ${selectedYear}년 독서 현황  ',
+                    style: TextStyle(fontSize: 25),
+                  ),
+                  const Icon(Icons.menu_book, size: 15),
+                ],
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.02,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.95,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Builder(
+                  builder: (BuildContext context) {
+                    if (barGroups.isEmpty) {
+                      return const Center(
+                        child: Text('아직 저장된 책이 없습니다.'),
+                      );
+                    } else {
+                      return BarChart(
+                        BarChartData(
+                          barGroups: barGroups,
+                          gridData: FlGridData(show: false),
+                          titlesData: FlTitlesData(
+                            bottomTitles: SideTitles(
+                              showTitles: true,
+                              getTitles: (value) {
+                                int combinedValue = value.toInt();
+                                int month = (combinedValue - 1) % 12 + 1;
+                                return '${month.toString().padLeft(2, '0')}';
+                              },
+                            ),
+                            topTitles: SideTitles(showTitles: false),
+                            leftTitles: SideTitles(
+                              showTitles: true,
+                              getTitles: (value) {
+                                int intValue = value.toInt();
+                                if (lastIntValue != intValue) {
+                                  lastIntValue = intValue;
+                                  return intValue.toString();
+                                } else {
+                                  return '';
+                                }
+                              },
+                            ),
+                            rightTitles: SideTitles(showTitles: false),
+                          ),
+                          minY: 0,
+                          maxY: readBooksPerMonth.isNotEmpty
+                              ? readBooksPerMonth.values.reduce((a, b) => a > b ? a : b) + 1
+                              : 0,
+                        ),
+                      );
+                    }
+                  },
                 ),
-                const Icon(Icons.thumb_up_alt_outlined, size: 20),
-              ],
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-          ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.1,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text.rich(
+                    TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                  text: '${selectedYear}년도에 총 '
+                    ),
+                    TextSpan(
+                        text: '${readBooksPerMonth.isNotEmpty ? readBooksPerMonth.values.reduce((a, b) => a + b) : 0}',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)
+                    ),
+                    TextSpan(
+                      text: '권 읽으셨어요! '
+                    )
+                  ]
+              ),
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const Icon(Icons.thumb_up_alt_outlined, size: 20),
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+            ],
+          ),
         ),
       ),
     );

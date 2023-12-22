@@ -265,7 +265,6 @@ with SingleTickerProviderStateMixin {
             ).toList()
           ),
           bottomNavigationBar: Container(
-            color: Colors.transparent,
             child: TabBar(
               tabs: <Tab>[
                 Tab(

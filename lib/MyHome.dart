@@ -70,7 +70,7 @@ with SingleTickerProviderStateMixin{
           ),
         ),
         titleSpacing: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(55),
@@ -120,7 +120,8 @@ with SingleTickerProviderStateMixin{
           CustomTab(page: BookShelf(key: globals.readBookShelfKey, status: BookStatus.read, loginPlatform: widget.loginPlatform)),
           CustomTab(page: BookShelf(key: globals.unreadBookShelfKey, status: BookStatus.unread, loginPlatform: widget.loginPlatform))
         ],
-      )
+      ),
+      backgroundColor: Colors.white,
     );
   }
 }
