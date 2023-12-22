@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:book_juk/models/BookModel.dart';
+import 'package:book_juk/MyHome.dart';
 
 enum Screen{
   home, search, statistics, settings
@@ -11,6 +12,8 @@ bool isAdded = false;
 bool isFilled = false;
 
 late TabController tabController;
+final GlobalKey<BookShelfState> readBookShelfKey = GlobalKey<BookShelfState>();
+final GlobalKey<BookShelfState> unreadBookShelfKey = GlobalKey<BookShelfState>();
 
 List<StoredBook> books =[];
 

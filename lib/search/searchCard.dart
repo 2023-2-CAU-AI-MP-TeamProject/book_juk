@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, camel_case_types
 
+import 'dart:io';
+
 import 'package:book_juk/models/BookModel.dart';
 import 'package:flutter/material.dart';
 import 'package:book_juk/detail/BookDetail.dart';
@@ -18,8 +20,21 @@ class searchCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(_decodeHtmlEntities(book.title), maxLines: 2, overflow: TextOverflow.ellipsis,),
-      leading: Image.network(book.cover,
-        width: 50,
+      leading: Builder(
+        builder: (context) {
+          try{
+            return Image.network(book.cover,
+              width: 50,
+            );
+          }catch(e){
+            if(e is HttpException){
+              return const FlutterLogo(size: 0.5);
+            }
+            else{
+              throw e;
+            }
+          }
+        },
       ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -16,9 +16,9 @@ class MyTheme {
       unselectedLabelColor: Colors.black12
     ),
     indicatorColor: Colors.transparent,
-    primaryColor: const Color.fromRGBO(58, 67, 86, 0.004),
-    primaryColorDark: const Color.fromRGBO(0,51,153,255),
-    primaryColorLight: const Color.fromRGBO(178,204,255,255),
+    // primaryColor: Color.fromARGB(255, 58, 67, 86),
+    // primaryColorDark: Color.fromARGB(255, 0, 51, 153),
+    // primaryColorLight: Color.fromARGB(255, 178, 204, 255),
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -34,9 +34,9 @@ class MyTheme {
         unselectedLabelColor: Colors.black12
     ),
     indicatorColor: Colors.transparent,
-    primaryColor: const Color.fromRGBO(255,228,0,255),
-    primaryColorDark: const Color.fromRGBO(250,237,125,255),
-    primaryColorLight: const Color.fromRGBO(242,203,97,255),
+    // primaryColor: const Color.fromRGBO(255,228,0,255),
+    // primaryColorDark: const Color.fromRGBO(250,237,125,255),
+    // primaryColorLight: const Color.fromRGBO(242,203,97,255),
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -52,9 +52,9 @@ class MyTheme {
         unselectedLabelColor: Colors.black12
     ),
     indicatorColor: Colors.transparent,
-    primaryColor: const Color.fromRGBO(134,229,127,255),
-    primaryColorDark: const Color.fromRGBO(29,219,22,255),
-    primaryColorLight: const Color.fromRGBO(206,242,121,255),
+    // primaryColor: const Color.fromRGBO(134,229,127,255),
+    // primaryColorDark: const Color.fromRGBO(29,219,22,255),
+    // primaryColorLight: const Color.fromRGBO(206,242,121,255),
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -70,9 +70,9 @@ class MyTheme {
         unselectedLabelColor: Colors.black12
     ),
     indicatorColor: Colors.transparent,
-    primaryColor: const Color.fromRGBO(255,167,167,255),
-    primaryColorDark: const Color.fromRGBO(255,216,216,255),
-    primaryColorLight: const Color.fromRGBO(255,217,250,255),
+    // primaryColor: const Color.fromRGBO(255,167,167,255),
+    // primaryColorDark: const Color.fromRGBO(255,216,216,255),
+    // primaryColorLight: const Color.fromRGBO(255,217,250,255),
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: CupertinoPageTransitionsBuilder(),
