@@ -49,6 +49,7 @@ class _BookDetailState extends State<BookDetail> {
       };
     }
     firestore.storeBook(b);
+    globals.navigatorKeys['root']!.currentState!.setState(() {});
   }
 
   @override
@@ -140,6 +141,7 @@ class _BookDetailState extends State<BookDetail> {
                               Navigator.of(context).pop();
                               globals.books.remove(widget.storedBook!);
                               firestore.deleteBook(widget.storedBook!);
+                              globals.navigatorKeys['root']!.currentState!.setState(() {});
                               if(globals.navigatorKeys[globals.Screen.home]!.currentState != null){
                                 globals.navigatorKeys[globals.Screen.home]!.currentState!.setState(() {});
                                 globals.navigatorKeys[globals.Screen.home]!.currentState!.pop();

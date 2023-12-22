@@ -191,11 +191,14 @@ class _BookStoreDialogState extends State<BookStoreDialog> {
                     switch(curStatus){
                       case BookStatus.read:
                         globals.readBookShelfKey.currentState!.updateBookShelf();
+                        globals.readBookShelfKey.currentState!.setState(() {});
                         break;
                       case BookStatus.unread:
                         globals.unreadBookShelfKey.currentState?.updateBookShelf();
+                        globals.unreadBookShelfKey.currentState?.setState(() {});
                         break;
                     }
+                    globals.navigatorKeys['root']!.currentState!.setState(() {});
                     Navigator.of(context).popUntil(ModalRoute.withName(Navigator.defaultRouteName));
                     globals.tabController.index = 0;
                     globals.isAdded = true;

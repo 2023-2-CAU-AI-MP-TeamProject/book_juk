@@ -137,11 +137,15 @@ class BookShelf extends StatefulWidget {
 class BookShelfState extends State<BookShelf> {
   List<BookShelfLine> bookLineList = [];
   List<StoredBook> copy = [];
+  final FireStoreService firestore = FireStoreService();
 
   void updateBookShelf(){
     bookLineList = [];
     copy = [];
     List<StoredBook> buffer = [];
+    if(widget.loginPlatform != LoginPlatform.none) {
+      firestore.loadBooks().then((books) => globals.books = books);
+    }
 
     for(StoredBook book in globals.books){
       if(book.status == widget.status){

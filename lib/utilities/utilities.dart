@@ -28,10 +28,6 @@ dynamic toEnum(dynamic value){
           return BookStatus.read;
         case "BookStatus.unread":
           return BookStatus.unread;
-        case "true":
-          return true;
-        case "false":
-          return false;
       }
     }
     return value;
