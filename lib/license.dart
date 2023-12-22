@@ -39,8 +39,8 @@ class License extends StatelessWidget {
             const SizedBox(width: 50.0),
             Image.asset(
               'assets/icon.png',
-              width: 100.0,
-              height: 100.0,
+              width: 150.0,
+              height: 150.0,
             ),
           ],
         ),
