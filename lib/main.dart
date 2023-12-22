@@ -155,7 +155,7 @@ with SingleTickerProviderStateMixin {
 
   Future<void> getLoginInfo() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    _loginPlatform = toEnum(pref.getString("login_platform")) ?? LoginPlatform.none;
+    _loginPlatform = toEnum(await pref.getString("login_platform")) ?? LoginPlatform.none;
     print('end: $_loginPlatform');
     setState(() {});
     return;
@@ -163,8 +163,8 @@ with SingleTickerProviderStateMixin {
 
   Future<void> setLoginState(LoginPlatform loginPlatform) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    setState(() {
-      pref.setString("login_platform", loginPlatform.toString());
+    setState(() async {
+      await pref.setString("login_platform", loginPlatform.toString());
     });
     return;
   }
