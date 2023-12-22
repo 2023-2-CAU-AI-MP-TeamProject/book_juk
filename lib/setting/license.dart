@@ -62,12 +62,17 @@ class License extends StatelessWidget {
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
               ),
               Text(
-                '        서다연 (이메일@이메일.com)',
+                '        서다연 (이메일@이메일.com)\n'
+                    '추가적인 정보',
                 style: TextStyle(fontSize: 16),
               ),
-              Text('        이재인 (이메일@이메일.com)',
+              SizedBox(height: 20),
+              Text('        이재인 (이메일@이메일.com)\n'
+                  '추가적인 정보',
                 style: TextStyle(fontSize: 16),),
-              Text('        이정민 (이메일@이메일.com)',
+              SizedBox(height: 20),
+              Text('        이정민 (이메일@이메일.com)\n'
+                  '추가적인 정보',
                 style: TextStyle(fontSize: 16),),
             ],
           ),
