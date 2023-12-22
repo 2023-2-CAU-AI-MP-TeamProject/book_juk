@@ -16,9 +16,9 @@ class MyTheme {
       unselectedLabelColor: Colors.black12
     ),
     indicatorColor: Colors.transparent,
-    primaryColor: const Color.fromRGBO(58, 67, 86, 0.004),
-    primaryColorDark: const Color.fromRGBO(0,51,153,255),
-    primaryColorLight: const Color.fromRGBO(178,204,255,255),
+    primaryColor: Color.fromARGB(255, 58, 67, 86),
+    primaryColorDark: Color.fromARGB(255, 0, 51, 153),
+    primaryColorLight: Color.fromARGB(255, 178, 204, 255),
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: CupertinoPageTransitionsBuilder(),

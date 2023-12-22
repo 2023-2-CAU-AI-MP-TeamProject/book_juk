@@ -173,20 +173,24 @@ class BookShelf extends StatelessWidget {
   }
 }
 
-class Book extends StatelessWidget {
+class Book extends StatefulWidget {
+  @override
+  State<Book> createState() => _BookState();
+}
 
+class _BookState extends State<Book> {
   @override
   Widget build(BuildContext context) {
-
     final colors = [
-      Theme.of(context).primaryColorLight,
       Theme.of(context).primaryColor,
-      Theme.of(context).primaryColorDark
+      Theme.of(context).primaryColorDark,
+      Theme.of(context).primaryColorLight,
     ];
     final random = Random();
     final bookColor = colors[random.nextInt(colors.length)];
     final bookHeight = 80 + random.nextInt(20);
     final bookTitle = "AI학과 화이팅";
+    print(colors[0]);
 
     return GestureDetector(
       onTap: () {
