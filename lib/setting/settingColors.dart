@@ -28,6 +28,9 @@ class _SettingColorsState extends State<SettingColors> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                Container(
+                  height: 80,
+                ),
                 getColorButton(Colors.blue, MyTheme.blue),
                 getColorButton(Colors.yellow, MyTheme.yellow),
                 getColorButton(Colors.green, MyTheme.green),
