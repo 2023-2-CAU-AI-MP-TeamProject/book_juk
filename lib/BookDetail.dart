@@ -1,11 +1,14 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:book_juk/BookStoreDialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'models/BookModel.dart';
-import 'MyAppBar.dart';
 import 'package:html/parser.dart';
-
+import 'globals.dart' as globals;
 
 class BookDetail extends StatelessWidget {
   BookDetail(
@@ -22,11 +25,50 @@ class BookDetail extends StatelessWidget {
   ];
 
   final String itemIdType = 'isbn13';
+  late BookModel book;
+
+  void storeBook(BookStatus status, DateTime date) {
+    //todo : implement storing book via Firestore databases
+    globals.books.add(StoredBook(book: book, status: status, date: date));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar: AppBar(
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => BookStoreDialog(callBackBook: storeBook),
+              );
+            },
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.resolveWith(
+                (states) {
+                  if(states.contains(MaterialState.pressed)) {
+                    return Theme.of(context).colorScheme.primary;
+                  }
+                  return Colors.black;
+                }
+              ),
+              overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+              animationDuration: Duration.zero
+            ),
+            child: const Text('저장')
+          )
+        ],
+        leading: BackButton(
+          onPressed: () => Navigator.pop(context),
+          // splashColor: Colors.transparent,
+          // highlightColor: Colors.transparent,
+          // icon: const Icon(CupertinoIcons.back, color: Colors.black),
+          color: Colors.black
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Center(
         child: FutureBuilder(
           future: detailBook(),
@@ -38,7 +80,7 @@ class BookDetail extends StatelessWidget {
               return const Text('Error!');
             }
             else {
-              BookModel book = snapshot.data;
+              book = snapshot.data;
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -79,7 +121,7 @@ class BookDetail extends StatelessWidget {
             }
           }
         )
-      ),
+      )
     );
   }
 
