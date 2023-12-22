@@ -16,190 +16,188 @@ class Setting extends StatefulWidget {
 class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            color: Color(0xffDBE3E3),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return SingleChildScrollView(
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        color: Color(0xffDBE3E3),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      height: 50,
-                    ),
-                    Builder(builder: (context) {
-                      final user = FirebaseAuth.instance.currentUser;
-                      if(user != null){
-                        final name = user.displayName;
-                        final email = user.email;
-                        final photoUrl = user.photoURL;
-                        final uid = user.uid;
-                        return Center(
-                          child: Column(
-                            children: [
-                              (photoUrl != null)
-                              ? ClipOval(child: Image.network(photoUrl, width: 200, height: 200, fit: BoxFit.cover,))
-                              : const FlutterLogo(),
-                              const SizedBox(height: 10),
-                              Text('$name',
-                                style: const TextStyle(
-                                  fontSize: 20
-                                )
-                              ),
-                              Text('$email',
-                                style: const TextStyle(
-                                  fontSize: 15
-                                )
-                              ),
-                              const SizedBox(height: 5),
-                              Text('uid: $uid',
-                                style: const TextStyle(
-                                  fontSize: 10
-                                )
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      return const Placeholder();
-                    },),
-                  ],
-                ),
-                const SizedBox(height: 50),
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Text('유저 설정')
-                ),
-                borderLine(context),
-                SizedBox(
                   height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _showInitializationDialog(context);
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: MaterialStateProperty.all(Colors.grey),
-                      elevation: MaterialStateProperty.all(0),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.delete_forever,
-                          color: Colors.black,
-                        ),
-                        SizedBox(width: 8),
-                        Text('초기화',
-                          style: TextStyle(
-                            color: Colors.black,
+                ),
+                Builder(builder: (context) {
+                  final user = FirebaseAuth.instance.currentUser;
+                  if(user != null){
+                    final name = user.displayName;
+                    final email = user.email;
+                    final photoUrl = user.photoURL;
+                    final uid = user.uid;
+                    return Center(
+                      child: Column(
+                        children: [
+                          (photoUrl != null)
+                          ? ClipOval(child: Image.network(photoUrl, width: 200, height: 200, fit: BoxFit.cover,))
+                          : const FlutterLogo(),
+                          const SizedBox(height: 10),
+                          Text('$name',
+                            style: const TextStyle(
+                              fontSize: 20
+                            )
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      globals.navigatorKeys[globals.Screen.settings]!.currentState!.push(
-                        MaterialPageRoute(builder: (context) => const SettingColors()),
-                      );
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: MaterialStateProperty.all(Colors.grey),
-                      elevation: MaterialStateProperty.all(0),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.palette,
-                          color: Colors.black,
-                        ),
-                        SizedBox(width: 8),
-                        Text('테마 설정',
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _showLogoutDialog(context);
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: MaterialStateProperty.all(Colors.grey),
-                      elevation: MaterialStateProperty.all(0),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.door_back_door,
-                          color: Colors.black,
-                        ),
-                        SizedBox(width: 8),
-                        Text('로그아웃',
-                          style: TextStyle(
-                          color: Colors.black,
-                        ),),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  child: const Text('기타')
-                ),
-                borderLine(context),
-                SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      globals.navigatorKeys[globals.Screen.settings]!.currentState!.push(
-                        MaterialPageRoute(builder: (context) => License()),
-                      );
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: MaterialStateProperty.all(Colors.grey),
-                      elevation: MaterialStateProperty.all(0),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.more_vert,
-                          color: Colors.black,
-                        ),
-                        SizedBox(width: 8),
-                        Text('라이선스 정보',
-                          style: TextStyle(
-                          color: Colors.black,
-                        ),),
-                      ],
-                    ),
-                  ),
-                ),
+                          Text('$email',
+                            style: const TextStyle(
+                              fontSize: 15
+                            )
+                          ),
+                          const SizedBox(height: 5),
+                          Text('uid: $uid',
+                            style: const TextStyle(
+                              fontSize: 10
+                            )
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return const Placeholder();
+                },),
               ],
             ),
-          ),
+            const SizedBox(height: 50),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: const Text('유저 설정')
+            ),
+            borderLine(context),
+            SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  _showInitializationDialog(context);
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.grey),
+                  elevation: MaterialStateProperty.all(0),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.delete_forever,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8),
+                    Text('초기화',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  globals.navigatorKeys[globals.Screen.settings]!.currentState!.push(
+                    MaterialPageRoute(builder: (context) => const SettingColors()),
+                  );
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.grey),
+                  elevation: MaterialStateProperty.all(0),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.palette,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8),
+                    Text('테마 설정',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  _showLogoutDialog(context);
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.grey),
+                  elevation: MaterialStateProperty.all(0),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.door_back_door,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8),
+                    Text('로그아웃',
+                      style: TextStyle(
+                      color: Colors.black,
+                    ),),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: const Text('기타')
+            ),
+            borderLine(context),
+            SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  globals.navigatorKeys[globals.Screen.settings]!.currentState!.push(
+                    MaterialPageRoute(builder: (context) => License()),
+                  );
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.grey),
+                  elevation: MaterialStateProperty.all(0),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.more_vert,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8),
+                    Text('라이선스 정보',
+                      style: TextStyle(
+                      color: Colors.black,
+                    ),),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
+      ),
     );
 
   }
