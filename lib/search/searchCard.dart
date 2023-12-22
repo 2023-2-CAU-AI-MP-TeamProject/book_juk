@@ -2,7 +2,7 @@
 
 import 'package:book_juk/models/BookModel.dart';
 import 'package:flutter/material.dart';
-import 'BookDetail.dart';
+import 'package:book_juk/detail/BookDetail.dart';
 import 'package:html/parser.dart';
 
 class searchCard extends StatelessWidget {

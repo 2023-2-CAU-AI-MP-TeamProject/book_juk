@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'models/BookModel.dart';
+import 'package:book_juk/models/BookModel.dart';
 
 enum Screen{
   home, search, statistics, settings
@@ -27,4 +27,11 @@ void flush(){
   isAdded = false;
   isFilled = false;
   books.clear();
+}
+
+bool isInBookList(String isbn13){
+  for(StoredBook book in books){
+    if(book.isbn13 == isbn13) return true;
+  }
+  return false;
 }

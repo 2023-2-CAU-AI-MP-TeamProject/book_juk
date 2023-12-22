@@ -1,22 +1,25 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
+import 'package:flutter/material.dart';
 
 import 'package:book_juk/MyHome.dart';
-import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'Login.dart';
-import 'Search.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:book_juk/Login.dart';
+import 'package:book_juk/search/Search.dart';
+import 'package:book_juk/firebase/firebase_options.dart';
+import 'package:book_juk/firebase/firestore.dart';
+import 'package:book_juk/utilities/CustomNavigator.dart';
+import 'package:book_juk/Statistics.dart';
+import 'package:book_juk/setting/Setting.dart';
+import 'package:book_juk/utilities/Themes.dart';
+import 'package:book_juk/utilities/utilities.dart';
+import 'package:book_juk/globals.dart' as globals;
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'firebase_options.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'CustomNavigator.dart';
-import 'Statistics.dart';
-import 'Setting.dart';
 import 'package:provider/provider.dart';
-import 'Themes.dart';
-import 'globals.dart' as globals;
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -94,6 +97,8 @@ with SingleTickerProviderStateMixin {
   Future? _loading;
   final double tabHeight = 72;
 
+  final FireStoreService firestore = FireStoreService();
+
   void showSnackBar() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -101,34 +106,6 @@ with SingleTickerProviderStateMixin {
         duration: Duration(seconds: 2),
       )
     );
-  }
-
-  dynamic toEnum(dynamic value){
-    if(value is int){
-      switch(value){
-        case 0:
-          return globals.Screen.home;
-        case 1:
-          return globals.Screen.search;
-        case 2:
-          return globals.Screen.statistics;
-        case 3:
-          return globals.Screen.settings;
-      }
-      return globals.Screen.home;
-    }
-    else if(value is String){
-      switch(value){
-        case "LoginPlatform.kakao":
-          return LoginPlatform.kakao;
-        case "LoginPlatform.google":
-          return LoginPlatform.google;
-        case "LoginPlatform.none":
-          return LoginPlatform.none;
-      }
-      return LoginPlatform.none;
-    }
-    return value;
   }
 
   @override
@@ -151,6 +128,8 @@ with SingleTickerProviderStateMixin {
       }
     });
     _loading = getLoginInfo();
+    firestore.initOrUpdateFireStore();
+    firestore.loadBooks().then((books) => setState(() {globals.books = books;}));
     super.initState();
   }
 
@@ -220,41 +199,6 @@ with SingleTickerProviderStateMixin {
       Search(),
       Statistics(),
       Setting(logout: signOut)
-      // Column(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   children: [
-      //     Builder(builder: (context) {
-      //       final user = FirebaseAuth.instance.currentUser;
-      //       if(user != null){
-      //         final name = user.displayName;
-      //         final email = user.email;
-      //         final photoUrl = user.photoURL;
-      //         final uid = user.uid;
-      //         return Text('$name, $email, $photoUrl, $uid');
-      //       }
-      //       return Text('');
-      //     },),
-      //     Text(
-      //       _loginPlatform.toString(),
-      //       style: TextStyle(
-      //         fontSize: 30
-      //       ),
-      //       textAlign: TextAlign.center,
-      //     ),
-      //     TextButton.icon(
-      //       onPressed: () async {
-      //         showLoading(context);
-      //         await Future.delayed(Duration(seconds: 2));
-      //         await signOut();
-      //         if(context.mounted){
-      //           Navigator.pop(context);
-      //         }
-      //       }, 
-      //       icon: Icon(Icons.logout),
-      //       label: Text('logout')
-      //     )
-      //   ],
-      // )
     ];
 
     if(_loginPlatform == LoginPlatform.none) {

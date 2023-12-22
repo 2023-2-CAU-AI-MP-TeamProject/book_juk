@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'models/BookModel.dart';
+import 'package:book_juk/models/BookModel.dart';
 
-import 'globals.dart' as globals;
+import 'package:book_juk/globals.dart' as globals;
 
 class BookStoreDialog extends StatefulWidget {
   const BookStoreDialog({super.key, required this.callBackBook});

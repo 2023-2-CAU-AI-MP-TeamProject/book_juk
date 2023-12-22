@@ -1,4 +1,4 @@
-import 'package:book_juk/firebase_options.dart';
+import 'package:book_juk/firebase/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';

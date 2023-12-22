@@ -1,16 +1,17 @@
+import 'package:book_juk/firebase/firestore.dart';
 import 'package:book_juk/models/BookModel.dart';
 import 'package:flutter/material.dart';
 import 'globals.dart' as globals;
 
 class MyHome extends StatefulWidget {
   final TabController tabController;
-  const MyHome({super.key, required this.tabController});
+  final FireStoreService firestore = FireStoreService();
+  MyHome({super.key, required this.tabController});
 
   @override
   State<MyHome> createState() => _MyHomeState();
 }
 class _MyHomeState extends State<MyHome> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +63,7 @@ class _MyHomeState extends State<MyHome> {
             return ListTile(
               leading: (globals.books[index].status == BookStatus.read)
               ? const Icon(Icons.check, color: Colors.green) : const Icon(Icons.close, color: Colors.red),
-              title: Text(globals.books[index].book.title,
+              title: Text(globals.books[index].title,
                 maxLines: 2,
                 style: const TextStyle(
                   overflow: TextOverflow.ellipsis,
@@ -72,7 +73,7 @@ class _MyHomeState extends State<MyHome> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(globals.books[index].book.author,
+                  Text(globals.books[index].author,
                     maxLines: 1,
                     style: const TextStyle(
                       overflow: TextOverflow.ellipsis
@@ -89,7 +90,10 @@ class _MyHomeState extends State<MyHome> {
               ),
               trailing: IconButton(
                 onPressed: () {
-                  setState(() => globals.books.removeAt(index));
+                  setState(() {
+                    widget.firestore.deleteBook(globals.books[index]);
+                    globals.books.removeAt(index);
+                  });
                 },
                 icon: const Icon(Icons.cancel)
               ),

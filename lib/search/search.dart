@@ -4,10 +4,10 @@ import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'models/BookModel.dart';
-import 'SearchCard.dart';
+import 'package:book_juk/models/BookModel.dart';
+import 'package:book_juk/search/SearchCard.dart';
 
-import 'globals.dart' as globals;
+import 'package:book_juk/globals.dart' as globals;
 
 class Search extends StatefulWidget {
   const Search({super.key});
