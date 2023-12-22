@@ -130,7 +130,7 @@ class _BookStoreDialogState extends State<BookStoreDialog> {
                         context: context,
                         initialDate: date,
                         firstDate: DateTime(DateTime.now().year - 50),
-                        lastDate: DateTime(DateTime.now().year + 50),
+                        lastDate: DateTime.now(),
                         initialEntryMode: DatePickerEntryMode.calendarOnly,
                         locale: const Locale('ko', 'KR')
                       );

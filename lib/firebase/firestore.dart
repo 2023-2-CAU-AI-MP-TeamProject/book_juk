@@ -75,4 +75,17 @@ class FireStoreService {
     }
     return false;
   }
+
+  Future<bool> deleteUser() async {
+    final firestore = FirebaseFirestore.instance;
+    try{
+      final user = await getUser();
+      
+      await firestore.collection("users").doc(user.uid).delete();
+      return true;
+    } catch(e) {
+      print('Error: $e');
+    }
+    return false;
+  }
 }

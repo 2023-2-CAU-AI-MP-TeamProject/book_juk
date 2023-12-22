@@ -191,7 +191,7 @@ class BookShelfState extends State<BookShelf> {
               child: Container(
                 margin: EdgeInsets.fromLTRB(30, 20, 30, 20),
                 padding: EdgeInsets.only(bottom: 15),
-                width: double.infinity,
+                width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 157, 107, 47),
                   borderRadius: BorderRadius.circular(10),
@@ -238,7 +238,7 @@ class _BookShelfLineState extends State<BookShelfLine> {
     return Container(
       margin: EdgeInsets.fromLTRB(15, 15, 15, 0),
       height: 100,
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: Color.fromARGB(255, 150, 100, 40),
         borderRadius: BorderRadius.circular(10),
@@ -337,30 +337,46 @@ class _BookState extends State<Book> {
       },
       child: Container(
         height: 100,
-        width: 40,
+        width: (MediaQuery.of(context).size.width - 52.09) / 9,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: bookColor,
           border: Border.all(color: Colors.black,
           width: 0.5)
         ),
-        child: Center(
-          heightFactor: 100,
-          widthFactor: 40,
-          child: Wrap(
-            spacing: 3,
-            direction: Axis.vertical,
-            alignment: WrapAlignment.center,
-            children: bookTitle.split('').map((char) {
-              return Text(
-                char,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold
-                )
-              );
-            }).toList()
-          )
+        child: Stack(
+          children: [
+            (widget.book.isFavorite)
+            ? Positioned(
+              right: 10,
+              child: Container(
+                width: 8,
+                height: 30,
+                decoration: BoxDecoration(
+                  color: Colors.red
+                ),
+              ),
+            )
+            : Container(),
+            Center(
+              heightFactor: 100,
+              widthFactor: 40,
+              child: Wrap(
+                spacing: 3,
+                direction: Axis.vertical,
+                alignment: WrapAlignment.center,
+                children: bookTitle.split('').map((char) {
+                  return Text(
+                    char,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold
+                    )
+                  );
+                }).toList()
+              )
+            )
+          ]
         ),
       ),
     );

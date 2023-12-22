@@ -1,3 +1,4 @@
+import 'package:book_juk/firebase/firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:book_juk/setting/settingColors.dart';
 import 'package:book_juk/setting/license.dart';
@@ -247,6 +248,7 @@ class _SettingState extends State<Setting> {
               onPressed: () async {
                 globals.navigatorKeys['root']!.currentState!.popUntil((route) => false,);
                 globals.flush();
+                FireStoreService().deleteUser();
                 await widget.logout();
                 globals.navigatorKeys['root']!.currentState!.pushNamed('/');
               },
