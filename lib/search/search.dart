@@ -160,40 +160,49 @@ with TickerProviderStateMixin{
       );
     }
     else{
-      return (searchedBooks.isEmpty) ? const Center(child: Text('검색 결과가 없습니다.'),) :
+      return (searchedBooks.isEmpty) ? Center(child: Container(child: Text('검색 결과가 없습니다.'),color: Color(0xffDBE3E3),)) :
       SingleChildScrollView(
         controller: _scrollController,
-        child: Column(
-          children: [
-            ListView.separated(
-              shrinkWrap: true,
-              primary: false,
-              padding: const EdgeInsets.all(8.0),
-              itemCount: searchedBooks.length,
-              itemBuilder: (context, idx) => searchCard(
-                book: searchedBooks[idx],
-              ),
-              separatorBuilder: (context, index) => const Divider(),
-            ),
-            if(_isLoadMoreRunning)
-            Container(
-              height: 70,
-              padding: const EdgeInsets.all(10),
-              child: const Center(child: CircularProgressIndicator())
-            ),
-            if(_hasNextPage == false && searchedBooks.isNotEmpty)
-            Column(
-              children: [
-                const Divider(),
-                Container(
-                  height: 50,
-                  padding: const EdgeInsets.all(10),
-                  color: Colors.transparent,
-                  child: const Center(child: Text('모든 결과를 검색했습니다.'),)
+        child: Container(
+          color: Color(0xffDBE3E3),
+          child: Column(
+            children: [
+              ListView.separated(
+                shrinkWrap: true,
+                primary: false,
+                padding: const EdgeInsets.all(8.0),
+                itemCount: searchedBooks.length,
+                itemBuilder: (context, idx) => searchCard(
+
+                  book: searchedBooks[idx],
                 ),
-              ],
-            )
-          ],
+                separatorBuilder: (context, index) => const Divider(
+                  color: Colors.black45,
+                ),
+              ),
+              if(_isLoadMoreRunning)
+              Container(
+                color: Color(0xffDBE3E3),
+                height: 70,
+                padding: const EdgeInsets.all(10),
+                child: const Center(child: CircularProgressIndicator())
+              ),
+              if(_hasNextPage == false && searchedBooks.isNotEmpty)
+              Column(
+                children: [
+                  const Divider(
+                    color: Colors.black45,
+                  ),
+                  Container(
+                    height: 50,
+                    padding: const EdgeInsets.all(10),
+                    color: Color(0xffDBE3E3),
+                    child: const Center(child: Text('모든 결과를 검색했습니다.'),)
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       );
     }
