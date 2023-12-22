@@ -64,6 +64,9 @@ class _StatisticsState extends State<Statistics> {
               borderSide: const BorderSide(
                 width: 1,
               ),
+              colors: [
+                Theme.of(context).primaryColor,
+              ]
             ),
           ],
         ),

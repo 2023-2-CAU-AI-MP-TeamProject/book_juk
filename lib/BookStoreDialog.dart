@@ -144,6 +144,14 @@ class _BookStoreDialogState extends State<BookStoreDialog> {
                     DateTime curDate = date;
                     widget.callBackBook(curStatus, curDate);
                     globals.navigatorKeys[globals.Screen.search]!.currentState!.pop();
+                    switch(curStatus){
+                      case BookStatus.read:
+                        globals.readBookShelfKey.currentState!.updateBookShelf();
+                        break;
+                      case BookStatus.unread:
+                        globals.unreadBookShelfKey.currentState!.updateBookShelf();
+                        break;
+                    }
                     Navigator.of(context).popUntil(ModalRoute.withName(Navigator.defaultRouteName));
                     globals.tabController.index = 0;
                     globals.isAdded = true;
