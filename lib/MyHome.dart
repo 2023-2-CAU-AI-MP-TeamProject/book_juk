@@ -48,59 +48,62 @@ class _MyHomeState extends State<MyHome> {
           ),
         ),
         titleSpacing: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color(0xffDBE3E3),
         elevation: 0,
       ),
-      body: Center(
-        child: (globals.books.isEmpty) ? const Text('Home',
-          style: TextStyle(
-            fontSize: 100
+      body: Container(
+        decoration: BoxDecoration(color: Color(0xffDBE3E3)),
+        child: Center(
+          child: (globals.books.isEmpty) ? const Text('Home',
+            style: TextStyle(
+              fontSize: 100
+            ),
+            textAlign: TextAlign.center,
+          )
+          : ListView.builder(
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: (globals.books[index].status == BookStatus.read)
+                ? const Icon(Icons.check, color: Colors.green) : const Icon(Icons.close, color: Colors.red),
+                title: Text(globals.books[index].title,
+                  maxLines: 2,
+                  style: const TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ),
+                isThreeLine: true,
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(globals.books[index].author,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        overflow: TextOverflow.ellipsis
+                      )
+                    ),
+                    Text('${globals.books[index].date.year}-${globals.books[index].date.month}-${globals.books[index].date.day}',
+                      maxLines: 1,
+                      style: const TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        color: Colors.blue
+                      )
+                    ),
+                  ],
+                ),
+                trailing: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.firestore.deleteBook(globals.books[index]);
+                      globals.books.removeAt(index);
+                    });
+                  },
+                  icon: const Icon(Icons.cancel)
+                ),
+              );
+            },
+            itemCount: globals.books.length,
           ),
-          textAlign: TextAlign.center,
-        )
-        : ListView.builder(
-          itemBuilder: (context, index) {
-            return ListTile(
-              leading: (globals.books[index].status == BookStatus.read)
-              ? const Icon(Icons.check, color: Colors.green) : const Icon(Icons.close, color: Colors.red),
-              title: Text(globals.books[index].title,
-                maxLines: 2,
-                style: const TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                )
-              ),
-              isThreeLine: true,
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(globals.books[index].author,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      overflow: TextOverflow.ellipsis
-                    )
-                  ),
-                  Text('${globals.books[index].date.year}-${globals.books[index].date.month}-${globals.books[index].date.day}',
-                    maxLines: 1,
-                    style: const TextStyle(
-                      overflow: TextOverflow.ellipsis,
-                      color: Colors.blue
-                    )
-                  ),
-                ],
-              ),
-              trailing: IconButton(
-                onPressed: () {
-                  setState(() {
-                    widget.firestore.deleteBook(globals.books[index]);
-                    globals.books.removeAt(index);
-                  });
-                },
-                icon: const Icon(Icons.cancel)
-              ),
-            );
-          },
-          itemCount: globals.books.length,
-        )
+        ),
       )
     );
   }

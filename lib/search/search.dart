@@ -124,7 +124,7 @@ with TickerProviderStateMixin{
           ),
         ),
         titleSpacing: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color(0xffDBE3E3),
         elevation: 0,
       ),
       body: body,
@@ -146,7 +146,8 @@ with TickerProviderStateMixin{
         onTap:() => FocusScope.of(context).unfocus(),
         onVerticalDragStart: (details) => FocusScope.of(context).unfocus(),
         onHorizontalDragStart: (details) => FocusScope.of(context).unfocus(),
-        child: const SizedBox(
+        child: Container(
+          color: Color(0xffDBE3E3),
           width: double.infinity,
           height: double.infinity,
           child: AbsorbPointer(
