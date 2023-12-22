@@ -115,6 +115,7 @@ with SingleTickerProviderStateMixin{
       ),
       body: TabBarView(
         controller: _tabController,
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           CustomTab(page: BookShelf(key: globals.readBookShelfKey, status: BookStatus.read, loginPlatform: widget.loginPlatform)),
           CustomTab(page: BookShelf(key: globals.unreadBookShelfKey, status: BookStatus.unread, loginPlatform: widget.loginPlatform))
