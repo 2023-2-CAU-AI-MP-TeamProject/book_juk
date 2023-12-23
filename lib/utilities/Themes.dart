@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+//4가지 테마를 저장해둔 파일이다.
 class ThemeProvider extends ChangeNotifier {
   ThemeData theme = MyTheme.blue;
 
@@ -9,7 +9,7 @@ class ThemeProvider extends ChangeNotifier {
   }
 }
 class MyTheme {
-  static final ThemeData blue= ThemeData(
+  static final ThemeData blue= ThemeData( //파란색
     primarySwatch: Colors.blue,
     tabBarTheme: const TabBarTheme(
       labelColor: Colors.blue,
@@ -27,7 +27,7 @@ class MyTheme {
     )
   );
 
-  static final ThemeData yellow= ThemeData(
+  static final ThemeData yellow= ThemeData( //노란색
     primarySwatch: Colors.yellow,
     tabBarTheme: const TabBarTheme(
         labelColor: Colors.yellow,
@@ -45,7 +45,7 @@ class MyTheme {
     )
   );
 
-  static final ThemeData green= ThemeData(
+  static final ThemeData green= ThemeData( //초록색
     primarySwatch: Colors.green,
     tabBarTheme: const TabBarTheme(
         labelColor: Colors.green,
@@ -63,7 +63,7 @@ class MyTheme {
     )
   );
 
-  static final ThemeData pink= ThemeData(
+  static final ThemeData pink= ThemeData( //분홍색
     primarySwatch: Colors.pink,
     tabBarTheme: const TabBarTheme(
         labelColor: Colors.pink,

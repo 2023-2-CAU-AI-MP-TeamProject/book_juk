@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+//라이선스를 알려주는 화면이다.
 class License extends StatelessWidget {
   const License({super.key});
 

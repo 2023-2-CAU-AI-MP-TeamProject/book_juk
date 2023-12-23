@@ -5,7 +5,7 @@ import 'package:book_juk/setting/license.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:book_juk/globals.dart' as globals;
-
+// 설정 화면이다. 초기화, 테마 설정, 로그아웃을 할 수 있고, 라이선스 정보를 확인할 수 있다.
 class Setting extends StatefulWidget {
   final Future<void> Function() logout;
   const Setting({super.key, required this.logout});
@@ -16,7 +16,7 @@ class Setting extends StatefulWidget {
 
 class _SettingState extends State<Setting> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { //사용자의 카카오 또는 구글에서 가져온 프로필사진와 닉네임, 아이디를 표시한다.
     return SingleChildScrollView(
       physics: NeverScrollableScrollPhysics(),
       child: Container(
@@ -70,7 +70,7 @@ class _SettingState extends State<Setting> {
               ],
             ),
             const SizedBox(height: 50),
-            Container(
+            Container( //초기화, 테마 설정, 로그아웃 버튼 구현
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: const Text('유저 설정')
             ),
@@ -169,7 +169,7 @@ class _SettingState extends State<Setting> {
             borderLine(context),
             SizedBox(
               height: 50,
-              child: ElevatedButton(
+              child: ElevatedButton( //라이선스 정보 버튼 구현
                 onPressed: () {
                   globals.navigatorKeys[globals.Screen.settings]!.currentState!.push(
                     MaterialPageRoute(builder: (context) => License()),
@@ -218,7 +218,7 @@ class _SettingState extends State<Setting> {
     );
   }
 
-  void _showInitializationDialog(BuildContext context) {
+  void _showInitializationDialog(BuildContext context) { //초기화 다이얼로그 구현
     showDialog(
       context: context,
       builder: (context) {
@@ -279,7 +279,7 @@ class _SettingState extends State<Setting> {
       },
     );
   }
-  void _showLogoutDialog(BuildContext context) {
+  void _showLogoutDialog(BuildContext context) { //로그아웃 다이얼로그 구현
     showDialog(
       context: context,
       builder: (context) {

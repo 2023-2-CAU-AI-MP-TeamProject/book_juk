@@ -1,7 +1,7 @@
 import 'package:book_juk/globals.dart' as globals;
 import 'package:book_juk/Login.dart';
 import 'package:book_juk/models/BookModel.dart';
-
+//상태를 변환하기 위한 switch문을 저장해둔 파일이다.
 dynamic toEnum(dynamic value){
     if(value is int){
       switch(value){

@@ -4,7 +4,8 @@ import 'package:book_juk/utilities/Themes.dart';
 import 'package:provider/provider.dart';
 import 'package:book_juk/globals.dart' as globals;
 
-ThemeData? themeFromString(String value){
+//설정 중 테마 수정이다. 4가지 색의 테마 중 하나를 골라서 적용할 수 있다.
+ThemeData? themeFromString(String value){ //4가지 색
   switch(value){
     case 'blue':
       return MyTheme.blue;
@@ -18,7 +19,7 @@ ThemeData? themeFromString(String value){
   return null;
 }
 
-class SettingColors extends StatefulWidget {
+class SettingColors extends StatefulWidget { //테마 저장 구현
   const SettingColors({super.key});
 
   @override
