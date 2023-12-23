@@ -62,16 +62,16 @@ class License extends StatelessWidget {
             ),
             Text(
               '        서다연 (sdyhappy@naver.com)\n'
-                  '중앙대학교 AI학과 22학번',
+                  '           중앙대학교 AI학과 22학번',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 20),
             Text('        이재인 (jane10000@naver.com)\n'
-                '중앙대학교 AI학과 22학번',
+                '           중앙대학교 AI학과 22학번',
               style: TextStyle(fontSize: 16),),
             SizedBox(height: 20),
             Text('        이정민 (mulgyul203@naver.com)\n'
-                '중앙대학교 AI학과 22학번',
+                '           중앙대학교 AI학과 22학번',
               style: TextStyle(fontSize: 16),),
           ],
         ),
