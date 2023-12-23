@@ -5,8 +5,9 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-enum LoginPlatform {
+//카카오 또는 구글 계정을 이용하여 로그인할 수 있다.
+//로그인된 계정마다 파이어베이스에 정보가 저장되고 로그아웃을 해도 책의 정보가 남아있게 해준다.
+enum LoginPlatform { //카카오 또는 구글로 로그인
   kakao,
   google,
   none,
@@ -24,7 +25,7 @@ class _LoginState extends State<Login> {
   LoginPlatform _loginPlatform = LoginPlatform.none;
 
   String _loginText() {
-    if(_loginPlatform == LoginPlatform.kakao) {
+    if(_loginPlatform == LoginPlatform.kakao) { //카카오 또는 구글로 로그인
       return "Loginned with kakao";
     } else if(_loginPlatform == LoginPlatform.google) {
       return "Loginned with google";
@@ -33,7 +34,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-  void setLoginState(String loginPlatform) async {
+  void setLoginState(String loginPlatform) async { //로그인 상태를 확인한다.
     final SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       pref.setString("login_platform", loginPlatform);
@@ -81,7 +82,7 @@ class _LoginState extends State<Login> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { //로그인 화면
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -148,7 +149,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void kakaoLogin() async {
+  void kakaoLogin() async { //카카오 로그인 동작 구현
     showLoading(context);
     if (await isKakaoTalkInstalled()) {
       try {
@@ -214,7 +215,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-  void googleLogin() async {
+  void googleLogin() async { //구글 로그인 구현
     showLoading(context);
     try{
         // Trigger the authentication flow

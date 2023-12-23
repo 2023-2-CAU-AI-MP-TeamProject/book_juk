@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'models/BookModel.dart';
 import 'globals.dart' as globals;
+//fl_chart를 이용하여 년도별, 월별로 읽은 책의 권수를 통계내준다.
 
 class Statistics extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class _StatisticsState extends State<Statistics> {
   int lastIntValue = -1;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { //BookStatus.read를 이용해서 읽은 책의 권수를 가져와서 통계를 낸다.
     Map<String, int> readBooksPerMonth = {};
     globals.books.forEach((book) {
       if (book.status == BookStatus.read && book.date.year == selectedYear) {
@@ -39,18 +40,18 @@ class _StatisticsState extends State<Statistics> {
         }),
     );
 
-    List<BarChartGroupData> barGroups = [];
+    List<BarChartGroupData> barGroups = []; // 년도와 월을 기준으로 책을 분류한다.
     readBooksPerMonth.forEach((yearMonth, count) {
       List<String> yearMonthList = yearMonth.split('-');
       int year = int.parse(yearMonthList[0]);
       int month = int.parse(yearMonthList[1]);
 
-      int totalBars=readBooksPerMonth.length;
+      int totalBars=readBooksPerMonth.length; //차트 바에 읽은 권수를 표현한다.
       double barWidth = MediaQuery.of(context).size.width * 0.8/totalBars;
       double maxBarWidth = MediaQuery.of(context).size.width * 0.3;
       barWidth = barWidth > maxBarWidth ? maxBarWidth : barWidth;
 
-      barGroups.add(
+      barGroups.add( //차트 바의 디자인을 조정한다.
         BarChartGroupData(
           x: year * 12 + month.toInt(),
           barRods: [
@@ -73,7 +74,7 @@ class _StatisticsState extends State<Statistics> {
       );
     });
 
-    return Scaffold(
+    return Scaffold( //차트의 디자인을 조정한다.
       body: Center(
         child: Container(
           color: Colors.white,
@@ -178,7 +179,7 @@ class _StatisticsState extends State<Statistics> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.1,
               ),
-              Row(
+              Row( //선택한 년도에 읽은 책의 총 권수를 알려준다.
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text.rich(

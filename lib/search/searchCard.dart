@@ -33,7 +33,9 @@ class searchCard extends StatelessWidget {
             );
           }catch(e){
             if(e is HttpException){
-              return const FlutterLogo(size: 0.5);
+              return Image.asset(
+                  'assets/unfound.png',
+                  width: 50,);
             }
             else{
               throw e;
