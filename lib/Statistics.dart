@@ -109,18 +109,18 @@ class _StatisticsState extends State<Statistics> {
                     underline: Container(),
                     icon: Container(),
                   ),
-                  Icon(Icons.expand_more)
+                  Icon(Icons.expand_more, color: Colors.black54,)
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.menu_book, size: 15),
+                  const Icon(Icons.menu_book, size: 25),
                   Text(
                     '  ${selectedYear}년 독서 현황  ',
                     style: TextStyle(fontSize: 25),
                   ),
-                  const Icon(Icons.menu_book, size: 15),
+                  const Icon(Icons.menu_book, size: 25),
                 ],
               ),
               const SizedBox(height: 20),
@@ -192,13 +192,12 @@ class _StatisticsState extends State<Statistics> {
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)
                     ),
                     TextSpan(
-                      text: '권 읽으셨어요! '
+                      text: '권 읽으셨어요! 👍'
                     )
                   ]
               ),
                     style: TextStyle(fontSize: 20),
                   ),
-                  const Icon(Icons.thumb_up_alt_outlined, size: 20),
                 ],
               ),
               SizedBox(
