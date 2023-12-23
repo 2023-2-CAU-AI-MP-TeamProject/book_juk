@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 //4가지 테마를 저장해둔 파일이다.
+//담당: 서다연, 수정: 이재인
 class ThemeProvider extends ChangeNotifier {
   ThemeData theme = MyTheme.blue;
 

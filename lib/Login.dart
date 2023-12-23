@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 //카카오 또는 구글 계정을 이용하여 로그인할 수 있다.
 //로그인된 계정마다 파이어베이스에 정보가 저장되고 로그아웃을 해도 책의 정보가 남아있게 해준다.
+//담당: 이재인
 enum LoginPlatform { //카카오 또는 구글로 로그인
   kakao,
   google,

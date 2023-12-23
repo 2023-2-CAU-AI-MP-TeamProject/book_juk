@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:book_juk/globals.dart' as globals;
 // 설정 화면이다. 초기화, 테마 설정, 로그아웃을 할 수 있고, 라이선스 정보를 확인할 수 있다.
+//담당: 서다연, 수정: 서다연, 이정민, 이재인
 class Setting extends StatefulWidget {
   final Future<void> Function() logout;
   const Setting({super.key, required this.logout});
@@ -18,9 +19,9 @@ class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) { //사용자의 카카오 또는 구글에서 가져온 프로필사진와 닉네임, 아이디를 표시한다.
     return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
+      //physics: NeverScrollableScrollPhysics(),
       child: Container(
-        height: MediaQuery.of(context).size.height - 100,
+        height: MediaQuery.of(context).size.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,

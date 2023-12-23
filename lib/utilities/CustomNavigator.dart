@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 //페이지 라우팅과 관련된 파일이다.
+//담당: 이재인
 class CustomNavigator extends StatefulWidget {
   final Widget page;
   final GlobalKey<NavigatorState> navigatorKey;

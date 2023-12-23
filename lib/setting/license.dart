@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 //라이선스를 알려주는 화면이다.
+//담당: 서다연, 수정: 서다연, 이정민
 class License extends StatelessWidget {
   const License({super.key});
 
@@ -60,17 +61,17 @@ class License extends StatelessWidget {
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '        서다연 (이메일@이메일.com)\n'
-                  '추가적인 정보',
+              '        서다연 (sdyhappy@naver.com)\n'
+                  '중앙대학교 AI학과 22학번',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 20),
-            Text('        이재인 (이메일@이메일.com)\n'
-                '추가적인 정보',
+            Text('        이재인 (jane10000@naver.com)\n'
+                '중앙대학교 AI학과 22학번',
               style: TextStyle(fontSize: 16),),
             SizedBox(height: 20),
-            Text('        이정민 (이메일@이메일.com)\n'
-                '추가적인 정보',
+            Text('        이정민 (mulgyul203@naver.com)\n'
+                '중앙대학교 AI학과 22학번',
               style: TextStyle(fontSize: 16),),
           ],
         ),

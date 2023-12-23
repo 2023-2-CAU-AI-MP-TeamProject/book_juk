@@ -3,7 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'models/BookModel.dart';
 import 'globals.dart' as globals;
 //fl_chart를 이용하여 년도별, 월별로 읽은 책의 권수를 통계내준다.
-
+//담당: 서다연, 보조: 이정민
 class Statistics extends StatefulWidget {
   @override
   _StatisticsState createState() => _StatisticsState();

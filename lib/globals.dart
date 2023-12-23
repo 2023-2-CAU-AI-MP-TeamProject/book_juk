@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:book_juk/models/BookModel.dart';
 import 'package:book_juk/MyHome.dart';
 //다른 dart 파일에서 필요한 globalkey들을 모아둔 파일이다.
+//담당: 이재인
 enum Screen{
   home, search, statistics, settings
 }

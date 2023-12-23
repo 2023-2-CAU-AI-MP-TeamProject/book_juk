@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 //App의 Appbar다.
+//담당: 이재인
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({super.key});
 

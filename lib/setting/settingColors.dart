@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:book_juk/globals.dart' as globals;
 
 //설정 중 테마 수정이다. 4가지 색의 테마 중 하나를 골라서 적용할 수 있다.
+//담당: 서다연, 수정: 이재인
 ThemeData? themeFromString(String value){ //4가지 색
   switch(value){
     case 'blue':
