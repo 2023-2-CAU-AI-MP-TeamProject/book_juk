@@ -233,7 +233,21 @@ class _SettingState extends State<Setting> {
                 SizedBox(height: 30,),
                 Text('초기화 하시겠습니까?'),
                 SizedBox(height: 10),
-                Text('저장했던 책의 정보들이 삭제되며  이 작업은 되돌릴 수 없습니다!!!', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+                Text.rich(TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '저장했던 책의 정보들이 '
+                    ),
+                    TextSpan(
+                      text: '삭제',
+                      style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)
+                    ),
+                    TextSpan(
+                      text: '되며,  이 작업은 되돌릴 수 없습니다!!!'
+                    )
+                  ]
+                ),
+                style: TextStyle(color: Colors.red),)
               ],
             ),
           ),
