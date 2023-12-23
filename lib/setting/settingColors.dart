@@ -87,6 +87,9 @@ class _SettingColorsState extends State<SettingColors> {
           onTap: () {
             final provider = Provider.of<ThemeProvider>(context, listen: false);
             provider.switchTheme(theme);
+            setState(() {
+              stringTheme=value;
+            });
           },
           child: Container(),
         ),
