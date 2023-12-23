@@ -273,8 +273,8 @@ class _BookState extends State<Book> {
     final random = Random();
     final bookColor = colors[random.nextInt(colors.length)];
     final bookTitle = "${widget.book.title.substring(
-        0, (widget.book.title.length > 10) ? 10 : widget.book.title.length
-      )}${(widget.book.title.length > 10) ? "..." : ""}";
+        0, (widget.book.title.length > 20) ? 20 : widget.book.title.length
+      )}${(widget.book.title.length > 20) ? " ••" : ""}";
 
     return GestureDetector(
       onTap: () {
@@ -309,14 +309,16 @@ class _BookState extends State<Book> {
                         )
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     Expanded(
-                      child: Text(
-                        widget.book.description ?? '',
-                        maxLines: 5,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 15,
+                      child: SingleChildScrollView(
+                        child: Text(
+                          widget.book.description ?? '',
+                          maxLines: 5,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
@@ -362,19 +364,24 @@ class _BookState extends State<Book> {
             Center(
               heightFactor: 100,
               widthFactor: 40,
-              child: Wrap(
-                spacing: 3,
-                direction: Axis.vertical,
-                alignment: WrapAlignment.center,
-                children: bookTitle.split('').map((char) {
-                  return Text(
-                    char,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold
-                    )
-                  );
-                }).toList()
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 7.0),
+                child: Wrap(
+                  spacing: 1,
+                  direction: Axis.vertical,
+                  alignment: WrapAlignment.start,
+                  children: bookTitle.split('').map((char) {
+                    return Text(
+                      char,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        height: (char == ' ' || char == '•') ? 0.5 : 0.8
+                      ),
+                      textAlign: TextAlign.center,
+                    );
+                  }).toList()
+                ),
               )
             )
           ]
