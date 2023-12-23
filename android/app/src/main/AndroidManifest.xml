@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="book_juk"
+        android:label="책:크 - 나만의 책꽂이"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
