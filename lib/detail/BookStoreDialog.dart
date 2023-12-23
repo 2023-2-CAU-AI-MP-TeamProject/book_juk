@@ -181,38 +181,38 @@ class _BookStoreDialogState extends State<BookStoreDialog> {
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    BookStatus curStatus = (_isRead) ? BookStatus.read : BookStatus.unread;
-                    DateTime curDate = date;
-                    bool curFavo = isFavorite;
-                    widget.callBackBook(curStatus, curDate, curFavo);
-                    if(globals.navigatorKeys[globals.Screen.search]!.currentState != null){
-                      globals.navigatorKeys[globals.Screen.search]!.currentState!.maybePop();
-                    }
-                    if(globals.navigatorKeys[globals.Screen.home]!.currentState != null){
-                      globals.navigatorKeys[globals.Screen.home]!.currentState!.maybePop();
-                    }
-                    switch(curStatus){
-                      case BookStatus.read:
-                        globals.readBookShelfKey.currentState!.updateBookShelf();
-                        globals.readBookShelfKey.currentState!.setState(() {});
-                        break;
-                      case BookStatus.unread:
-                        globals.unreadBookShelfKey.currentState?.updateBookShelf();
-                        globals.unreadBookShelfKey.currentState?.setState(() {});
-                        break;
-                    }
-                    globals.navigatorKeys['root']!.currentState!.setState(() {});
-                    Navigator.of(context).popUntil(ModalRoute.withName(Navigator.defaultRouteName));
-                    globals.tabController.index = 0;
-                    globals.isAdded = true;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('성공적으로 저장되었습니다.'),
-                        duration: Duration(seconds: 1),
-                      )
-                    );
-                  });
+                  BookStatus curStatus = (_isRead) ? BookStatus.read : BookStatus.unread;
+                  DateTime curDate = date;
+                  bool curFavo = isFavorite;
+                  widget.callBackBook(curStatus, curDate, curFavo);
+                  if(globals.navigatorKeys[globals.Screen.search]!.currentState != null){
+                    globals.navigatorKeys[globals.Screen.search]!.currentState!.maybePop();
+                  }
+                  if(globals.navigatorKeys[globals.Screen.home]!.currentState != null){
+                    globals.navigatorKeys[globals.Screen.home]!.currentState!.maybePop();
+                  }
+                  switch(curStatus){
+                    case BookStatus.read:
+                      globals.readBookShelfKey.currentState!.updateBookShelf();
+                      globals.readBookShelfKey.currentState!.setState(() {});
+                      break;
+                    case BookStatus.unread:
+                      globals.unreadBookShelfKey.currentState?.updateBookShelf();
+                      globals.unreadBookShelfKey.currentState?.setState(() {});
+                      break;
+                  }
+                  globals.navigatorKeys['root']!.currentState!.setState(() {});
+                  Navigator.of(context).popUntil(ModalRoute.withName(Navigator.defaultRouteName));
+                  globals.tabController.index = 0;
+                  globals.homeTabController.index = (curStatus == BookStatus.read) ? 0 : 1;
+                  globals.isAdded = true;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('성공적으로 저장되었습니다.'),
+                      duration: Duration(seconds: 1),
+                    )
+                  );
+                  setState(() {});
                 },
                 child: SizedBox(
                   height: 30,

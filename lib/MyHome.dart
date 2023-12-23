@@ -25,18 +25,17 @@ class MyHome extends StatefulWidget {
 class _MyHomeState extends State<MyHome> 
 with SingleTickerProviderStateMixin{
   bool isRead = true;
-  late TabController _tabController;
 
   @override
   void initState(){
-    _tabController = TabController(length: 2, vsync: this);
+    globals.homeTabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
   @override
   void dispose(){
     super.dispose();
-    _tabController.dispose();
+    globals.homeTabController.dispose();
   }
 
   @override
@@ -111,7 +110,7 @@ with SingleTickerProviderStateMixin{
               )
             ],
             isScrollable: false,
-            controller: _tabController,
+            controller: globals.homeTabController,
             unselectedLabelColor: Colors.black,
             onTap: (value) => isRead = !isRead,
             indicatorColor: Theme.of(context).primaryColor,
@@ -119,7 +118,7 @@ with SingleTickerProviderStateMixin{
         ),
       ),
       body: TabBarView(
-        controller: _tabController,
+        controller: globals.homeTabController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
           CustomTab(page: BookShelf(key: globals.readBookShelfKey, status: BookStatus.read, loginPlatform: widget.loginPlatform)),
@@ -316,14 +315,12 @@ class _BookState extends State<Book> {
                     ),
                     SizedBox(height: 10),
                     Expanded(
-                      child: SingleChildScrollView(
-                        child: Text(
-                          widget.book.description ?? '',
-                          maxLines: 5,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 15,
-                          ),
+                      child: Text(
+                        widget.book.description ?? '',
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 15,
                         ),
                       ),
                     ),

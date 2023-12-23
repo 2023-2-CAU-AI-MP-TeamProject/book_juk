@@ -13,6 +13,7 @@ bool isAdded = false;
 bool isFilled = false;
 
 late TabController tabController;
+late TabController homeTabController;
 final GlobalKey<BookShelfState> readBookShelfKey = GlobalKey<BookShelfState>();
 final GlobalKey<BookShelfState> unreadBookShelfKey = GlobalKey<BookShelfState>();
 
