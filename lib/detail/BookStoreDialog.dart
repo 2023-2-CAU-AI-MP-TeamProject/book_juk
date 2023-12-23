@@ -3,6 +3,10 @@ import 'package:book_juk/models/BookModel.dart';
 
 import 'package:book_juk/globals.dart' as globals;
 
+//책의 저장 버튼을 눌렀을 때 책을 읽은 책으로 저장할 지, 읽고 싶은 책으로 저장할 지
+//책을 읽었다면 읽은 날짜, 좋아요 여부(저장 시 책갈피 표시)를 저장하는 기능이다.
+//담당: 이재인
+
 class BookStoreDialog extends StatefulWidget {
   const BookStoreDialog({super.key, required this.callBackBook, this.book});
   final Function(BookStatus status, DateTime date, bool isFavorite) callBackBook;

@@ -7,6 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:book_juk/detail/BookDetail.dart';
 import 'package:html/parser.dart';
 
+
+//search.dart에서 검색 기능을 구현하였는데, 검색 결과가 ListView 형식으로 나타나기 때문에
+//그 안에 들어갈 ListTile을 구현하였다.
+//담당: 이재인
+
 class searchCard extends StatelessWidget {
   final BookModel book;
 

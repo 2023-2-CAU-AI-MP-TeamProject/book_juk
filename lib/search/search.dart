@@ -9,6 +9,10 @@ import 'package:book_juk/search/SearchCard.dart';
 
 import 'package:book_juk/globals.dart' as globals;
 
+//도서 검색 페이지를 구현하였다.
+//검색 결과에 따라 다른 화면이 나오도록 하였으며, 알라딘 DB에 따른 검색 결과를 출력한다.
+//담당: 이재인
+
 class Search extends StatefulWidget {
   const Search({super.key});
 

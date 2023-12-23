@@ -14,6 +14,11 @@ import 'package:flutter/foundation.dart'
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
+
+//현재의 플렛폼에 따라 옵션을 변환한다.
+//web, android, ios에 대해서는 기능하며, macOS, windows, linux에서는 기능하지 않도록 한다.
+//담당: 이재인
+
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {

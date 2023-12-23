@@ -5,6 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+//파이어스토어에서 해당 사용자에 대해 책을 저장, 삭제하는 기능과, 초기화 구현을 위한 사용자 삭제 기능 등을 구현하였다.
+//담당: 이재인
+
 class FireStoreService {
   Future<User> getUser() async {
     final pref = await SharedPreferences.getInstance();

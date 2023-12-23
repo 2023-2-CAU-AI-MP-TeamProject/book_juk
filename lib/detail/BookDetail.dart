@@ -11,6 +11,11 @@ import 'package:book_juk/models/BookModel.dart';
 import 'package:html/parser.dart';
 import 'package:book_juk/globals.dart' as globals;
 
+//책에 대한 상세 정보를 다루는 파일이다.
+//MyHome.dart에서 구현한 책장에서 책을 눌러 상세보기를 누르거나, 검색창에서 책을 검색해서 정보를 볼 때, 해당 페이지를 출력한다.
+//책에 대한 정보를 알라딘DB에서 가져오도록 한다.
+//담당: 이재인
+
 class BookDetail extends StatefulWidget {
   final String isbn13;
   late StoredBook? storedBook;

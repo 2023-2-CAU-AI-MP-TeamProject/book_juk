@@ -7,6 +7,11 @@ import 'package:book_juk/utilities/CustomNavigator.dart';
 import 'globals.dart' as globals;
 import 'dart:math';
 
+//앱을 실행하고, 로그인을 완료하였을 때 진입하는 홈 화면이며, 저장한 책들을 시각화하는 책장을 구현하였다.
+//책장은 책이 계속 저장됨에 따라 추가적으로 책장을 만들며, 무한 스크롤, 확대 기능이 있다.
+// 위의 도서 검색을 누르면 검색 페이지로 이동할 수 있다.
+//담당: 이정민, 수정: 이재인, 이정민
+
 class MyHome extends StatefulWidget {
   final TabController tabController;
   final LoginPlatform loginPlatform;

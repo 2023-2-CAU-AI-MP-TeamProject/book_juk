@@ -2,6 +2,9 @@
 import 'package:book_juk/utilities/utilities.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+//알라딘 DB에서 받아온 정보들에 맞추어 변수를 설정하였다.
+//담당: 이재인
+
 enum BookStatus {
   read, unread
 }

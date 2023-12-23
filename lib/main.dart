@@ -22,6 +22,10 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
+//앱에 대한 전체적인 정보를 다루며, 로그인 기능, 사용자가 앱 사용을 종료하고 다시 실행할 때
+//사용자에 대한 정보를 인식하고 업데이트하는 기능, 모든 페이지에 공통으로 들어가는 바텀앱바 등을 구현하였다.
+//담당: 이재인, 보조: 이정민
+
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
